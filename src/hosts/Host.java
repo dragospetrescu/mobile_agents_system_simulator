@@ -1,3 +1,7 @@
+package hosts;
+
+import agents.Agent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +33,6 @@ public class Host {
 
     @Override
     public String toString() {
-        return "Host " + id;
+        return "hosts.Host " + id;
     }
 }

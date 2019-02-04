@@ -1,3 +1,8 @@
+package helpers;
+
+import hosts.Host;
+import simulation.Constants;
+
 import java.util.Random;
 
 public class TimeAssigner {

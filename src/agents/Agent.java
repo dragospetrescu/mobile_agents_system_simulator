@@ -1,3 +1,9 @@
+package agents;
+
+import helpers.Logger;
+import helpers.TimeAssigner;
+import hosts.Host;
+
 public class Agent {
 
     private int id;
@@ -53,6 +59,6 @@ public class Agent {
 
     @Override
     public String toString() {
-        return "Agent " + id;
+        return "agents.Agent " + id;
     }
 }
