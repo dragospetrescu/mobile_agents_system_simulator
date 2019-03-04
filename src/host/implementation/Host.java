@@ -32,7 +32,7 @@ public class Host {
         homeAgents.put(agent, this);
     }
 
-    public List<Agent> getPresentAgents() {
+    public List<Agent> getActiveAgents() {
         return presentAgents;
     }
 
@@ -49,7 +49,7 @@ public class Host {
         return "Host " + id;
     }
 
-    public Message parseMessage(Message message) {
+    public Message receiveMessage(Message message) {
 
         if(message instanceof InterAgentMessage) {
             InterAgentMessage interAgentMessage = (InterAgentMessage)message;
@@ -89,5 +89,13 @@ public class Host {
     @Override
     public int hashCode() {
         return id;
+    }
+
+    public boolean wantsToSendMessage() {
+        return false;
+    }
+
+    public Message prepareMessage() {
+        return null;
     }
 }

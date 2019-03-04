@@ -1,110 +1,78 @@
 package simulation;
 
-import agents.Agent;
-import helpers.Logger;
-import hosts.HomeServer;
-import hosts.Host;
-import messages.AgentToHomeMessage;
-import messages.InterAgentMessage;
-import messages.Message;
+import agent.implementation.Agent;
+import host.implementation.Host;
+import message.Message;
 
 import java.util.*;
 
-public class Simulation {
-
-    public static void main(String[] args) {
-
-        Simulation simulation = new Simulation();
-        simulation.init();
-        simulation.run();
-    }
+public abstract class Simulation {
 
     private List<Host> hosts;
     private List<Agent> agents;
     private List<Agent> migratingAgents;
     private List<Message> travelingMessages;
-    private HomeServer homeServer;
 
-    private long noSteps;
-    private Random randomHost;
-
-
-    private void init() {
-
-        noSteps = Constants.NO_STEPS;
-        randomHost = new Random(42);
+    public void init() {
 
         hosts = new ArrayList<>();
-        for (int hostId = 0; hostId < Constants.NO_HOSTS; hostId++) {
-            Host host = new Host(hostId);
-            hosts.add(host);
-        }
-
         migratingAgents = new ArrayList<>();
         travelingMessages = new ArrayList<>();
-
-
         agents = new ArrayList<>();
-        for (int agentId = 0; agentId < Constants.NO_AGENTS; agentId++) {
-            int hostId = agentId;
-            Host host = hosts.get(hostId);
-            Agent agent = new Agent(agentId, host);
-            host.addHomeAgent(agent);
-            agents.add(agent);
-        }
-        homeServer = new HomeServer(Constants.NO_AGENTS, agents, hosts);
+
+        initHosts();
+        initAgents();
     }
 
-    private void run() {
+    public abstract void initAgents();
 
-        for (long step = 0; step < noSteps; step++) {
+    public abstract void initHosts();
 
-            List<Message> messagesToBeRemoved = new ArrayList<>();
-            for (ListIterator<Message> lit = travelingMessages.listIterator(); lit.hasNext();) {
-                Message message = lit.next();
-                if(message.isArrived()) {
+    public void addNewAgent(Agent agent, Host host) {
+        agents.add(agent);
+        host.addAgent(agent);
+    }
+
+    public void addNewHost(Host host) {
+        hosts.add(host);
+    }
+
+
+    public void run() {
+
+        for (long step = 0; step < Constants.NO_STEPS; step++) {
+
+            for (Iterator<Message> messageIterator = travelingMessages.iterator(); messageIterator.hasNext();) {
+                Message message = messageIterator.next();
+                if (message.isArrived()) {
                     Host hostDestination = message.getHostDestination();
-                    Message forwardedMessage = hostDestination.parseMessage(message);
-                    if(forwardedMessage != null) {
-                        lit.add(forwardedMessage);
-                    }
-                    messagesToBeRemoved.add(message);
+                    hostDestination.receiveMessage(message);
+                    messageIterator.remove();
                 } else {
                     message.travel();
-                }
-            }
-            travelingMessages.removeAll(messagesToBeRemoved);
-
-            for (Agent agent : migratingAgents) {
-                if (agent.isArrived()) {
-                    Host destination = agent.getDestination();
-                    destination.addAgent(agent);
-                    agent.arrived();
-                } else {
-                    agent.travel();
                 }
             }
 
             for (Host host : hosts) {
 
-                List<Agent> hostAgents = host.getPresentAgents();
-                for (Iterator<Agent> agentsIterator = hostAgents.iterator(); agentsIterator.hasNext(); ) {
+                if (host.wantsToSendMessage()) {
+                    Message message = host.prepareMessage();
+                    travelingMessages.add(message);
+                }
+
+                List<Agent> hostActiveAgents = host.getActiveAgents();
+                for (Iterator<Agent> agentsIterator = hostActiveAgents.iterator(); agentsIterator.hasNext();) {
                     Agent agent = agentsIterator.next();
 
-                    if(agent.wantsToSendMessage()) {
-                        Agent destinationAgent = getRandomAgent();
-                        InterAgentMessage message = agent.createMessage(destinationAgent, homeServer);
-                        Logger.log(agent + " sends comm" + message + " to " + homeServer);
+                    if (agent.wantsToSendMessage()) {
+                        Message message = agent.prepareMessage();
                         travelingMessages.add(message);
                     }
 
-                    if (agent.isWorkDone()) {
+                    if (agent.wantsToMigrate()) {
+                        Message message = agent.prepareMigratingMessage();
+                        travelingMessages.add(message);
                         agentsIterator.remove();
-                        Host newAgentHost = getRandomHost();
-                        agent.startMigrating(newAgentHost);
-                        AgentToHomeMessage agentToHomeMessage = new AgentToHomeMessage(host, agent.getHomeHost(), newAgentHost, agent);
-                        travelingMessages.add(agentToHomeMessage);
-                        Logger.log(agent + " sends migrate" + agentToHomeMessage + " to " + agent.getHomeHost());
                         migratingAgents.add(agent);
                     } else {
                         agent.work();
@@ -112,13 +80,5 @@ public class Simulation {
                 }
             }
         }
-    }
-
-    public Host getRandomHost() {
-        return hosts.get(randomHost.nextInt(hosts.size()));
-    }
-
-    public Agent getRandomAgent() {
-        return agents.get(randomHost.nextInt(agents.size()));
     }
 }

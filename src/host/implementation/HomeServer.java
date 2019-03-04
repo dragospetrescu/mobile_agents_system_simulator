@@ -26,7 +26,7 @@ public class HomeServer extends Host {
     }
 
     @Override
-    public Message parseMessage(Message message) {
+    public Message receiveMessage(Message message) {
         if (message instanceof  InterAgentMessage) {
             InterAgentMessage interAgentMessage = (InterAgentMessage)message;
             Agent destinationAgent = interAgentMessage.getDestinationAgent();

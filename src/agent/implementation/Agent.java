@@ -4,6 +4,7 @@ import helpers.Logger;
 import helpers.RandomAssigner;
 import hosts.Host;
 import messages.InterAgentMessage;
+import messages.Message;
 import simulation.Constants;
 
 public class Agent {
@@ -23,7 +24,7 @@ public class Agent {
         homeHost = host;
     }
 
-    public boolean isWorkDone() {
+    public boolean wantsToMigrate() {
         return !isMigrating && workTime <= 0;
     }
 
@@ -95,5 +96,13 @@ public class Agent {
 
     public Host getHomeHost() {
         return homeHost;
+    }
+
+    public Message prepareMessage() {
+        return null;
+    }
+
+    public Message prepareMigratingMessage() {
+        return null;
     }
 }
