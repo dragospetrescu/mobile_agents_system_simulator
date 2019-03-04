@@ -9,16 +9,12 @@ import java.util.*;
 public abstract class Simulation {
 
     private List<Host> hosts;
-    private List<Agent> agents;
-    private List<Agent> migratingAgents;
     private List<Message> travelingMessages;
 
     public void init() {
 
         hosts = new ArrayList<>();
-        migratingAgents = new ArrayList<>();
         travelingMessages = new ArrayList<>();
-        agents = new ArrayList<>();
 
         initHosts();
         initAgents();
@@ -29,7 +25,6 @@ public abstract class Simulation {
     public abstract void initHosts();
 
     public void addNewAgent(Agent agent, Host host) {
-        agents.add(agent);
         host.addAgent(agent);
     }
 
@@ -37,12 +32,11 @@ public abstract class Simulation {
         hosts.add(host);
     }
 
-
     public void run() {
 
         for (long step = 0; step < Constants.NO_STEPS; step++) {
 
-            for (Iterator<Message> messageIterator = travelingMessages.iterator(); messageIterator.hasNext();) {
+            for (Iterator<Message> messageIterator = travelingMessages.iterator(); messageIterator.hasNext(); ) {
                 Message message = messageIterator.next();
                 if (message.isArrived()) {
                     Host hostDestination = message.getHostDestination();
@@ -61,7 +55,7 @@ public abstract class Simulation {
                 }
 
                 List<Agent> hostActiveAgents = host.getActiveAgents();
-                for (Iterator<Agent> agentsIterator = hostActiveAgents.iterator(); agentsIterator.hasNext();) {
+                for (Iterator<Agent> agentsIterator = hostActiveAgents.iterator(); agentsIterator.hasNext(); ) {
                     Agent agent = agentsIterator.next();
 
                     if (agent.wantsToSendMessage()) {
@@ -73,7 +67,6 @@ public abstract class Simulation {
                         Message message = agent.prepareMigratingMessage();
                         travelingMessages.add(message);
                         agentsIterator.remove();
-                        migratingAgents.add(agent);
                     } else {
                         agent.work();
                     }
