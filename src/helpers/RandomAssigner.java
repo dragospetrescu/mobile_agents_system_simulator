@@ -1,6 +1,6 @@
 package helpers;
 
-import host.implementation.Host;
+import host.Host;
 import simulation.Constants;
 
 import java.util.Random;

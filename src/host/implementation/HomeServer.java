@@ -1,6 +1,5 @@
 package host.implementation;
 
-import agent.implementation.Agent;
 import message.implementation.InterAgentMessage;
 import message.Message;
 

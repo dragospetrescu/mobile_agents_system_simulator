@@ -1,7 +1,7 @@
 package simulation;
 
-import agent.implementation.Agent;
-import host.implementation.Host;
+import agent.Agent;
+import host.Host;
 import message.Message;
 
 import java.util.*;
