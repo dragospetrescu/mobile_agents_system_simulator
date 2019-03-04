@@ -1,30 +1,43 @@
 package hosts;
 
 import agents.Agent;
+import helpers.Logger;
+import messages.AgentToHomeMessage;
+import messages.InterAgentMessage;
+import messages.Message;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Host {
 
     private int id;
-    private List<Agent> agents;
+    private List<Agent> presentAgents;
+    private Map<Agent, Host> homeAgents;
 
     public Host(int id) {
         this.id = id;
-        agents = new ArrayList<>();
+        presentAgents = new ArrayList<>();
+        homeAgents = new HashMap<>();
     }
 
     public void addAgent(Agent agent) {
-        agents.add(agent);
+        presentAgents.add(agent);
     }
 
-    public List<Agent> getAgents() {
-        return agents;
+    public void addHomeAgent(Agent agent) {
+        addAgent(agent);
+        homeAgents.put(agent, this);
+    }
+
+    public List<Agent> getPresentAgents() {
+        return presentAgents;
     }
 
     public void removeAgent(Agent agent) {
-        agents.remove(agent);
+        presentAgents.remove(agent);
     }
 
     public int getId() {
@@ -33,6 +46,48 @@ public class Host {
 
     @Override
     public String toString() {
-        return "hosts.Host " + id;
+        return "Host " + id;
+    }
+
+    public Message parseMessage(Message message) {
+
+        if(message instanceof InterAgentMessage) {
+            InterAgentMessage interAgentMessage = (InterAgentMessage)message;
+            Agent destinationAgent = interAgentMessage.getDestinationAgent();
+
+            if (presentAgents.contains(destinationAgent)) {
+                destinationAgent.receiveMessage(interAgentMessage);
+                return null;
+            }
+
+            if (homeAgents.containsKey(destinationAgent)) {
+                Host destinationHost = homeAgents.get(destinationAgent);
+                return new InterAgentMessage(interAgentMessage, this, destinationHost);
+            }
+
+            Logger.log(interAgentMessage + " failed to be delivered!");
+            return null;
+        } else if (message instanceof AgentToHomeMessage){
+            AgentToHomeMessage agentToHomeMessage = (AgentToHomeMessage) message;
+            Host agentNextHost = agentToHomeMessage.getAgentNextHost();
+            homeAgents.put(agentToHomeMessage.getSourceAgent(), agentNextHost);
+            return null;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Host host = (Host) o;
+
+        return id == host.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 }
