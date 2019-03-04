@@ -1,10 +1,10 @@
-package agents;
+package agent.implementation;
 
 import helpers.Logger;
 import helpers.RandomAssigner;
-import hosts.Host;
-import messages.InterAgentMessage;
-import messages.Message;
+import host.implementation.Host;
+import message.implementation.InterAgentMessage;
+import message.Message;
 import simulation.Constants;
 
 public class Agent {

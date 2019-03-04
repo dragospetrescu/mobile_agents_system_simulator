@@ -1,7 +1,8 @@
-package messages;
+package message.implementation;
 
-import agents.Agent;
-import hosts.Host;
+import agent.implementation.Agent;
+import host.implementation.Host;
+import message.Message;
 
 public class AgentToHomeMessage extends Message {
 

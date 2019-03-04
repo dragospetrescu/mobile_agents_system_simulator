@@ -1,7 +1,7 @@
-package messages;
+package message;
 
 import helpers.RandomAssigner;
-import hosts.Host;
+import host.implementation.Host;
 
 public abstract class Message {
 

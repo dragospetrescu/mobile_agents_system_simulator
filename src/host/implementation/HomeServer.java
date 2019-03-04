@@ -1,8 +1,8 @@
-package hosts;
+package host.implementation;
 
-import agents.Agent;
-import messages.InterAgentMessage;
-import messages.Message;
+import agent.implementation.Agent;
+import message.implementation.InterAgentMessage;
+import message.Message;
 
 import java.util.HashMap;
 import java.util.List;

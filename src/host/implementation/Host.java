@@ -1,10 +1,10 @@
-package hosts;
+package host.implementation;
 
-import agents.Agent;
+import agent.implementation.Agent;
 import helpers.Logger;
-import messages.AgentToHomeMessage;
-import messages.InterAgentMessage;
-import messages.Message;
+import message.implementation.AgentToHomeMessage;
+import message.implementation.InterAgentMessage;
+import message.Message;
 
 import java.util.ArrayList;
 import java.util.HashMap;
