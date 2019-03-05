@@ -1,4 +1,4 @@
-package router;
+package host.router;
 
 public class Connection {
 
