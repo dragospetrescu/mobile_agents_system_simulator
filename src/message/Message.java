@@ -5,10 +5,10 @@ import host.Host;
 
 public abstract class Message {
 
-    protected int id;
-    protected Host currentHost;
-    protected Host destinationHost;
-    protected int travelingTime;
+    private int id;
+    private Host currentHost;
+    private Host destinationHost;
+    private int travelingTime;
 
     private static int noMessages = 0;
 

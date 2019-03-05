@@ -6,7 +6,7 @@ import message.Message;
 
 import java.util.*;
 
-public abstract class Simulation {
+public class Simulation {
 
     private List<Host> hosts;
     private List<Message> travelingMessages;
@@ -20,9 +20,13 @@ public abstract class Simulation {
         initAgents();
     }
 
-    public abstract void initAgents();
+    public void initAgents() {
+//        TODO: READ FROM INPUT FILE AND INITIALIZE
+    }
 
-    public abstract void initHosts();
+    public void initHosts(){
+//        TODO: READ FROM INPUT FILE AND INITIALIZE
+    }
 
     public void addNewAgent(Agent agent, Host host) {
         host.addAgent(agent);

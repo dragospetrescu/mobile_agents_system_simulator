@@ -1,5 +1,6 @@
 package agent;
 
+import host.Host;
 import message.Message;
 
 public interface AgentInterface {

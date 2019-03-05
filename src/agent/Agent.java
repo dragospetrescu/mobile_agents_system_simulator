@@ -1,5 +1,7 @@
 package agent;
 
+import host.Host;
+
 public abstract class Agent implements AgentInterface {
 
     private int id;
