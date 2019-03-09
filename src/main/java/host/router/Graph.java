@@ -35,6 +35,7 @@ public class Graph {
         return;
     }
 
+    // TODO: very inefficient alghorithm. !!! TO BE CHANGED !!!
     private void floydWarshall(int graph[][], Map<Integer, Host> hostsMap) {
         int V = graph.length;
         int dist[][] = new int[V][V];
