@@ -1,9 +1,17 @@
 package simulation;
 
 import agent.Agent;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 import host.Host;
+import host.implementation.DummyHost;
+import host.router.Graph;
 import message.Message;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.lang.reflect.Type;
 import java.util.*;
 
 public class Simulation {
@@ -12,9 +20,7 @@ public class Simulation {
     private List<Message> travelingMessages;
 
     public void init() {
-
-        hosts = new ArrayList<>();
-        travelingMessages = new ArrayList<>();
+        travelingMessages = new ArrayList<Message>();
 
         initHosts();
         initAgents();
@@ -24,9 +30,34 @@ public class Simulation {
 //        TODO: READ FROM INPUT FILE AND INITIALIZE
     }
 
-    public void initHosts(){
-//        TODO: READ FROM INPUT FILE AND INITIALIZE
+    public void initHosts() {
+
+        Gson gson = new Gson();
+        JsonReader reader;
+        try {
+            reader = new JsonReader(new FileReader("hosts.json"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+        Type listType = new TypeToken<ArrayList<DummyHost>>(){}.getType();
+        hosts = gson.fromJson(reader, listType);
+        Map<Integer, Host> hostMap = new HashMap<Integer, Host>();
+        for (Host host :
+                hosts) {
+            hostMap.put(host.getId(), host);
+        }
+
+        Graph graph = new Graph("graph.ini");
+        graph.addRoutingToHosts(hostMap);
+
+        for (Host host :
+                hosts) {
+            host.printRouting();
+        }
+
     }
+
 
     public void addNewAgent(Agent agent, Host host) {
         host.addAgent(agent);

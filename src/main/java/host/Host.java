@@ -1,32 +1,33 @@
 package host;
 
 import agent.Agent;
-import message.Message;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class Host implements HostInterface {
 
-    private static int hostsCount = 0;
-
-    private int id;
+    public int id;
     private List<Agent> activeAgents;
+    private Map<Host, Host> nextHopMap;
 
     public Host() {
-        this.id = hostsCount;
-        hostsCount++;
-        this.activeAgents = new ArrayList<>();
+        this.activeAgents = new ArrayList<Agent>();
+        nextHopMap = new HashMap<Host, Host>();
     }
 
-    @Override
     public List<Agent> getActiveAgents() {
         return activeAgents;
     }
 
-    @Override
     public void addAgent(Agent agent) {
         activeAgents.add(agent);
+    }
+
+    public void addRouteNextHop(Host destinationRouter, Host nextHopRouter) {
+        nextHopMap.put(destinationRouter, nextHopRouter);
     }
 
     @Override
@@ -51,5 +52,13 @@ public abstract class Host implements HostInterface {
     @Override
     public int hashCode() {
         return id;
+    }
+
+    public void printRouting() {
+        System.out.println(toString());
+
+        for (Host destHost: nextHopMap.keySet()) {
+            System.out.println("To " + destHost + " by " + nextHopMap.get(destHost));
+        }
     }
 }

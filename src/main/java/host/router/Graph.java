@@ -1,41 +1,138 @@
 package host.router;
 
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
+import host.Host;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class Graph {
 
-    List<Router> routers;
-    Map<Pair, Integer> connectionCost;
+    private int[][] distances;
+    private int INF = -1;
+
+//    public static Graph createGraph(String filename) {
+//    }
+
+    public Graph(String filename) {
+        Gson gson = new Gson();
+        JsonReader reader;
+        try {
+            reader = new JsonReader(new FileReader(filename));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+        distances = gson.fromJson(reader, int[][].class);
+    }
+
+    public void addRoutingToHosts(Map<Integer, Host> hostsMap) {
+        floydWarshall(distances, hostsMap);
+        return;
+    }
+
+    private void floydWarshall(int graph[][], Map<Integer, Host> hostsMap) {
+        int V = graph.length;
+        int dist[][] = new int[V][V];
+        int A[][] = new int[V][V];
+
+        /* Initialize the solution matrix same as input graph matrix.
+           Or we can say the initial values of shortest distances
+           are based on shortest paths considering no intermediate
+           vertex. */
+        for (int i = 0; i < V; i++)
+            for (int j = 0; j < V; j++) {
+                dist[i][j] = graph[i][j];
+
+                if (i == j) {
+                    A[i][j] = i;
+                } else if (graph[i][j] != 0 && graph[i][j] != INF) {
+                    A[i][j] = j;
+                } else {
+                    A[i][j] = -1;
+                }
+
+            }
+
+        /* Add all vertices one by one to the set of intermediate
+           vertices.
+          ---> Before start of an iteration, we have shortest
+               distances between all pairs of vertices such that
+               the shortest distances consider only the vertices in
+               set {0, 1, 2, .. k-1} as intermediate vertices.
+          ----> After the end of an iteration, vertex no. k is added
+                to the set of intermediate vertices and the set
+                becomes {0, 1, 2, .. k} */
 
 
+        // Print the shortest distance matrix
 
-    class Pair {
-
-        private Router source;
-        private Router destination;
-
-        public Pair(Router source, Router destination) {
-            this.source = source;
-            this.destination = destination;
+        for (int k = 0; k < V; k++) {
+            // Pick all vertices as source one by one
+            for (int i = 0; i < V; i++) {
+                // Pick all vertices as destination for the
+                // above picked source
+                for (int j = 0; j < V; j++) {
+                    // If vertex k is on the shortest path from
+                    // i to j, then update the value of dist[i][j]
+                    if (dist[i][k] == INF || dist[k][j] == INF)
+                        continue;
+                    if (dist[i][k] + dist[k][j] < dist[i][j] || dist[i][j] == INF) {
+                        A[i][j] = k;
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                    }
+                }
+            }
         }
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            Pair pair = (Pair) o;
-
-            if (source != null ? !source.equals(pair.source) : pair.source != null) return false;
-            return destination != null ? destination.equals(pair.destination) : pair.destination == null;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = source != null ? source.hashCode() : 0;
-            result = 31 * result + (destination != null ? destination.hashCode() : 0);
-            return result;
+        for (int i = 0; i < V; i++) {
+            Host router = hostsMap.get(i);
+            for (int j = 0; j < V; j++) {
+                if (i == j)
+                    continue;
+                Host destinationRouter = hostsMap.get(j);
+                List<Integer> path = new ArrayList<Integer>();
+                get_path(A, i, j, path);
+                path.add(j);
+                Host nextHopRouter = hostsMap.get(path.get(1));
+                router.addRouteNextHop(destinationRouter, nextHopRouter);
+            }
         }
     }
+
+    public void get_path(int[][] A, int s, int t, List<Integer> path) {
+        if(path.size() >= 2) {
+            return;
+        }
+        if (A[s][t] == s || A[s][t] == t) {
+            path.add(s);
+            return;
+        }
+        get_path(A, s, A[s][t], path);
+        get_path(A, A[s][t], t, path);
+    }
+
+    void printSolution(int graph[][]) {
+        int V = graph.length;
+        System.out.println("The following matrix shows the shortest " +
+                "distances between every pair of vertices");
+        for (int i = 0; i < V; ++i) {
+            for (int j = 0; j < V; ++j) {
+                if (graph[i][j] == INF)
+                    System.out.print("INF ");
+                else
+                    System.out.print(graph[i][j] + "   ");
+            }
+            System.out.println();
+        }
+    }
+
+    public int[][] getDistances() {
+        return distances;
+    }
+
 }
