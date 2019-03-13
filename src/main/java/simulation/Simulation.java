@@ -1,61 +1,36 @@
 package simulation;
 
 import agent.Agent;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
 import host.Host;
-import host.implementation.DummyHost;
 import host.router.Graph;
 import message.Message;
+import message.MessagesManager;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.lang.reflect.Type;
 import java.util.*;
 
-public class Simulation {
+public abstract class Simulation {
 
     private List<Host> hosts;
-    private List<Message> travelingMessages;
+    private static Graph graph;
+    private MessagesManager messagesManager;
 
     public void init() {
-        travelingMessages = new ArrayList<Message>();
-
         initHosts();
+        messagesManager = new MessagesManager(graph);
         initAgents();
     }
 
-    public void initAgents() {
-//        TODO: READ FROM INPUT FILE AND INITIALIZE
-    }
+    public abstract void initAgents();
 
     public void initHosts() {
 
-        Gson gson = new Gson();
-        JsonReader reader;
-        try {
-            reader = new JsonReader(new FileReader("hosts.json"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return;
-        }
-        Type listType = new TypeToken<ArrayList<DummyHost>>(){}.getType();
-        hosts = gson.fromJson(reader, listType);
         Map<Integer, Host> hostMap = new HashMap<Integer, Host>();
-        for (Host host :
-                hosts) {
+        for (Host host: hosts) {
             hostMap.put(host.getId(), host);
         }
 
-        Graph graph = new Graph("graph.ini");
+        graph = new Graph("graph.ini");
         graph.addRoutingToHosts(hostMap);
-
-        for (Host host :
-                hosts) {
-            host.printRouting();
-        }
-
     }
 
 
@@ -67,26 +42,24 @@ public class Simulation {
         hosts.add(host);
     }
 
+    public static long  step;
+
     public void run() {
 
-        for (long step = 0; step < Constants.NO_STEPS; step++) {
+        for (step = 0; step < Constants.NO_STEPS; step++) {
 
-            for (Iterator<Message> messageIterator = travelingMessages.iterator(); messageIterator.hasNext(); ) {
-                Message message = messageIterator.next();
-                if (message.isArrived()) {
-                    Host hostDestination = message.getHostDestination();
-                    hostDestination.receiveMessage(message);
-                    messageIterator.remove();
-                } else {
-                    message.travel();
-                }
+            messagesManager.travelMessages();
+            List<Message> arrivedMessages = messagesManager.getArrivedMessages();
+            for (Message message : arrivedMessages) {
+                Host nextHopHost = message.getNextHop();
+                nextHopHost.receiveMessage(message);
             }
 
             for (Host host : hosts) {
 
                 if (host.wantsToSendMessage()) {
-                    Message message = host.prepareMessage();
-                    travelingMessages.add(message);
+                    List<Message> messages = host.getMessagesToBeSent();
+                    messagesManager.addAllMessages(messages);
                 }
 
                 List<Agent> hostActiveAgents = host.getActiveAgents();
@@ -94,13 +67,13 @@ public class Simulation {
                     Agent agent = agentsIterator.next();
 
                     if (agent.wantsToSendMessage()) {
-                        Message message = agent.prepareMessage();
-                        travelingMessages.add(message);
+                        List<Message> messages = agent.sendMessages();
+                        messagesManager.addAllMessages(messages);
                     }
 
                     if (agent.wantsToMigrate()) {
                         Message message = agent.prepareMigratingMessage();
-                        travelingMessages.add(message);
+                        messagesManager.addMessage(message);
                         agentsIterator.remove();
                     } else {
                         agent.work();
@@ -108,5 +81,13 @@ public class Simulation {
                 }
             }
         }
+    }
+
+    public void setHosts(List<Host> hosts) {
+        this.hosts = hosts;
+    }
+
+    public List<Host> getHosts() {
+        return hosts;
     }
 }

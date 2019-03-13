@@ -5,11 +5,11 @@ import host.Host;
 
 public interface MessageInterface {
 
-    void travel();
     Host getNextHop();
+    Host getPreviousHop();
     Host getHostDestination();
     Host getHostSource();
     Agent getAgentSource();
     Agent getAgentDestination();
-
+    void setNextHopHost(Host nextHop);
 }

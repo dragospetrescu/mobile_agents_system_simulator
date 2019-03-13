@@ -6,7 +6,6 @@ public abstract class Agent implements AgentInterface {
 
     private int id;
     private Host host;
-    private int workTime;
 
     public Agent(int id, Host host) {
         this.id = id;
@@ -19,17 +18,11 @@ public abstract class Agent implements AgentInterface {
     }
 
     @Override
-    public boolean isWorking() {
-        return workTime != 0;
-    }
-
-    @Override
-    public void work() {
-        workTime--;
-    }
-
-    @Override
     public String toString() {
         return "Agent " + id;
+    }
+
+    public void setHost(Host host) {
+        this.host = host;
     }
 }

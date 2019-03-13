@@ -8,8 +8,10 @@ import java.util.List;
 public interface HostInterface {
 
     void receiveMessage(Message message);
+    void interpretMessage(Message message);
     boolean wantsToSendMessage();
-    Message prepareMessage();
+    void addMessageForSending(Message message);
+    List<Message> getMessagesToBeSent();
     List<Agent> getActiveAgents();
     void addAgent(Agent agent);
 }

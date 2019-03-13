@@ -136,4 +136,7 @@ public class Graph {
         return distances;
     }
 
+    public Integer getDistance(Host previousHop, Host nextHop) {
+        return distances[previousHop.getId()][nextHop.getId()];
+    }
 }
