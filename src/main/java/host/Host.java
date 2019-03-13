@@ -4,7 +4,6 @@ import agent.Agent;
 import helpers.Logger;
 import message.Message;
 import message.implementation.MigratingAgentMessage;
-import simulation.Simulation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,7 +69,7 @@ public abstract class Host implements HostInterface {
     }
 
     public void receiveMessage(Message message) {
-        Logger.log("Message arrived at " + toString());
+        Logger.i("Message arrived at " + toString());
         Host messageDestination = message.getHostDestination();
         if (messageDestination.equals(this)) {
             if (message instanceof MigratingAgentMessage) {
@@ -78,7 +77,7 @@ public abstract class Host implements HostInterface {
 
                 Agent migratingAgent = migratingAgentMessage.getMigratingAgent();
                 addAgent(migratingAgent);
-                Logger.log(toString() + " received " + migratingAgent);
+                Logger.i(toString() + " received " + migratingAgent);
                 return;
 
             } else {

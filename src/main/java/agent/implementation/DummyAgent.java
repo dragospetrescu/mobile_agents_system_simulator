@@ -6,7 +6,6 @@ import helpers.RandomAssigner;
 import host.Host;
 import message.Message;
 import message.implementation.MigratingAgentMessage;
-import simulation.Simulation;
 
 import java.util.List;
 import java.util.Random;
@@ -23,7 +22,7 @@ public class DummyAgent extends Agent {
         this.allHosts = allHosts;
         rand = new Random();
         work = RandomAssigner.assignWork();
-        Logger.log("WORK " + work);
+        Logger.i("WORK " + work);
     }
 
     @Override
@@ -57,7 +56,7 @@ public class DummyAgent extends Agent {
     @Override
     public Message prepareMigratingMessage() {
         Host destinationHost = getRandomHost();
-        Logger.log(toString() + " traveling from " +getHost() + " to "+ destinationHost);
+        Logger.i(toString() + " traveling from " +getHost() + " to "+ destinationHost);
         return new MigratingAgentMessage(getHost(), destinationHost, this);
     }
 
