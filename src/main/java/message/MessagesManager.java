@@ -2,10 +2,7 @@ package message;
 
 import host.router.Graph;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MessagesManager {
 
@@ -24,15 +21,18 @@ public class MessagesManager {
     }
 
     public void travelMessages() {
-        for (Message message : travelingMessages.keySet()) {
+        Set<Message> messages = travelingMessages.keySet();
+        Set<Message> messagesToBeRemoved = new HashSet<>();
+        for (Message message : messages) {
             int leftDistance = travelingMessages.get(message) - 1;
             if (leftDistance <= 0) {
-                travelingMessages.remove(message);
+                messagesToBeRemoved.add(message);
                 arrivedMessages.add(message);
             } else {
                 travelingMessages.put(message, leftDistance);
             }
         }
+        messagesToBeRemoved.forEach(message -> travelingMessages.remove(message));
     }
 
     public List<Message> getArrivedMessages() {

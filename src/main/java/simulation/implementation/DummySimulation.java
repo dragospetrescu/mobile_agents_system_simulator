@@ -18,9 +18,13 @@ public class DummySimulation extends Simulation {
 
     @Override
     public void initAgents() {
-        Host host = getHosts().get(0);
-        Agent agent = new DummyAgent(0, host, getHosts());
-        addNewAgent(agent, host);
+        Host host0 = getHosts().get(0);
+        Agent agent0 = new DummyAgent(0, host0, getHosts());
+        addNewAgent(agent0, host0);
+
+        Host host1 = getHosts().get(1);
+        Agent agent1 = new DummyAgent(1, host1, getHosts());
+        addNewAgent(agent1, host1);
     }
 
     @Override

@@ -13,16 +13,12 @@ import java.util.Random;
 public class DummyAgent extends Agent {
 
     private int work;
-    private List<Host> allHosts;
-    private List<Agent> allAgents;
     private Random rand;
 
     public DummyAgent(int id, Host host, List<Host> allHosts) {
-        super(id, host);
-        this.allHosts = allHosts;
+        super(id, host, allHosts);
         rand = new Random();
         work = RandomAssigner.assignWork();
-        Logger.i("WORK " + work);
     }
 
     @Override
@@ -61,6 +57,7 @@ public class DummyAgent extends Agent {
     }
 
     private Host getRandomHost() {
+        List<Host> allHosts = getAllHosts();
         Host randomElement = allHosts.get(rand.nextInt(allHosts.size()));
         if(randomElement.equals(getHost())) {
             return getRandomHost();

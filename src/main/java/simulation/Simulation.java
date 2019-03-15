@@ -11,13 +11,21 @@ import java.util.*;
 public abstract class Simulation {
 
     private List<Host> hosts;
+    private List<Agent> agents;
     private static Graph graph;
     private MessagesManager messagesManager;
 
+    public Simulation() {
+        agents = new ArrayList<>();
+    }
+    
     public void init() {
         initHosts();
         messagesManager = new MessagesManager(graph);
         initAgents();
+        for (Agent agent : agents) {
+            agent.setAllAgents(agents);
+        }
     }
 
     public abstract void initAgents();
@@ -36,6 +44,7 @@ public abstract class Simulation {
 
     public void addNewAgent(Agent agent, Host host) {
         host.addAgent(agent);
+        agents.add(agent);
     }
 
     public void addNewHost(Host host) {
