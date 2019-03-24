@@ -6,7 +6,7 @@ import protocol.Protocol;
 
 public class TestHost extends ProtocolHost {
 
-	public TestHost(int id, CommunicatingHostInterface communicationHost, Protocol protocol) {
-		super(id, communicationHost, protocol);
+	public TestHost(CommunicatingHostInterface communicationHost) {
+		super(communicationHost.getId(), communicationHost, Protocol.TEST_PROTOCOL);
 	}
 }

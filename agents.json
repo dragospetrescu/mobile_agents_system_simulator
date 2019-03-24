@@ -1,0 +1,12 @@
+[
+  {
+      "id": 0,
+      "hostId": 0,
+      "protocol": "TEST_PROTOCOL"
+  },
+  {
+      "id": 1,
+      "hostId": 1,
+      "protocol": "TEST_PROTOCOL"
+  }
+]

@@ -4,6 +4,7 @@ import agent.communication.CommunicatingAgent;
 import agent.protocol.ProtocolAgent;
 import host.communication.CommunicatingHost;
 import host.protocol.ProtocolHostInterface;
+import test_protocol.host.TestHost;
 
 public enum Protocol {
 	
@@ -13,7 +14,7 @@ public enum Protocol {
 	public ProtocolHostInterface getProtocolHost(CommunicatingHost communicationHost) {
 		switch (this) {
 		case TEST_PROTOCOL:
-			return null;
+			return new TestHost(communicationHost);
 		}
 		return null;
 	}

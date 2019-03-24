@@ -1,6 +1,8 @@
 package agent.communication;
 
 import message.MessageInterface;
+import protocol.Protocol;
+
 import java.util.List;
 import host.communication.CommunicatingHostInterface;
 
@@ -14,4 +16,7 @@ public interface CommunicatingAgentInterface {
     List<MessageInterface> sendMessages();
     void addMessage(MessageInterface message);
 	void receiveMessage(MessageInterface message);
+	Protocol getProtocol();
+	void initAgent(List<CommunicatingAgentInterface> allAgents, List<CommunicatingHostInterface> allHosts);
+	int getId();
 }

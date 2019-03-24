@@ -20,4 +20,5 @@ public interface CommunicatingHostInterface {
     CommunicatingHostInterface getNextHop(CommunicatingHostInterface destinationHost);
 	int getId();
 	void addRouteNextHop(CommunicatingHostInterface destinationRouter, CommunicatingHostInterface nextHopRouter);
+	void setProtocolHost();
 }

@@ -14,7 +14,8 @@ import agent.protocol.ProtocolAgent;
 
 public class CommunicatingAgent implements CommunicatingAgentInterface {
 
-    private int id;
+	private int id;
+    private int hostId;
     private CommunicatingHostInterface host;
     private List<CommunicatingHostInterface> allHosts;
     private List<CommunicatingAgentInterface> allAgents;
@@ -23,16 +24,12 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
     private ProtocolAgent agentProtocol;
     private List<MessageInterface> messages;
     
-    public CommunicatingAgent(int id, CommunicatingHostInterface host, List<CommunicatingHostInterface> allHosts, Protocol protocol) {
-        this.id = id;
-        this.host = host;
-        this.allHosts = allHosts;
-        this.protocol = protocol;
-        this.agentProtocol = protocol.getProtocolAgent(this);
+    public CommunicatingAgent() {
+        
         work = RandomAssigner.assignWork();
         messages = new ArrayList<MessageInterface>();
     }
-
+    
     @Override
     public void work() {
         if(work == 0) {
@@ -86,5 +83,32 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	@Override
 	public void addMessage(MessageInterface message) {
 		messages.add(message);
+	}
+	
+	@Override
+	public Protocol getProtocol() {
+		return protocol;
+	}
+
+	@Override
+	public int getId() {
+		return id;
+	}
+
+	@Override
+	public void initAgent(List<CommunicatingAgentInterface> allAgents, List<CommunicatingHostInterface> allHosts) {
+		this.allAgents = allAgents;
+		this.allHosts = allHosts;
+		agentProtocol = protocol.getProtocolAgent(this);
+		
+		for (CommunicatingHostInterface host : allHosts) {
+			if (host.getId() == hostId) {
+				this.host = host;
+				break;
+			}
+		}
+		if (this.host == null) 
+			throw new RuntimeException("Can't find host with id " + hostId);
+		
 	}
 }

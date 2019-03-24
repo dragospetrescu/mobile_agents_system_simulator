@@ -1,34 +1,23 @@
 package test_protocol.agent;
 
-import java.util.List;
-
 import agent.communication.CommunicatingAgentInterface;
-import agent.protocol.ProtocolAgent;
+import agent.protocol.AbsoluteProtocolAgent;
 import message.MessageInterface;
 
-public class TestAgent implements ProtocolAgent {
+public class TestAgent extends AbsoluteProtocolAgent {
+
+	public TestAgent(CommunicatingAgentInterface communicatingAgent) {
+		super(communicatingAgent.getId(), communicatingAgent, communicatingAgent.getProtocol());
+	}
 
 	@Override
 	public void receiveMessage(MessageInterface message) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public List<MessageInterface> prepareMessages() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public CommunicatingAgentInterface getCommunicatingAgent() {
-		// TODO Auto-generated method stub
-		return null;
+		return;
 	}
 
 	@Override
 	public void prepareMessageTo(CommunicatingAgentInterface randomElement) {
-		// TODO Auto-generated method stub
-		
+		return;
 	}
+
 }

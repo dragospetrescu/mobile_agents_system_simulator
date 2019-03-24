@@ -20,11 +20,9 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	private List<MessageInterface> messagesToBeSent;
 	private Protocol protocol;
 	private ProtocolHostInterface protocolHost;
-
-	public CommunicatingHost(int id, Protocol protocol) {
-		this.protocol = protocol;
-		this.id = id;
-		this.protocolHost = this.protocol.getProtocolHost(this);
+	
+	public CommunicatingHost() {
+//		this.protocolHost = this.protocol.getProtocolHost(this);
 
 		activeAgents = new ArrayList<CommunicatingAgentInterface>();
 		nextHopMap = new HashMap<CommunicatingHostInterface, CommunicatingHostInterface>();
@@ -124,5 +122,10 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	@Override
 	public void addMessageForSending(MessageInterface message) {
 		messagesToBeSent.add(message);
+	}
+
+	@Override
+	public void setProtocolHost() {
+		this.protocolHost = this.protocol.getProtocolHost(this);
 	}
 }

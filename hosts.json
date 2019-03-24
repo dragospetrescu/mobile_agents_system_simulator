@@ -1,17 +1,22 @@
 [
   {
-      "id": 0
+      "id": 0,
+      "protocol": "TEST_PROTOCOL"
   },
   {
-      "id": 1
+      "id": 1,
+      "protocol": "TEST_PROTOCOL"
   },
   {
-      "id": 2
+      "id": 2,
+      "protocol": "TEST_PROTOCOL"
   },
   {
-      "id": 3
+      "id": 3,
+      "protocol": "TEST_PROTOCOL"
   },
   {
-      "id": 4
+      "id": 4,
+      "protocol": "TEST_PROTOCOL"
   }
 ]

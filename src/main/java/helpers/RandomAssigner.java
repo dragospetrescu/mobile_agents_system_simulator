@@ -1,6 +1,5 @@
 package helpers;
 
-import host.communication.CommunicatingHostInterface;
 import simulation.Constants;
 
 import java.util.List;
@@ -25,13 +24,4 @@ public class RandomAssigner {
 	    }
 	    return randomElement;
     }
-
-//	public static <T> getRandomElement(List<T> allHosts, <T> exceptionHost) {
-////		CommunicatingHostInterface randomElement = allHosts.get(random.nextInt(allHosts.size()));
-////        if(randomElement.equals(exceptionHost)) {
-////            return getRandomHost(allHosts, exceptionHost);
-////        }
-////        return randomElement;
-//		return null;
-//	}
 }

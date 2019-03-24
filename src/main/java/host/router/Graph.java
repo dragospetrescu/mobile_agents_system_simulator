@@ -7,6 +7,7 @@ import host.communication.CommunicatingHostInterface;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,11 @@ public class Graph {
         distances = gson.fromJson(reader, int[][].class);
     }
 
-    public void addRoutingToHosts(Map<Integer, CommunicatingHostInterface> hostsMap) {
+    public void addRoutingToHosts(List<CommunicatingHostInterface> hosts) {
+		Map<Integer, CommunicatingHostInterface> hostsMap = new HashMap<Integer, CommunicatingHostInterface>();
+		for (CommunicatingHostInterface host : hosts) {
+			hostsMap.put(host.getId(), host);
+		}
         floydWarshall(distances, hostsMap);
         return;
     }
