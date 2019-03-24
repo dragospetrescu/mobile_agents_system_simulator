@@ -1,19 +1,20 @@
 package message.implementation;
 
-import agent.Agent;
-import host.Host;
+import agent.communication.CommunicatingAgentInterface;
+import host.communication.CommunicatingHostInterface;
 import message.Message;
 
 public class MigratingAgentMessage extends Message {
 
-    private Agent migratingAgent;
+    private CommunicatingAgentInterface migratingAgent;
 
-    public MigratingAgentMessage(Host sourceHost, Host destinationHost, Agent migratingAgent) {
+    public MigratingAgentMessage(CommunicatingHostInterface sourceHost, CommunicatingHostInterface destinationHost, 
+    		CommunicatingAgentInterface migratingAgent) {
         super(sourceHost, destinationHost, null, null);
         this.migratingAgent = migratingAgent;
     }
 
-    public Agent getMigratingAgent() {
+    public CommunicatingAgentInterface getMigratingAgent() {
         return migratingAgent;
     }
 }

@@ -2,7 +2,7 @@ package host.router;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import host.Host;
+import host.communication.CommunicatingHostInterface;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -30,13 +30,13 @@ public class Graph {
         distances = gson.fromJson(reader, int[][].class);
     }
 
-    public void addRoutingToHosts(Map<Integer, Host> hostsMap) {
+    public void addRoutingToHosts(Map<Integer, CommunicatingHostInterface> hostsMap) {
         floydWarshall(distances, hostsMap);
         return;
     }
 
     // TODO: very inefficient alghorithm. !!! TO BE CHANGED !!!
-    private void floydWarshall(int graph[][], Map<Integer, Host> hostsMap) {
+    private void floydWarshall(int graph[][], Map<Integer, CommunicatingHostInterface> hostsMap) {
         int V = graph.length;
         int dist[][] = new int[V][V];
         int A[][] = new int[V][V];
@@ -91,15 +91,15 @@ public class Graph {
         }
 
         for (int i = 0; i < V; i++) {
-            Host router = hostsMap.get(i);
+        	CommunicatingHostInterface router = hostsMap.get(i);
             for (int j = 0; j < V; j++) {
                 if (i == j)
                     continue;
-                Host destinationRouter = hostsMap.get(j);
+                CommunicatingHostInterface destinationRouter = hostsMap.get(j);
                 List<Integer> path = new ArrayList<Integer>();
                 get_path(A, i, j, path);
                 path.add(j);
-                Host nextHopRouter = hostsMap.get(path.get(1));
+                CommunicatingHostInterface nextHopRouter = hostsMap.get(path.get(1));
                 router.addRouteNextHop(destinationRouter, nextHopRouter);
             }
         }
@@ -136,7 +136,7 @@ public class Graph {
         return distances;
     }
 
-    public Integer getDistance(Host previousHop, Host nextHop) {
+    public Integer getDistance(CommunicatingHostInterface previousHop, CommunicatingHostInterface nextHop) {
         return distances[previousHop.getId()][nextHop.getId()];
     }
 }

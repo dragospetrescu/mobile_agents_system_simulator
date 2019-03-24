@@ -1,35 +1,38 @@
 package message;
 
-import agent.Agent;
-import helpers.RandomAssigner;
-import host.Host;
+import agent.communication.CommunicatingAgentInterface;
+import host.communication.CommunicatingHostInterface;
 
-public abstract class Message implements MessageInterface {
+public class Message implements MessageInterface {
 
     private int id;
-    private Host sourceHost;
-    private Host destinationHost;
-    private Host previousHopHost;
-    private Host nextHopHost;
-    private Agent sourceAgent;
-    private Agent destinationAgent;
+    private CommunicatingHostInterface sourceHost;
+    private CommunicatingHostInterface destinationHost;
+    private CommunicatingHostInterface previousHopHost;
+    private CommunicatingHostInterface nextHopHost;
+    private CommunicatingAgentInterface sourceAgent;
+    private CommunicatingAgentInterface destinationAgent;
 
     private static int noMessages = 0;
 
 
-    public Message(Host sourceHost, Host destinationHost, Agent sourceAgent, Agent destinationAgent) {
+    public Message(CommunicatingHostInterface sourceHost, CommunicatingHostInterface destinationHost, CommunicatingAgentInterface sourceAgent, CommunicatingAgentInterface destinationAgent) {
         this.sourceHost = sourceHost;
         this.destinationHost = destinationHost;
         this.sourceAgent = sourceAgent;
         this.destinationAgent = destinationAgent;
         previousHopHost = destinationHost;
         nextHopHost = sourceHost.getNextHop(destinationHost);
+        id = noMessages;
+        noMessages++;
     }
 
-    public Host getHostDestination() {
+    @Override
+    public CommunicatingHostInterface getHostDestination() {
         return destinationHost;
     }
 
+    @Override
     public int getId() {
         return id;
     }
@@ -39,37 +42,34 @@ public abstract class Message implements MessageInterface {
         return "Message " + id;
     }
 
-
-    public void setNextHopHost(Host nextHopHost) {
-        this.nextHopHost = nextHopHost;
-    }
-
-    public void setPreviousHopHost(Host previousHopHost) {
-        this.previousHopHost = previousHopHost;
-    }
-
     @Override
-    public Host getNextHop() {
+    public CommunicatingHostInterface getNextHop() {
         return nextHopHost;
     }
 
     @Override
-    public Host getPreviousHop() {
+    public CommunicatingHostInterface getPreviousHop() {
         return previousHopHost;
     }
 
     @Override
-    public Host getHostSource() {
+    public CommunicatingHostInterface getHostSource() {
         return sourceHost;
     }
 
     @Override
-    public Agent getAgentSource() {
+    public CommunicatingAgentInterface getAgentSource() {
         return sourceAgent;
     }
 
     @Override
-    public Agent getAgentDestination() {
+    public CommunicatingAgentInterface getAgentDestination() {
         return destinationAgent;
     }
+
+	@Override
+	public void setNextHopHost(CommunicatingHostInterface nextHop) {
+		this.previousHopHost = this.nextHopHost;
+		this.nextHopHost = nextHop;
+	}
 }

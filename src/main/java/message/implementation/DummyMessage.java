@@ -1,13 +1,13 @@
 package message.implementation;
 
-import agent.Agent;
-import host.Host;
+import agent.communication.CommunicatingAgentInterface;
+import host.communication.CommunicatingHostInterface;
 import message.Message;
 
 public class DummyMessage extends Message {
 
-    public DummyMessage(Host sourceHost, Host destinationHost, Agent sourceAgent, Agent destinationAgent) {
+    public DummyMessage(CommunicatingHostInterface sourceHost, CommunicatingHostInterface destinationHost, 
+    		CommunicatingAgentInterface sourceAgent, CommunicatingAgentInterface destinationAgent) {
         super(sourceHost, destinationHost, sourceAgent, destinationAgent);
     }
-
 }

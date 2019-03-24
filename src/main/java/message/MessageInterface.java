@@ -1,15 +1,16 @@
 package message;
 
-import agent.Agent;
-import host.Host;
+import agent.communication.CommunicatingAgentInterface;
+import host.communication.CommunicatingHostInterface;
 
 public interface MessageInterface {
 
-    Host getNextHop();
-    Host getPreviousHop();
-    Host getHostDestination();
-    Host getHostSource();
-    Agent getAgentSource();
-    Agent getAgentDestination();
-    void setNextHopHost(Host nextHop);
+	CommunicatingHostInterface getNextHop();
+	CommunicatingHostInterface getPreviousHop();
+	CommunicatingHostInterface getHostDestination();
+	CommunicatingHostInterface getHostSource();
+    CommunicatingAgentInterface getAgentSource();
+    CommunicatingAgentInterface getAgentDestination();
+    void setNextHopHost(CommunicatingHostInterface nextHop);
+    int getId();
 }
