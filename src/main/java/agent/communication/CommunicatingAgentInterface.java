@@ -4,6 +4,8 @@ import message.MessageInterface;
 import protocol.Protocol;
 
 import java.util.List;
+
+import host.communication.CommunicatingHost;
 import host.communication.CommunicatingHostInterface;
 
 public interface CommunicatingAgentInterface {
@@ -19,4 +21,5 @@ public interface CommunicatingAgentInterface {
 	Protocol getProtocol();
 	void initAgent(List<CommunicatingAgentInterface> allAgents, List<CommunicatingHostInterface> allHosts);
 	int getId();
+	void setHost(CommunicatingHost communicatingHost);
 }

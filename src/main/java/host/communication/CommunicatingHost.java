@@ -35,6 +35,7 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 
 	public void addAgent(CommunicatingAgentInterface agent) {
 		activeAgents.add(agent);
+		agent.setHost(this);
 	}
 
 	public void addRouteNextHop(CommunicatingHostInterface destinationRouter,

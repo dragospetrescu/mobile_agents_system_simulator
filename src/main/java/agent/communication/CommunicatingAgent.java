@@ -2,6 +2,7 @@ package agent.communication;
 
 import helpers.Logger;
 import helpers.RandomAssigner;
+import host.communication.CommunicatingHost;
 import host.communication.CommunicatingHostInterface;
 import message.MessageInterface;
 import message.implementation.MigratingAgentMessage;
@@ -32,7 +33,7 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
     
     @Override
     public void work() {
-        if(work == 0) {
+        if(work < 0) {
             work = RandomAssigner.assignWork();
         }
         if(work % 23 == 0) {
@@ -109,6 +110,12 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 		}
 		if (this.host == null) 
 			throw new RuntimeException("Can't find host with id " + hostId);
+		this.host.addAgent(this);
 		
+	}
+
+	@Override
+	public void setHost(CommunicatingHost host) {
+		this.host = host;
 	}
 }

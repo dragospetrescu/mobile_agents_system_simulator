@@ -64,7 +64,6 @@ public class Simulation {
 
 		for (CommunicatingAgentInterface agent : agents) {
 			agent.initAgent(agents, hosts);
-			System.out.println(agent);
 		}
 	}
 
@@ -89,7 +88,7 @@ public class Simulation {
 	public void run() {
 
 		for (int step = 0; step < Constants.NO_STEPS; step++) {
-
+			
 			messagesManager.travelMessages();
 			List<MessageInterface> arrivedMessages = messagesManager.getArrivedMessages();
 			for (MessageInterface message : arrivedMessages) {
