@@ -1,6 +1,7 @@
 package host.communication;
 
 import agent.communication.CommunicatingAgentInterface;
+import helpers.LogTag;
 import helpers.Logger;
 import host.protocol.ProtocolHostInterface;
 import message.MessageInterface;
@@ -22,8 +23,6 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	private ProtocolHostInterface protocolHost;
 	
 	public CommunicatingHost() {
-//		this.protocolHost = this.protocol.getProtocolHost(this);
-
 		activeAgents = new ArrayList<CommunicatingAgentInterface>();
 		nextHopMap = new HashMap<CommunicatingHostInterface, CommunicatingHostInterface>();
 		messagesToBeSent = new ArrayList<MessageInterface>();
@@ -36,6 +35,7 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	public void addAgent(CommunicatingAgentInterface agent) {
 		activeAgents.add(agent);
 		agent.setHost(this);
+		agent.setWork();
 	}
 
 	public void addRouteNextHop(CommunicatingHostInterface destinationRouter,
@@ -79,15 +79,13 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 
 	@Override
 	public void receiveMessage(MessageInterface message) {
-		Logger.i("Message arrived at " + toString());
-
 		CommunicatingHostInterface messageDestination = message.getHostDestination();
 		if (messageDestination.equals(this)) {
 			if (message instanceof MigratingAgentMessage) {
 				MigratingAgentMessage migratingAgentMessage = (MigratingAgentMessage) message;
 				CommunicatingAgentInterface migratingAgent = migratingAgentMessage.getMigratingAgent();
 				addAgent(migratingAgent);
-				Logger.i(toString() + " received " + migratingAgent);
+				Logger.i(LogTag.AGENT_MIGRATING, toString() + " received " + migratingAgent);
 			} else {
 				protocolHost.interpretMessage(message);
 			}

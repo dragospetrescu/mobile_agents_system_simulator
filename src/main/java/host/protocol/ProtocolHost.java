@@ -3,10 +3,12 @@ package host.protocol;
 import java.util.List;
 
 import agent.communication.CommunicatingAgentInterface;
+import helpers.LogTag;
 import helpers.Logger;
 import host.communication.CommunicatingHostInterface;
 import message.MessageInterface;
 import protocol.Protocol;
+import statistics.StatisticsCreator;
 
 public class ProtocolHost implements ProtocolHostInterface {
 
@@ -28,7 +30,8 @@ public class ProtocolHost implements ProtocolHostInterface {
 		if(communicatingAgents.contains(communicatingAgent)) {
 			communicatingAgent.receiveMessage(message);
 		} else {
-			Logger.w(message + " did non find destination " + communicatingAgent + " at " + this);
+			Logger.w(LogTag.NORMAL_MESSAGE, message + " did non find destination " + communicatingAgent + " at " + this);
+			StatisticsCreator.messageFailedDelivered(message);
 		}
 	}
 	
@@ -47,4 +50,11 @@ public class ProtocolHost implements ProtocolHostInterface {
 	public Protocol getProtocol() {
 		return protocol;
 	}
+
+	@Override
+	public String toString() {
+		return protocol + " HOST " + id;
+	}
+	
+	
 }

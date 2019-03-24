@@ -14,7 +14,8 @@ public class RandomAssigner {
     }
 
     public static int assignWork() {
-        return getRandomNumberInRange(1, Constants.MAXIMUM_WORK_TIME);
+        int workTime = getRandomNumberInRange(Constants.MAXIMUM_WORK_TIME / 10, Constants.MAXIMUM_WORK_TIME);
+        return workTime;
     }
     
     public static <T> T getRandomElement(List<T> allElements, T exception) {

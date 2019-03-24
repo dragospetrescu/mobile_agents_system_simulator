@@ -22,4 +22,6 @@ public interface CommunicatingAgentInterface {
 	void initAgent(List<CommunicatingAgentInterface> allAgents, List<CommunicatingHostInterface> allHosts);
 	int getId();
 	void setHost(CommunicatingHost communicatingHost);
+	List<CommunicatingHostInterface> getAllHosts();
+	void setWork();
 }

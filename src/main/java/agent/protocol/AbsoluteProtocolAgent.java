@@ -29,4 +29,9 @@ public abstract class AbsoluteProtocolAgent implements ProtocolAgent {
 	public Protocol getProtocol() {
 		return protocol;
 	}
+	
+	@Override
+	public String toString() {
+		return protocol + " Agent " + id;
+	}
 }

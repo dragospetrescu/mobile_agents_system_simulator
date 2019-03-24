@@ -1,0 +1,10 @@
+package helpers;
+
+public enum LogTag {
+	AGENT_INIT,
+	HOST_INIT,
+	GRAPH_INIT,
+	MESSAGE_ROUTING,
+	AGENT_MIGRATING,
+	NORMAL_MESSAGE
+}

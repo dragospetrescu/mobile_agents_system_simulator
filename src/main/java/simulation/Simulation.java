@@ -7,6 +7,7 @@ import host.communication.CommunicatingHostInterface;
 import host.router.Graph;
 import message.MessageInterface;
 import message.MessagesManager;
+import statistics.StatisticsCreator;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -87,7 +88,7 @@ public class Simulation {
 
 	public void run() {
 
-		for (int step = 0; step < Constants.NO_STEPS; step++) {
+		for (int step = 0; step < Constants.NO_WORKING_STEPS + Constants.STEPS_WAITING_FOR_LAST_MESSAGES; step++) {
 			
 			messagesManager.travelMessages();
 			List<MessageInterface> arrivedMessages = messagesManager.getArrivedMessages();
@@ -113,6 +114,7 @@ public class Simulation {
 						messagesManager.addAllMessages(messages);
 					}
 
+					if(step < Constants.NO_WORKING_STEPS)
 					if (agent.wantsToMigrate()) {
 						MessageInterface message = agent.prepareMigratingMessage();
 						messagesManager.addMessage(message);
@@ -123,5 +125,9 @@ public class Simulation {
 				}
 			}
 		}
+	}
+	
+	public void printStatistics() {
+		System.out.println(1.0 * StatisticsCreator.getNumberOfSuccess() / StatisticsCreator.getNumberOfMessages() + " success rate");
 	}
 }

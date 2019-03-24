@@ -13,20 +13,23 @@ public class Message implements MessageInterface {
     private CommunicatingAgentInterface sourceAgent;
     private CommunicatingAgentInterface destinationAgent;
 
-    private static int noMessages = 0;
+    public static int noMessages = 0;
 
 
-    public Message(CommunicatingHostInterface sourceHost, CommunicatingHostInterface destinationHost, CommunicatingAgentInterface sourceAgent, CommunicatingAgentInterface destinationAgent) {
+    public Message(int id, CommunicatingHostInterface sourceHost, CommunicatingHostInterface destinationHost, CommunicatingAgentInterface sourceAgent, CommunicatingAgentInterface destinationAgent) {
         this.sourceHost = sourceHost;
         this.destinationHost = destinationHost;
         this.sourceAgent = sourceAgent;
         this.destinationAgent = destinationAgent;
         previousHopHost = destinationHost;
         nextHopHost = sourceHost.getNextHop(destinationHost);
-        id = noMessages;
-        noMessages++;
+        this.id = id;
     }
-
+    
+    public Message(CommunicatingHostInterface sourceHost, CommunicatingHostInterface destinationHost, CommunicatingAgentInterface sourceAgent, CommunicatingAgentInterface destinationAgent) {
+    	this(noMessages, sourceHost, destinationHost, sourceAgent, destinationAgent);
+    	noMessages++;
+    }
     @Override
     public CommunicatingHostInterface getHostDestination() {
         return destinationHost;
@@ -72,4 +75,28 @@ public class Message implements MessageInterface {
 		this.previousHopHost = this.nextHopHost;
 		this.nextHopHost = nextHop;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Message other = (Message) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+	
+	
 }
