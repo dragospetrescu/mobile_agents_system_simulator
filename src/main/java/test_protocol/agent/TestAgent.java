@@ -1,10 +1,10 @@
 package test_protocol.agent;
 
 import agent.communication.CommunicatingAgentInterface;
-import agent.protocol.AbsoluteProtocolAgent;
+import agent.protocol.AbstractProtocolAgent;
 import message.MessageInterface;
 
-public class TestAgent extends AbsoluteProtocolAgent {
+public class TestAgent extends AbstractProtocolAgent {
 
 	public TestAgent(CommunicatingAgentInterface communicatingAgent) {
 		super(communicatingAgent.getId(), communicatingAgent, communicatingAgent.getProtocol());

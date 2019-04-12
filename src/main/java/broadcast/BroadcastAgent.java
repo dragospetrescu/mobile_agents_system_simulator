@@ -3,7 +3,7 @@ package broadcast;
 import java.util.List;
 
 import agent.communication.CommunicatingAgentInterface;
-import agent.protocol.AbsoluteProtocolAgent;
+import agent.protocol.AbstractProtocolAgent;
 import helpers.LogTag;
 import helpers.Logger;
 import host.communication.CommunicatingHostInterface;
@@ -12,7 +12,7 @@ import message.MessageInterface;
 import message.implementation.DummyMessage;
 import statistics.StatisticsCreator;
 
-public class BroadcastAgent extends AbsoluteProtocolAgent {
+public class BroadcastAgent extends AbstractProtocolAgent {
 
 	public BroadcastAgent(CommunicatingAgentInterface communicatingAgent) {
 		super(communicatingAgent.getId(), communicatingAgent, communicatingAgent.getProtocol());

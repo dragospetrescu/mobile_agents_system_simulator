@@ -3,13 +3,13 @@ package agent.protocol;
 import agent.communication.CommunicatingAgentInterface;
 import protocol.Protocol;
 
-public abstract class AbsoluteProtocolAgent implements ProtocolAgent {
+public abstract class AbstractProtocolAgent implements ProtocolAgent {
 
 	private int id;
 	private CommunicatingAgentInterface communicatingAgent;
 	private Protocol protocol;
 	
-	public AbsoluteProtocolAgent(int id, CommunicatingAgentInterface communicatingAgent, Protocol protocol) {
+	public AbstractProtocolAgent(int id, CommunicatingAgentInterface communicatingAgent, Protocol protocol) {
 		this.id = id;
 		this.communicatingAgent = communicatingAgent;
 		this.protocol = protocol;
