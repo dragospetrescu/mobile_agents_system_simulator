@@ -3,6 +3,7 @@ package host.protocol;
 import java.util.List;
 
 import agent.communication.CommunicatingAgentInterface;
+import agent.protocol.ProtocolAgent;
 import helpers.LogTag;
 import helpers.Logger;
 import host.communication.CommunicatingHostInterface;
@@ -28,7 +29,8 @@ public class ProtocolHost implements ProtocolHostInterface {
 		CommunicatingAgentInterface communicatingAgent = message.getAgentDestination();
 		List<CommunicatingAgentInterface> communicatingAgents = communicationHost.getActiveAgents();
 		if(communicatingAgents.contains(communicatingAgent)) {
-			communicatingAgent.receiveMessage(message);
+			ProtocolAgent protocolAgent = communicatingAgent.getProtocolAgent();
+			protocolAgent.receiveMessage(message);
 		} else {
 			Logger.w(LogTag.NORMAL_MESSAGE, message + " did non find destination " + communicatingAgent + " at " + this);
 			StatisticsCreator.messageFailedDelivered(message);

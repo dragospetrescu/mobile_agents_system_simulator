@@ -5,6 +5,7 @@ import protocol.Protocol;
 
 import java.util.List;
 
+import agent.protocol.ProtocolAgent;
 import host.communication.CommunicatingHost;
 import host.communication.CommunicatingHostInterface;
 
@@ -19,6 +20,7 @@ public interface CommunicatingAgentInterface {
     void addMessage(MessageInterface message);
 	void receiveMessage(MessageInterface message);
 	Protocol getProtocol();
+	ProtocolAgent getProtocolAgent();
 	void initAgent(List<CommunicatingAgentInterface> allAgents, List<CommunicatingHostInterface> allHosts);
 	int getId();
 	void setHost(CommunicatingHost communicatingHost);

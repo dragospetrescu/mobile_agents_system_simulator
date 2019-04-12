@@ -1,6 +1,7 @@
 package agent.protocol;
 
 import agent.communication.CommunicatingAgentInterface;
+import message.MessageInterface;
 import protocol.Protocol;
 
 public abstract class AbstractProtocolAgent implements ProtocolAgent {
@@ -13,6 +14,11 @@ public abstract class AbstractProtocolAgent implements ProtocolAgent {
 		this.id = id;
 		this.communicatingAgent = communicatingAgent;
 		this.protocol = protocol;
+	}
+	
+	@Override
+	public void receiveMessage(MessageInterface message) {
+		communicatingAgent.receiveMessage(message);
 	}
 
 	@Override

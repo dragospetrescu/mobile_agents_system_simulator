@@ -20,7 +20,7 @@ public class BroadcastAgent extends AbstractProtocolAgent {
 
 	@Override
 	public void receiveMessage(MessageInterface message) {
-		Logger.i(LogTag.NORMAL_MESSAGE, toString() + " received " + message);
+		super.receiveMessage(message);
 		StatisticsCreator.messageSuccesfullyDelivered(message);
 	}
 

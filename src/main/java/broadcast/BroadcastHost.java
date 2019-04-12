@@ -3,6 +3,7 @@ package broadcast;
 import java.util.List;
 
 import agent.communication.CommunicatingAgentInterface;
+import agent.protocol.ProtocolAgent;
 import host.communication.CommunicatingHostInterface;
 import host.protocol.ProtocolHost;
 import message.MessageInterface;
@@ -18,7 +19,8 @@ public class BroadcastHost extends ProtocolHost {
 		CommunicatingAgentInterface communicatingAgent = message.getAgentDestination();
 		List<CommunicatingAgentInterface> communicatingAgents = getCommunicationHost().getActiveAgents();
 		if(communicatingAgents.contains(communicatingAgent)) {
-			communicatingAgent.receiveMessage(message);
+			ProtocolAgent protocolAgent = communicatingAgent.getProtocolAgent();
+			protocolAgent.receiveMessage(message);
 		}
 	}
 

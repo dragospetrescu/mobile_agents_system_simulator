@@ -75,7 +75,7 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 
 	@Override
 	public void receiveMessage(MessageInterface message) {
-		agentProtocol.receiveMessage(message);
+		Logger.i(LogTag.NORMAL_MESSAGE, this + " received " + message);
 	}
 
 	@Override
@@ -124,5 +124,10 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	@Override
 	public void setWork() {
 		work = RandomAssigner.assignWork();		
+	}
+	
+	@Override
+	public ProtocolAgent getProtocolAgent() {
+		return agentProtocol;
 	}
 }
