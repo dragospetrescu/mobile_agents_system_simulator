@@ -4,8 +4,14 @@ import agent.communication.CommunicatingAgentInterface;
 import agent.protocol.AbstractProtocolAgent;
 import message.MessageInterface;
 
+/**
+ * Not working. This is a test
+ */
 public class TestAgent extends AbstractProtocolAgent {
 
+	/**
+	 * @param communicatingAgent that is using this protocol
+	 */
 	public TestAgent(CommunicatingAgentInterface communicatingAgent) {
 		super(communicatingAgent.getId(), communicatingAgent, communicatingAgent.getProtocol());
 	}

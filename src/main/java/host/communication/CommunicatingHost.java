@@ -3,8 +3,9 @@ package host.communication;
 import agent.communication.CommunicatingAgentInterface;
 import helpers.LogTag;
 import helpers.Logger;
-import host.protocol.ProtocolHostInterface;
+import host.protocol.ProtocolHost;
 import message.MessageInterface;
+import message.MessagesManager;
 import message.implementation.MigratingAgentMessage;
 import protocol.Protocol;
 
@@ -13,15 +14,45 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents the protocol-independent part of the Host. 
+ * It's responsibilities are: 
+ * - communicating with the {@link MessagesManager}
+ * - interpreting MigratingAgentMessages
+ * - keeping a list of the active agents of this host
+ */
 public class CommunicatingHost implements CommunicatingHostInterface {
 
+	/**
+	 * Unique identifier
+	 */
 	public int id;
+	/**
+	 * Agents that are currently residing on this host
+	 */
 	private List<CommunicatingAgentInterface> activeAgents;
+	/**
+	 * Routing table of this host
+	 */
 	private Map<CommunicatingHostInterface, CommunicatingHostInterface> nextHopMap;
+	/**
+	 * List of messages that will be sent to the {@link MessagesManager} 
+	 */
 	private List<MessageInterface> messagesToBeSent;
+	/**
+	 * TODO this will become a list of protocols
+	 * List of protocols this host is implementing
+	 */
 	private Protocol protocol;
-	private ProtocolHostInterface protocolHost;
+	/**
+	 * TODO this will become a list of protocolsHosts
+	 * The protocol dependent parts of the host
+	 */
+	private ProtocolHost protocolHost;
 	
+	/**
+	 * TODO add parameters
+	 */
 	public CommunicatingHost() {
 		activeAgents = new ArrayList<CommunicatingAgentInterface>();
 		nextHopMap = new HashMap<CommunicatingHostInterface, CommunicatingHostInterface>();
@@ -67,14 +98,6 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	@Override
 	public int hashCode() {
 		return id;
-	}
-
-	public void printRouting() {
-		System.out.println(toString());
-
-		for (CommunicatingHostInterface destHost : nextHopMap.keySet()) {
-			System.out.println("To " + destHost + " by " + nextHopMap.get(destHost));
-		}
 	}
 
 	@Override
@@ -124,7 +147,7 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	}
 
 	@Override
-	public void setProtocolHost() {
+	public void createProtocolHosts() {
 		this.protocolHost = this.protocol.getProtocolHost(this);
 	}
 }

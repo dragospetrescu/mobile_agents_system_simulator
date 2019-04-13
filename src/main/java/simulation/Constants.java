@@ -1,5 +1,9 @@
 package simulation;
 
+@SuppressWarnings("javadoc")
+/**
+ * TODO this will be removed and those parameters will be received through a json 
+ */
 public class Constants {
 
     public static final int NETWORK_MAXIMUM_OVERHEAD = 3;

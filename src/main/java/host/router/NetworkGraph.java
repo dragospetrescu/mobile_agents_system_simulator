@@ -11,7 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Graph {
+@SuppressWarnings("javadoc")
+/**
+ * TODO
+ * WILL BE REFACTORED
+ */
+public class NetworkGraph {
 
     private int[][] distances;
     private int INF = -1;
@@ -19,7 +24,7 @@ public class Graph {
 //    public static Graph createGraph(String filename) {
 //    }
 
-    public Graph(String filename) {
+    public NetworkGraph(String filename) {
         Gson gson = new Gson();
         JsonReader reader;
         try {

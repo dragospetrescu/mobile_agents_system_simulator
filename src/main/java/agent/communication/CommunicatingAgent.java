@@ -8,24 +8,62 @@ import host.communication.CommunicatingHostInterface;
 import message.MessageInterface;
 import message.implementation.MigratingAgentMessage;
 import protocol.Protocol;
+import statistics.StatisticsCreator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import agent.protocol.ProtocolAgent;
 
+/**
+ * Represents the protocol-independent part of the Agent. It's responsibilities
+ * are: - migrating - calling the protocol to send messages to a certain agent -
+ * giving the messages to the host - create statistics about received messages
+ */
 public class CommunicatingAgent implements CommunicatingAgentInterface {
 
+	/**
+	 * Unique identifier
+	 */
 	private int id;
+	/**
+	 * Unique identifier of the host the CommunicatingAgent is currently inhabiting
+	 */
 	private int hostId;
+	/**
+	 * The host the CommunicatingAgent is currently inhabiting
+	 */
 	private CommunicatingHostInterface host;
+	/**
+	 * All hosts available in the simulation
+	 */
 	private List<CommunicatingHostInterface> allHosts;
+	/**
+	 * All agents available in the simulation
+	 */
 	private List<CommunicatingAgentInterface> allAgents;
+	/**
+	 * The turns left until the next migration
+	 */
 	private int work;
+	/**
+	 * The communication protocol this agent is currently using
+	 */
 	private Protocol protocol;
+	/**
+	 * The protocol dependent part which handles messages creation and finding the
+	 * host destination of an agent destination. Should always be in sync with
+	 * protocol
+	 */
 	private ProtocolAgent agentProtocol;
+	/**
+	 * List of messages to be delivered to be sent
+	 */
 	private List<MessageInterface> messages;
 
+	/**
+	 * TODO add parameters
+	 */
 	public CommunicatingAgent() {
 		messages = new ArrayList<MessageInterface>();
 	}
@@ -75,6 +113,7 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 
 	@Override
 	public void receiveMessage(MessageInterface message) {
+		StatisticsCreator.messageSuccesfullyDelivered(message);
 		Logger.i(LogTag.NORMAL_MESSAGE, this + " received " + message);
 	}
 
@@ -123,9 +162,9 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 
 	@Override
 	public void setWork() {
-		work = RandomAssigner.assignWork();		
+		work = RandomAssigner.assignWork();
 	}
-	
+
 	@Override
 	public ProtocolAgent getProtocolAgent() {
 		return agentProtocol;

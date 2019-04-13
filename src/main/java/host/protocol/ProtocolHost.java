@@ -1,62 +1,36 @@
 package host.protocol;
 
-import java.util.List;
-
-import agent.communication.CommunicatingAgentInterface;
-import agent.protocol.ProtocolAgent;
-import helpers.LogTag;
-import helpers.Logger;
 import host.communication.CommunicatingHostInterface;
 import message.MessageInterface;
 import protocol.Protocol;
-import statistics.StatisticsCreator;
 
-public class ProtocolHost implements ProtocolHostInterface {
+/**
+ * ProtocolHost represents the protocol-dependent part of the Host. 
+ * It's responsibilities are: 
+ * - interpreting messages 
+ */
+public interface ProtocolHost {
 
-	private int id;
-	private CommunicatingHostInterface communicationHost;
-	private Protocol protocol;
-	
-	public ProtocolHost(int id, CommunicatingHostInterface communicationHost, Protocol protocol) {
-		super();
-		this.id = id;
-		this.communicationHost = communicationHost;
-		this.protocol = protocol;
-	}
+	/**
+	 * If the host contains the destination agent it redirects the message to the agent.
+	 * Otherwise it marks it as a fail for statistic reasons.
+	 * 
+	 * @param message - the message to be interpreted / redirected
+	 */
+	void interpretMessage(MessageInterface message);
 
-	@Override
-	public void interpretMessage(MessageInterface message) {
-		CommunicatingAgentInterface communicatingAgent = message.getAgentDestination();
-		List<CommunicatingAgentInterface> communicatingAgents = communicationHost.getActiveAgents();
-		if(communicatingAgents.contains(communicatingAgent)) {
-			ProtocolAgent protocolAgent = communicatingAgent.getProtocolAgent();
-			protocolAgent.receiveMessage(message);
-		} else {
-			Logger.w(LogTag.NORMAL_MESSAGE, message + " did non find destination " + communicatingAgent + " at " + this);
-			StatisticsCreator.messageFailedDelivered(message);
-		}
-	}
-	
+	/**
+	 * @return the CommunicatingHost that is currently using this ProtocolHost
+	 */
+	CommunicatingHostInterface getCommunicationHost();
 
-	@Override
-	public CommunicatingHostInterface getCommunicationHost() {
-		return communicationHost;
-	}
+	/**
+	 * @return id - unique identifier
+	 */
+	int getId();
 
-	@Override
-	public int getId() {
-		return id;
-	}
-
-	@Override
-	public Protocol getProtocol() {
-		return protocol;
-	}
-
-	@Override
-	public String toString() {
-		return protocol + " HOST " + id;
-	}
-	
-	
+	/**
+	 * @return the protocol of this agent
+	 */
+	Protocol getProtocol();
 }

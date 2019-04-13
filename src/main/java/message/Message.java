@@ -3,72 +3,120 @@ package message;
 import agent.communication.CommunicatingAgentInterface;
 import host.communication.CommunicatingHostInterface;
 
+/**
+ * Generic message, implements the next hop logic Can be extended to create
+ * custom, protocol specific messages
+ */
 public class Message implements MessageInterface {
 
-    private int id;
-    private CommunicatingHostInterface sourceHost;
-    private CommunicatingHostInterface destinationHost;
-    private CommunicatingHostInterface previousHopHost;
-    private CommunicatingHostInterface nextHopHost;
-    private CommunicatingAgentInterface sourceAgent;
-    private CommunicatingAgentInterface destinationAgent;
+	/**
+	 * Unique id
+	 */
+	private int id;
+	/**
+	 * The host from which the message was sent
+	 */
+	private CommunicatingHostInterface sourceHost;
+	/**
+	 * The final host destination
+	 */
+	private CommunicatingHostInterface destinationHost;
+	/**
+	 * The last host that redirected the message
+	 */
+	private CommunicatingHostInterface previousHopHost;
+	/**
+	 * The next host to the final destination
+	 */
+	private CommunicatingHostInterface nextHopHost;
+	/**
+	 * The agent that sent the message. Can be null if the message was sent by a
+	 * host.
+	 */
+	private CommunicatingAgentInterface sourceAgent;
+	/**
+	 * The destination agent. Can be null if the destination is a host.
+	 */
+	private CommunicatingAgentInterface destinationAgent;
 
-    public static int noMessages = 0;
+	/**
+	 * Used to make sure each message receives a unique id
+	 */
+	public static int noMessages = 0;
 
+	/**
+	 * Warning. You should only use this constructor if the id provided is unique
+	 * 
+	 * @param id - the unique identifier
+	 * @param sourceHost - host from where the message is sent
+	 * @param destinationHost - the host where the message has to arrive
+	 * @param sourceAgent - the agent that sends the message
+	 * @param destinationAgent - the agent that has to receive the message
+	 */
+	public Message(int id, CommunicatingHostInterface sourceHost, CommunicatingHostInterface destinationHost,
+			CommunicatingAgentInterface sourceAgent, CommunicatingAgentInterface destinationAgent) {
+		this.sourceHost = sourceHost;
+		this.destinationHost = destinationHost;
+		this.sourceAgent = sourceAgent;
+		this.destinationAgent = destinationAgent;
+		previousHopHost = destinationHost;
+		nextHopHost = sourceHost.getNextHop(destinationHost);
+		this.id = id;
+	}
 
-    public Message(int id, CommunicatingHostInterface sourceHost, CommunicatingHostInterface destinationHost, CommunicatingAgentInterface sourceAgent, CommunicatingAgentInterface destinationAgent) {
-        this.sourceHost = sourceHost;
-        this.destinationHost = destinationHost;
-        this.sourceAgent = sourceAgent;
-        this.destinationAgent = destinationAgent;
-        previousHopHost = destinationHost;
-        nextHopHost = sourceHost.getNextHop(destinationHost);
-        this.id = id;
-    }
-    
-    public Message(CommunicatingHostInterface sourceHost, CommunicatingHostInterface destinationHost, CommunicatingAgentInterface sourceAgent, CommunicatingAgentInterface destinationAgent) {
-    	this(noMessages, sourceHost, destinationHost, sourceAgent, destinationAgent);
-    	noMessages++;
-    }
-    @Override
-    public CommunicatingHostInterface getHostDestination() {
-        return destinationHost;
-    }
+	/**
+	 * Use this constructor if you don't care about the id
+	 * 
+	 * @param sourceHost - host from where the message is sent
+	 * @param destinationHost - the host where the message has to arrive
+	 * @param sourceAgent - the agent that sends the message
+	 * @param destinationAgent - the agent that has to receive the message
+	 */
+	public Message(CommunicatingHostInterface sourceHost, CommunicatingHostInterface destinationHost,
+			CommunicatingAgentInterface sourceAgent, CommunicatingAgentInterface destinationAgent) {
+		this(noMessages, sourceHost, destinationHost, sourceAgent, destinationAgent);
+		noMessages++;
+	}
 
-    @Override
-    public int getId() {
-        return id;
-    }
+	@Override
+	public CommunicatingHostInterface getHostDestination() {
+		return destinationHost;
+	}
 
-    @Override
-    public String toString() {
-        return "Message " + id;
-    }
+	@Override
+	public int getId() {
+		return id;
+	}
 
-    @Override
-    public CommunicatingHostInterface getNextHop() {
-        return nextHopHost;
-    }
+	@Override
+	public String toString() {
+		return "Message " + id;
+	}
 
-    @Override
-    public CommunicatingHostInterface getPreviousHop() {
-        return previousHopHost;
-    }
+	@Override
+	public CommunicatingHostInterface getNextHop() {
+		return nextHopHost;
+	}
 
-    @Override
-    public CommunicatingHostInterface getHostSource() {
-        return sourceHost;
-    }
+	@Override
+	public CommunicatingHostInterface getPreviousHop() {
+		return previousHopHost;
+	}
 
-    @Override
-    public CommunicatingAgentInterface getAgentSource() {
-        return sourceAgent;
-    }
+	@Override
+	public CommunicatingHostInterface getHostSource() {
+		return sourceHost;
+	}
 
-    @Override
-    public CommunicatingAgentInterface getAgentDestination() {
-        return destinationAgent;
-    }
+	@Override
+	public CommunicatingAgentInterface getAgentSource() {
+		return sourceAgent;
+	}
+
+	@Override
+	public CommunicatingAgentInterface getAgentDestination() {
+		return destinationAgent;
+	}
 
 	@Override
 	public void setNextHopHost(CommunicatingHostInterface nextHop) {
@@ -97,6 +145,5 @@ public class Message implements MessageInterface {
 			return false;
 		return true;
 	}
-	
-	
+
 }
