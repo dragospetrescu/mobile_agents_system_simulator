@@ -2,6 +2,7 @@ package host.communication;
 
 import agent.communication.CommunicatingAgentInterface;
 import host.protocol.AbstractProtocolHost;
+import host.protocol.ProtocolHost;
 import message.MessageInterface;
 import message.MessagesManager;
 import message.implementation.MigratingAgentMessage;
@@ -109,4 +110,10 @@ public interface CommunicatingHostInterface {
 	 * @return host with this id
 	 */
 	CommunicatingHostInterface getHostById(int id);
+	
+	/**
+	 * @param protocol 
+	 * @return implementation of protocol
+	 */
+	ProtocolHost getProtocolHost(Protocol protocol);
 }

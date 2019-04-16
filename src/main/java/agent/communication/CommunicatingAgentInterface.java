@@ -87,9 +87,9 @@ public interface CommunicatingAgentInterface {
 	 * Sets for each agent the allAgents of the simulations and allHosts of the simulation
 	 * 
 	 * @param allAgents - all CommunicatingAgents of the simulation
-	 * @param allHosts - all Hosts of the simulation
+	 * @param hosts - all CommunicatingHosts of the simulation
 	 */
-	void initAgent(List<CommunicatingAgentInterface> allAgents, List<CommunicatingHostInterface> allHosts);
+	void initAgent(List<CommunicatingAgentInterface> allAgents, List<CommunicatingHostInterface> hosts);
 
 	/**
 	 * @return - the unique id of each CommunicatingAgentInterface
@@ -106,7 +106,7 @@ public interface CommunicatingAgentInterface {
 	/**
 	 * @return all hosts of the simulation
 	 */
-	List<CommunicatingHostInterface> getAllHosts();
+	List<CommunicatingHostInterface> getAllNormalHosts();
 
 	/**
 	 * Calls protocol.init()

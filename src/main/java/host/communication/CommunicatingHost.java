@@ -182,4 +182,10 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 
 		throw new RuntimeException("Host with id " + homeServerHostId + " not found!");
 	}
+
+	
+	@Override
+	public ProtocolHost getProtocolHost(Protocol protocol) {
+		return protocolHost;
+	}
 }

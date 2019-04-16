@@ -36,10 +36,6 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	 */
 	private CommunicatingHostInterface host;
 	/**
-	 * All hosts available in the simulation
-	 */
-	private List<CommunicatingHostInterface> allHosts;
-	/**
 	 * All agents available in the simulation
 	 */
 	private List<CommunicatingAgentInterface> allAgents;
@@ -99,7 +95,8 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 
 	@Override
 	public MessageInterface prepareMigratingMessage() {
-		CommunicatingHostInterface destinationHost = RandomAssigner.getRandomElement(allHosts, host);
+		List<CommunicatingHostInterface> normalHosts = getAllNormalHosts();
+		CommunicatingHostInterface destinationHost = RandomAssigner.getRandomElement(normalHosts, host);
 		Logger.i(LogTag.AGENT_MIGRATING, toString() + " traveling from " + getHost() + " to " + destinationHost);
 		agentProtocol.migrate(destinationHost);
 		
@@ -140,12 +137,11 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	}
 
 	@Override
-	public void initAgent(List<CommunicatingAgentInterface> allAgents, List<CommunicatingHostInterface> allHosts) {
+	public void initAgent(List<CommunicatingAgentInterface> allAgents, List<CommunicatingHostInterface> hosts) {
 		this.allAgents = allAgents;
-		this.allHosts = allHosts;
 		agentProtocol = protocol.getProtocolAgent(this);
 
-		for (CommunicatingHostInterface host : allHosts) {
+		for (CommunicatingHostInterface host : hosts) {
 			if (host.getId() == hostId) {
 				this.host = host;
 				break;
@@ -163,8 +159,8 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	}
 
 	@Override
-	public List<CommunicatingHostInterface> getAllHosts() {
-		return allHosts;
+	public List<CommunicatingHostInterface> getAllNormalHosts() {
+		return host.getAllNormalHosts();
 	}
 
 	@Override

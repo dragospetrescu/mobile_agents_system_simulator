@@ -33,7 +33,7 @@ public class BroadcastAgent extends AbstractProtocolAgent {
 	@Override
 	public void prepareMessageTo(CommunicatingAgentInterface destinationAgent) {
 		CommunicatingAgentInterface communicatingAgent = getCommunicatingAgent();
-		List<CommunicatingHostInterface> allHosts = communicatingAgent.getAllHosts();
+		List<CommunicatingHostInterface> allHosts = communicatingAgent.getAllNormalHosts();
 		for (CommunicatingHostInterface communicatingHostDestination : allHosts) {
 			if (!communicatingHostDestination.equals(communicatingAgent.getHost())) {
 				MessageInterface message = new NormalCommunicationMessage(Message.noMessages, communicatingAgent.getHost(),

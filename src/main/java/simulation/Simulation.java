@@ -109,7 +109,8 @@ public class Simulation {
 	private void initAllHosts() {
 		allHosts = new ArrayList<CommunicatingHostInterface>();
 		allHosts.addAll(normalHosts);
-		allHosts.addAll(specialHosts);
+		if (specialHosts != null)
+			allHosts.addAll(specialHosts);
 		
 		for (CommunicatingHostInterface host : allHosts) {
 			host.init(normalHosts, specialHosts);
@@ -149,10 +150,7 @@ public class Simulation {
 	 * Initializes host's protocol
 	 */
 	private void initHostProtocol() {
-		for (CommunicatingHostInterface communicatingHostInterface : normalHosts) {
-			communicatingHostInterface.initProtocol();
-		}
-		for (CommunicatingHostInterface communicatingHostInterface : specialHosts) {
+		for (CommunicatingHostInterface communicatingHostInterface : allHosts) {
 			communicatingHostInterface.initProtocol();
 		}
 	}
@@ -186,7 +184,7 @@ public class Simulation {
 		agents = gson.fromJson(reader, listType);
 
 		for (CommunicatingAgentInterface agent : agents) {
-			agent.initAgent(agents, normalHosts);
+			agent.initAgent(agents, allHosts);
 		}
 	}
 
