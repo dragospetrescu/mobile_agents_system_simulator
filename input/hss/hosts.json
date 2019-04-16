@@ -14,9 +14,5 @@
   {
       "id": 3,
       "protocol": "HSS"
-  },
-  {
-      "id": 4,
-      "protocol": "HSSServer"
   }
 ]

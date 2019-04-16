@@ -30,7 +30,7 @@ public class Simulation {
 	/**
 	 * All CommunicatingHosts of the simulation. They are protocol independent.
 	 */
-	private List<CommunicatingHostInterface> hosts;
+	private List<CommunicatingHostInterface> normalHosts;
 	
 	/**
 	 * All CommunicatingAgents of the simulation. They are protocol independent.
@@ -58,16 +58,23 @@ public class Simulation {
 	 */
 	private String hostsFile;
 
+	private String specialHostsFile;
+
+	private List<CommunicatingHostInterface> specialHosts;
+
+	private List<CommunicatingHostInterface> allHosts;
+
 	
 	/**
 	 * @param graphFile - Json file where the simulation's agents are described
 	 * @param hostsFile - Json file where the network is described
 	 * @param agentsFile - Json file where the simulation's hosts are described
 	 */
-	public Simulation(String graphFile, String hostsFile, String agentsFile) {
+	public Simulation(String graphFile, String hostsFile, String agentsFile, String specialHostsFile) {
 		this.graphFile = graphFile;
 		this.hostsFile = hostsFile;
 		this.agentsFile = agentsFile;
+		this.specialHostsFile = specialHostsFile;
 		agents = new ArrayList<>();
 	}
 
@@ -75,7 +82,9 @@ public class Simulation {
 	 * Main initialization function. Should be called before starting the simulation
 	 */
 	public void init() {
-		initHosts();
+		createSpecialHosts();
+		createNormalHosts();
+		initAllHosts();
 		initRouting();
 		initAgents();
 		initHostProtocol();
@@ -83,6 +92,32 @@ public class Simulation {
 	}
 
 	
+	private void initAllHosts() {
+		allHosts = new ArrayList<CommunicatingHostInterface>();
+		allHosts.addAll(normalHosts);
+		allHosts.addAll(specialHosts);
+		
+		for (CommunicatingHostInterface host : allHosts) {
+			host.init(normalHosts, specialHosts);
+		}	
+	}
+
+	private void createSpecialHosts() {
+		if (specialHostsFile == null)
+			return;
+		Gson gson = new Gson();
+		JsonReader reader;
+		try {
+			reader = new JsonReader(new FileReader(specialHostsFile));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return;
+		}
+		Type listType = new TypeToken<ArrayList<CommunicatingHost>>() {
+		}.getType();
+		specialHosts = gson.fromJson(reader, listType);
+	}
+
 	private void initAgentProtocol() {
 		for (CommunicatingAgentInterface communicatingAgentInterface : agents) {
 			communicatingAgentInterface.initProtocol();
@@ -90,7 +125,10 @@ public class Simulation {
 	}
 
 	private void initHostProtocol() {
-		for (CommunicatingHostInterface communicatingHostInterface : hosts) {
+		for (CommunicatingHostInterface communicatingHostInterface : normalHosts) {
+			communicatingHostInterface.initProtocol();
+		}
+		for (CommunicatingHostInterface communicatingHostInterface : specialHosts) {
 			communicatingHostInterface.initProtocol();
 		}
 	}
@@ -100,7 +138,8 @@ public class Simulation {
 	 */
 	private void initRouting() {
 		graph = new NetworkGraph(graphFile);
-		graph.addRoutingToHosts(hosts);
+		
+		graph.addRoutingToHosts(allHosts);
 
 		messagesManager = new MessagesManager(graph);
 	}
@@ -123,14 +162,14 @@ public class Simulation {
 		agents = gson.fromJson(reader, listType);
 
 		for (CommunicatingAgentInterface agent : agents) {
-			agent.initAgent(agents, hosts);
+			agent.initAgent(agents, normalHosts);
 		}
 	}
 
 	/**
 	 * Initializes the hosts
 	 */
-	public void initHosts() {
+	public void createNormalHosts() {
 		Gson gson = new Gson();
 		JsonReader reader;
 		try {
@@ -141,11 +180,8 @@ public class Simulation {
 		}
 		Type listType = new TypeToken<ArrayList<CommunicatingHost>>() {
 		}.getType();
-		hosts = gson.fromJson(reader, listType);
+		normalHosts = gson.fromJson(reader, listType);
 
-		for (CommunicatingHostInterface host : hosts) {
-			host.init(hosts);
-		}
 	}
 
 	
@@ -164,7 +200,7 @@ public class Simulation {
 				nextHopHost.receiveMessage(message);
 			}
 
-			for (CommunicatingHostInterface host : hosts) {
+			for (CommunicatingHostInterface host : allHosts) {
 
 				if (host.wantsToSendMessage()) {
 					List<MessageInterface> messages = host.sendMessages();

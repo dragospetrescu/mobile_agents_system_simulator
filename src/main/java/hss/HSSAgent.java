@@ -11,6 +11,7 @@ import message.implementation.NormalCommunicationMessage;
 public class HSSAgent extends AbstractProtocolAgent {
 
 	private CommunicatingHostInterface homeServerHost;
+	private CommunicatingHostInterface homeAgentHost;
 
 	public HSSAgent(CommunicatingAgentInterface communicatingAgent) {
 		super(communicatingAgent.getId(), communicatingAgent, communicatingAgent.getProtocol());
@@ -30,7 +31,7 @@ public class HSSAgent extends AbstractProtocolAgent {
 	public void migrate(CommunicatingHostInterface newHost) {
 		CommunicatingAgentInterface communicatingAgent = getCommunicatingAgent();
 		CommunicatingHostInterface sourceHost = communicatingAgent.getHost();
-		MessageInterface message = new HSSMigratingMessage(sourceHost, homeServerHost, communicatingAgent, null, newHost);
+		MessageInterface message = new HSSMigratingMessage(sourceHost, homeAgentHost, communicatingAgent, null, newHost);
 		communicatingAgent.addMessage(message);
 	}
 
@@ -38,6 +39,7 @@ public class HSSAgent extends AbstractProtocolAgent {
 	public void init(Map<String, String> protocolArguments) {
 		int homeServerHostId = Integer.parseInt(protocolArguments.get("homeServerHost"));
 		homeServerHost = getCommunicatingAgent().getHost().getHostById(homeServerHostId);
+		homeAgentHost = getCommunicatingAgent().getHost();
 	}
 
 }

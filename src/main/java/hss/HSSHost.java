@@ -21,7 +21,6 @@ public class HSSHost extends AbstractProtocolHost {
 	@Override
 	public void interpretMessage(MessageInterface message) {
 		if (message instanceof HSSForwardedMessage) {
-			HSSForwardedMessage hssMessage = (HSSForwardedMessage) message;
 			CommunicatingAgentInterface agentDestination = message.getAgentDestination();
 			CommunicatingHostInterface communicationHost = getCommunicationHost();
 			CommunicatingHostInterface hostDestination = agentToAddressDatabase.get(agentDestination);

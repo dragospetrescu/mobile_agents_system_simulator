@@ -86,7 +86,7 @@ public interface CommunicatingHostInterface {
 
 	void initProtocol();
 
-	void init(List<CommunicatingHostInterface> hosts);
+	void init(List<CommunicatingHostInterface> hosts, List<CommunicatingHostInterface> specialHosts);
 	
 	List<CommunicatingHostInterface> getAllHosts();
 

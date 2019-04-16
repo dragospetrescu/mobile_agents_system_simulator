@@ -60,7 +60,14 @@ public class Message implements MessageInterface {
 		this.sourceAgent = sourceAgent;
 		this.destinationAgent = destinationAgent;
 		previousHopHost = sourceHost;
-		nextHopHost = sourceHost.getNextHop(destinationHost);
+		if(sourceHost.equals(destinationHost)) {
+			nextHopHost = sourceHost;
+		} else {
+			nextHopHost = sourceHost.getNextHop(destinationHost);
+		}
+		if(nextHopHost == null) {
+			System.out.println("AICI" + sourceHost + " " + destinationHost);
+		}
 		this.id = id;
 	}
 
