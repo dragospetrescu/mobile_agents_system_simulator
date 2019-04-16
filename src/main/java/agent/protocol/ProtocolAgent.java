@@ -55,6 +55,9 @@ public interface ProtocolAgent {
 	 */
 	void migrate(CommunicatingHostInterface destinationHost);
 
+	/**
+	 * @param protocolArguments extra arguments for the protocol
+	 */
 	void init(Map<String, String> protocolArguments);
 
 }

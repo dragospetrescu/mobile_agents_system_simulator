@@ -61,6 +61,9 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	 * List of messages to be delivered to be sent
 	 */
 	private List<MessageInterface> messages;
+	/**
+	 * Extra arguments for the protocol
+	 */
 	private Map<String, String> protocolArguments;
 
 	/**

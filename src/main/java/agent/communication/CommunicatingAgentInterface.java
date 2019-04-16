@@ -108,6 +108,9 @@ public interface CommunicatingAgentInterface {
 	 */
 	List<CommunicatingHostInterface> getAllHosts();
 
+	/**
+	 * Calls protocol.init()
+	 */
 	void initProtocol();
 
 }

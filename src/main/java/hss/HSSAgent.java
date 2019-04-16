@@ -6,13 +6,32 @@ import agent.communication.CommunicatingAgentInterface;
 import agent.protocol.AbstractProtocolAgent;
 import host.communication.CommunicatingHostInterface;
 import message.MessageInterface;
-import message.implementation.NormalCommunicationMessage;
 
+/**
+ * The Agent from the HSS documentation
+ * 
+ * When agent migrates it sends to it's home host message
+ * that updates the location database
+ * 
+ * Agent 0 wants to send message to Agent 1
+ * Agent 0 sends message to HomeServer
+ * HomeServer sends message to Agent 1 Home Agent
+ * Home Agent sends message location of the Agent
+ */
 public class HSSAgent extends AbstractProtocolAgent {
 
+	/**
+	 * Server that has mapped agent to homeHost
+	 */
 	private CommunicatingHostInterface homeServerHost;
+	/**
+	 * This agent's home Host
+	 */
 	private CommunicatingHostInterface homeAgentHost;
 
+	/**
+	 * @param communicatingAgent - agent that is going to use this protocol implementation
+	 */
 	public HSSAgent(CommunicatingAgentInterface communicatingAgent) {
 		super(communicatingAgent.getId(), communicatingAgent, communicatingAgent.getProtocol());
 	}
@@ -31,7 +50,7 @@ public class HSSAgent extends AbstractProtocolAgent {
 	public void migrate(CommunicatingHostInterface newHost) {
 		CommunicatingAgentInterface communicatingAgent = getCommunicatingAgent();
 		CommunicatingHostInterface sourceHost = communicatingAgent.getHost();
-		MessageInterface message = new HSSMigratingMessage(sourceHost, homeAgentHost, communicatingAgent, null, newHost);
+		MessageInterface message = new HSSLocationUpdateMessage(sourceHost, homeAgentHost, communicatingAgent, null, newHost);
 		communicatingAgent.addMessage(message);
 	}
 

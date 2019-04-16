@@ -10,11 +10,26 @@ import host.protocol.AbstractProtocolHost;
 import message.MessageInterface;
 import message.implementation.NormalCommunicationMessage;
 
-public class HSSHost extends AbstractProtocolHost {
+/**
+ * The HomeServer from the HSS documentation
+ * 
+ * It keeps a map agent -> host location
+ * 
+ * When agent migrates it sends to it's home host message
+ * that updates the location database
+ */
+public class HSSHomeAgentHost extends AbstractProtocolHost {
 
+	/**
+	 * Map agent to current location
+	 * It is updated every time agent migrates
+	 */
 	Map<CommunicatingAgentInterface, CommunicatingHostInterface> agentToAddressDatabase;
 
-	public HSSHost(CommunicatingHostInterface communicationHost) {
+	/**
+	 * @param communicationHost - the CommunicatingAgent that will use this protocol
+	 */
+	public HSSHomeAgentHost(CommunicatingHostInterface communicationHost) {
 		super(communicationHost.getId(), communicationHost, communicationHost.getProtocol());
 	}
 
@@ -31,9 +46,9 @@ public class HSSHost extends AbstractProtocolHost {
 			} else {
 				communicationHost.addMessageForSending(forwardedNormalMessage);
 			}
-		} else if (message instanceof HSSMigratingMessage) {
-			HSSMigratingMessage hssMessage = (HSSMigratingMessage) message;
-			CommunicatingHostInterface newInhabitingHost = hssMessage.getNewInhabitingHost();
+		} else if (message instanceof HSSLocationUpdateMessage) {
+			HSSLocationUpdateMessage hssMessage = (HSSLocationUpdateMessage) message;
+			CommunicatingHostInterface newInhabitingHost = hssMessage.getNewHostLocation();
 			CommunicatingAgentInterface agentSource = hssMessage.getAgentSource();
 			agentToAddressDatabase.put(agentSource, newInhabitingHost);
 		} else {

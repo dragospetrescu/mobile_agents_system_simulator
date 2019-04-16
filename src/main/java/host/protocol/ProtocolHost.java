@@ -34,5 +34,8 @@ public interface ProtocolHost {
 	 */
 	Protocol getProtocol();
 
+	/**
+	 * Protocol init
+	 */
 	void init();
 }

@@ -84,11 +84,29 @@ public interface CommunicatingHostInterface {
 	 */
 	void addRouteNextHop(CommunicatingHostInterface destinationRouter, CommunicatingHostInterface nextHopRouter);
 
+	/**
+	 * Calls protocol.init
+	 */
 	void initProtocol();
 
-	void init(List<CommunicatingHostInterface> hosts, List<CommunicatingHostInterface> specialHosts);
+	/**
+	 * Sends all existing hosts
+	 * 
+	 * @param normalHosts - agents can migrate to those
+	 * @param specialHosts - agent cannot migrate to those
+	 */
+	void init(List<CommunicatingHostInterface> normalHosts, List<CommunicatingHostInterface> specialHosts);
 	
-	List<CommunicatingHostInterface> getAllHosts();
+	/**
+	 * @return all hosts to which the agent can migrate to
+	 */
+	List<CommunicatingHostInterface> getAllNormalHosts();
 
-	CommunicatingHostInterface getHostById(int homeServerHostId);
+	/**
+	 * Gets host by id. Should only be used in init
+	 * 
+	 * @param id 
+	 * @return host with this id
+	 */
+	CommunicatingHostInterface getHostById(int id);
 }

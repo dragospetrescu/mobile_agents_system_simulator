@@ -28,7 +28,7 @@ import com.google.gson.stream.JsonReader;
 public class Simulation {
 
 	/**
-	 * All CommunicatingHosts of the simulation. They are protocol independent.
+	 * Normal hosts of the simulation. They are protocol independent.
 	 */
 	private List<CommunicatingHostInterface> normalHosts;
 	
@@ -54,14 +54,24 @@ public class Simulation {
 	 */
 	private String graphFile;
 	/**
-	 * Json file where the simulation's hosts are described
+	 * Json file where the simulation's normal hosts are described
 	 */
 	private String hostsFile;
 
+	/**
+	 * Json file where the simulation's special hosts are described (protocol specific)
+	 * May be null
+	 */
 	private String specialHostsFile;
 
+	/**
+	 * Special hosts of the simulation. They are protocol dependent.
+	 */
 	private List<CommunicatingHostInterface> specialHosts;
 
+	/**
+	 * All hosts of the simulation
+	 */
 	private List<CommunicatingHostInterface> allHosts;
 
 	
@@ -69,6 +79,7 @@ public class Simulation {
 	 * @param graphFile - Json file where the simulation's agents are described
 	 * @param hostsFile - Json file where the network is described
 	 * @param agentsFile - Json file where the simulation's hosts are described
+	 * @param specialHostsFile - Json file where the simulation's special hosts are described
 	 */
 	public Simulation(String graphFile, String hostsFile, String agentsFile, String specialHostsFile) {
 		this.graphFile = graphFile;
@@ -92,6 +103,9 @@ public class Simulation {
 	}
 
 	
+	/**
+	 * Inits all hosts
+	 */
 	private void initAllHosts() {
 		allHosts = new ArrayList<CommunicatingHostInterface>();
 		allHosts.addAll(normalHosts);
@@ -102,6 +116,10 @@ public class Simulation {
 		}	
 	}
 
+	/**
+	 * Creates special hosts from json file or if
+	 * the specialHostsFile is null it does nothing
+	 */
 	private void createSpecialHosts() {
 		if (specialHostsFile == null)
 			return;
@@ -118,12 +136,18 @@ public class Simulation {
 		specialHosts = gson.fromJson(reader, listType);
 	}
 
+	/**
+	 * Initializes agent's protocol
+	 */
 	private void initAgentProtocol() {
 		for (CommunicatingAgentInterface communicatingAgentInterface : agents) {
 			communicatingAgentInterface.initProtocol();
 		}
 	}
 
+	/**
+	 * Initializes host's protocol
+	 */
 	private void initHostProtocol() {
 		for (CommunicatingHostInterface communicatingHostInterface : normalHosts) {
 			communicatingHostInterface.initProtocol();

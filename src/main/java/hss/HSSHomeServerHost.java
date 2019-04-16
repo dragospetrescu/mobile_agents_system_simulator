@@ -9,11 +9,29 @@ import host.communication.CommunicatingHostInterface;
 import host.protocol.AbstractProtocolHost;
 import message.MessageInterface;
 
-public class HSSServerHost extends AbstractProtocolHost {
+/**
+ * The HomeServer from the HSS documentation
+ * 
+ * It keeps a map agent -> home agent
+ * 
+ * Agent 0 wants to send message to Agent 1
+ * Agent 0 sends message to HomeServer
+ * HomeServer sends message to Agent 1 Home Agent
+ * Home Agent sends message location of the Agent
+ * 
+ */
+public class HSSHomeServerHost extends AbstractProtocolHost {
 
+	/**
+	 * Map agent -> home agent
+	 * See {@link HSSHomeAgentHost}
+	 */
 	Map<CommunicatingAgentInterface, CommunicatingHostInterface> agentToHomeDatabase;
 
-	public HSSServerHost(CommunicatingHostInterface communicationHost) {
+	/**
+	 * @param communicationHost - the CommunicatingAgent that will use this protocol
+	 */
+	public HSSHomeServerHost(CommunicatingHostInterface communicationHost) {
 		super(communicationHost.getId(), communicationHost, communicationHost.getProtocol());
 	}
 
@@ -38,7 +56,7 @@ public class HSSServerHost extends AbstractProtocolHost {
 	@Override
 	public void init() {
 		agentToHomeDatabase = new HashMap<CommunicatingAgentInterface, CommunicatingHostInterface>();
-		List<CommunicatingHostInterface> allHosts = getCommunicationHost().getAllHosts();
+		List<CommunicatingHostInterface> allHosts = getCommunicationHost().getAllNormalHosts();
 		for (CommunicatingHostInterface communicatingHostInterface : allHosts) {
 			List<CommunicatingAgentInterface> activeAgents = communicatingHostInterface.getActiveAgents();
 			for (CommunicatingAgentInterface activeAgent : activeAgents) {
