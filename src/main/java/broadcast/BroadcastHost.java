@@ -31,4 +31,8 @@ public class BroadcastHost extends AbstractProtocolHost {
 			protocolAgent.receiveMessage(message);
 		}
 	}
+	
+	@Override
+	public void init() {
+	}
 }

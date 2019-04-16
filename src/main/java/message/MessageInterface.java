@@ -26,6 +26,11 @@ public interface MessageInterface {
 	 * @return the final host destination
 	 */
 	CommunicatingHostInterface getHostDestination();
+	
+	/**
+	 * @param hostDestination - new destination of message
+	 */
+	void setHostDestination(CommunicatingHostInterface hostDestination);
 
 	/**
 	 * @return the host from which the message was sent

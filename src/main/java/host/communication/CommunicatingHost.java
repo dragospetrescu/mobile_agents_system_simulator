@@ -15,11 +15,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Represents the protocol-independent part of the Host. 
- * It's responsibilities are: 
- * - communicating with the {@link MessagesManager}
- * - interpreting MigratingAgentMessages
- * - keeping a list of the active agents of this host
+ * Represents the protocol-independent part of the Host. It's responsibilities
+ * are: - communicating with the {@link MessagesManager} - interpreting
+ * MigratingAgentMessages - keeping a list of the active agents of this host
  */
 public class CommunicatingHost implements CommunicatingHostInterface {
 
@@ -36,20 +34,28 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	 */
 	private Map<CommunicatingHostInterface, CommunicatingHostInterface> nextHopMap;
 	/**
-	 * List of messages that will be sent to the {@link MessagesManager} 
+	 * List of messages that will be sent to the {@link MessagesManager}
 	 */
 	private List<MessageInterface> messagesToBeSent;
 	/**
-	 * TODO this will become a list of protocols
-	 * List of protocols this host is implementing
+	 * TODO this will become a list of protocols List of protocols this host is
+	 * implementing
 	 */
 	private Protocol protocol;
 	/**
-	 * TODO this will become a list of protocolsHosts
-	 * The protocol dependent parts of the host
+	 * TODO this will become a list of protocolsHosts The protocol dependent parts
+	 * of the host
 	 */
 	private ProtocolHost protocolHost;
-	
+	/**
+	 * Hosts to which agents can migrate
+	 */
+	private List<CommunicatingHostInterface> normalHosts;
+	/**
+	 * Hosts to which agents cannot migrate
+	 */
+	private List<CommunicatingHostInterface> specialHosts;
+
 	/**
 	 * TODO add parameters
 	 */
@@ -147,7 +153,33 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	}
 
 	@Override
-	public void createProtocolHosts() {
+	public void initProtocol() {
+		this.protocolHost.init();
+	}
+
+	@Override
+	public void init(List<CommunicatingHostInterface> normalHosts, List<CommunicatingHostInterface> specialHosts) {
 		this.protocolHost = this.protocol.getProtocolHost(this);
+		this.normalHosts = normalHosts;
+		this.specialHosts = specialHosts;
+	}
+
+	@Override
+	public List<CommunicatingHostInterface> getAllNormalHosts() {
+		return normalHosts;
+	}
+
+	@Override
+	public CommunicatingHostInterface getHostById(int homeServerHostId) {
+		for (CommunicatingHostInterface host : normalHosts) {
+			if (homeServerHostId == host.getId())
+				return host;
+		}
+		for (CommunicatingHostInterface host : specialHosts) {
+			if (homeServerHostId == host.getId())
+				return host;
+		}
+
+		throw new RuntimeException("Host with id " + homeServerHostId + " not found!");
 	}
 }

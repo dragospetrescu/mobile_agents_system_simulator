@@ -6,6 +6,9 @@ import broadcast.BroadcastAgent;
 import broadcast.BroadcastHost;
 import host.communication.CommunicatingHost;
 import host.protocol.ProtocolHost;
+import hss.HSSHomeServerHost;
+import hss.HSSAgent;
+import hss.HSSHomeAgentHost;
 import test_protocol.agent.TestAgent;
 import test_protocol.host.TestHost;
 
@@ -24,7 +27,16 @@ public enum Protocol {
 	/**
 	 * Agents broadcast all their messages.
 	 */
-	BROADCAST;
+	BROADCAST,
+	/**
+	 * HSS normal protocol
+	 */
+	HSS,
+	/**
+	 * Home Server protocol for HSS
+	 */
+	HSSServer
+	;
 
 	/**
 	 * Based on the {@link Protocol} it returns a ProtocolHost
@@ -38,6 +50,10 @@ public enum Protocol {
 			return new TestHost(communicationHost);
 		case BROADCAST:
 			return new BroadcastHost(communicationHost);
+		case HSS:
+			return new HSSHomeAgentHost(communicationHost);
+		case HSSServer:
+			return new HSSHomeServerHost(communicationHost);
 		}
 		throw new RuntimeException("NO PROTOCOL HOST CREATED FOR " + this + " " + communicationHost);
 	}
@@ -54,6 +70,10 @@ public enum Protocol {
 			return new TestAgent(communicatingAgent);
 		case BROADCAST:
 			return new BroadcastAgent(communicatingAgent);
+		case HSS:
+			return new HSSAgent(communicatingAgent);
+		case HSSServer:
+			throw new RuntimeException("HSSServer is not an agent Protocol!");
 		}
 		throw new RuntimeException("NO PROTOCOL AGENT CREATED FOR " + this + " " + communicatingAgent);
 	}

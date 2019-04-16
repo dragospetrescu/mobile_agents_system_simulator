@@ -24,6 +24,7 @@ public class NormalCommunicationMessage extends Message {
     		CommunicatingAgentInterface sourceAgent, CommunicatingAgentInterface destinationAgent) {
         super(sourceHost, destinationHost, sourceAgent, destinationAgent);
     }
+    
 	/**
 	 * Warning. You should only use this constructor if the id provided is unique
 	 * 

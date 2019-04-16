@@ -1,0 +1,19 @@
+[
+  {
+      "id": 0,
+      "hostId": 0,
+      "protocol": "HSS",
+      "protocolArguments": {
+      	"homeServerHost": "4"
+      }
+  },
+    {
+      "id": 1,
+      "hostId": 1,
+      "protocol": "HSS",
+      "protocolArguments": {
+      	"homeServerHost": "4"
+      }
+  }
+]
+

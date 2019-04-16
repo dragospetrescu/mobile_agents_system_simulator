@@ -59,8 +59,15 @@ public class Message implements MessageInterface {
 		this.destinationHost = destinationHost;
 		this.sourceAgent = sourceAgent;
 		this.destinationAgent = destinationAgent;
-		previousHopHost = destinationHost;
-		nextHopHost = sourceHost.getNextHop(destinationHost);
+		previousHopHost = sourceHost;
+		if(sourceHost.equals(destinationHost)) {
+			nextHopHost = sourceHost;
+		} else {
+			nextHopHost = sourceHost.getNextHop(destinationHost);
+		}
+		if(nextHopHost == null) {
+			System.out.println("AICI" + sourceHost + " " + destinationHost);
+		}
 		this.id = id;
 	}
 
@@ -106,6 +113,11 @@ public class Message implements MessageInterface {
 	@Override
 	public CommunicatingHostInterface getHostSource() {
 		return sourceHost;
+	}
+	
+	@Override
+	public void setHostDestination(CommunicatingHostInterface destinationHost) {
+		this.destinationHost = destinationHost;
 	}
 
 	@Override

@@ -20,8 +20,12 @@ public class ProtocolTestMain {
     	String graphPath = args[0];
     	String hostsPath = args[1];
     	String agentsPath = args[2];
+    	String specialHostsPath = null;
+    	if (args.length == 4) {
+    		specialHostsPath = args[3];
+    	}
     	
-        Simulation simulation = new Simulation(graphPath, hostsPath, agentsPath);
+        Simulation simulation = new Simulation(graphPath, hostsPath, agentsPath, specialHostsPath);
         simulation.init();
         simulation.start();
         simulation.printStatistics();
