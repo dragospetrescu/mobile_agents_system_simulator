@@ -59,7 +59,7 @@ public class Message implements MessageInterface {
 		this.destinationHost = destinationHost;
 		this.sourceAgent = sourceAgent;
 		this.destinationAgent = destinationAgent;
-		previousHopHost = destinationHost;
+		previousHopHost = sourceHost;
 		nextHopHost = sourceHost.getNextHop(destinationHost);
 		this.id = id;
 	}
@@ -106,6 +106,11 @@ public class Message implements MessageInterface {
 	@Override
 	public CommunicatingHostInterface getHostSource() {
 		return sourceHost;
+	}
+	
+	@Override
+	public void setHostDestination(CommunicatingHostInterface destinationHost) {
+		this.destinationHost = destinationHost;
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import statistics.StatisticsCreator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import agent.protocol.ProtocolAgent;
 
@@ -60,6 +61,7 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	 * List of messages to be delivered to be sent
 	 */
 	private List<MessageInterface> messages;
+	private Map<String, String> protocolArguments;
 
 	/**
 	 * TODO add parameters
@@ -96,6 +98,8 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	public MessageInterface prepareMigratingMessage() {
 		CommunicatingHostInterface destinationHost = RandomAssigner.getRandomElement(allHosts, host);
 		Logger.i(LogTag.AGENT_MIGRATING, toString() + " traveling from " + getHost() + " to " + destinationHost);
+		agentProtocol.migrate(destinationHost);
+		
 		return new MigratingAgentMessage(getHost(), destinationHost, this);
 	}
 
@@ -168,5 +172,10 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	@Override
 	public ProtocolAgent getProtocolAgent() {
 		return agentProtocol;
+	}
+
+	@Override
+	public void initProtocol() {
+		agentProtocol.init(protocolArguments);
 	}
 }

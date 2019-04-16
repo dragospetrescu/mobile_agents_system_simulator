@@ -1,6 +1,7 @@
 package broadcast;
 
 import java.util.List;
+import java.util.Map;
 
 import agent.communication.CommunicatingAgentInterface;
 import agent.protocol.AbstractProtocolAgent;
@@ -42,5 +43,9 @@ public class BroadcastAgent extends AbstractProtocolAgent {
 			}
 		}
 		Message.noMessages++;
+	}
+
+	@Override
+	public void init(Map<String, String> protocolArguments) {
 	}
 }

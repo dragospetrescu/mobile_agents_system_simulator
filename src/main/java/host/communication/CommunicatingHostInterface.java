@@ -84,8 +84,11 @@ public interface CommunicatingHostInterface {
 	 */
 	void addRouteNextHop(CommunicatingHostInterface destinationRouter, CommunicatingHostInterface nextHopRouter);
 
-	/**
-	 * Based on the protocols it creates multiple {@link AbstractProtocolHost} that match the protocols
-	 */
-	void createProtocolHosts();
+	void initProtocol();
+
+	void init(List<CommunicatingHostInterface> hosts);
+	
+	List<CommunicatingHostInterface> getAllHosts();
+
+	CommunicatingHostInterface getHostById(int homeServerHostId);
 }

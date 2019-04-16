@@ -15,4 +15,8 @@ public class TestHost extends AbstractProtocolHost {
 	public TestHost(CommunicatingHostInterface communicationHost) {
 		super(communicationHost.getId(), communicationHost, Protocol.TEST_PROTOCOL);
 	}
+
+	@Override
+	public void init() {
+	}
 }

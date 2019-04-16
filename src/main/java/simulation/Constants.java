@@ -12,3 +12,4 @@ public class Constants {
     public static final int NO_WORKING_STEPS = 10000;
 	public static final int STEPS_WAITING_FOR_LAST_MESSAGES = NO_WORKING_STEPS;
 }
+	

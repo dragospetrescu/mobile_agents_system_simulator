@@ -108,4 +108,6 @@ public interface CommunicatingAgentInterface {
 	 */
 	List<CommunicatingHostInterface> getAllHosts();
 
+	void initProtocol();
+
 }

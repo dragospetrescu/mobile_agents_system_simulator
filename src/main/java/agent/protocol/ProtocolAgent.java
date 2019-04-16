@@ -3,7 +3,10 @@ package agent.protocol;
 import message.MessageInterface;
 import protocol.Protocol;
 
+import java.util.Map;
+
 import agent.communication.CommunicatingAgentInterface;
+import host.communication.CommunicatingHostInterface;
 
 /**
  * ProtocolAgent represents the protocol-dependent part of the Agent. It's
@@ -44,5 +47,14 @@ public interface ProtocolAgent {
 	 * @return the protocol of this agent
 	 */
 	Protocol getProtocol();
+
+	/**
+	 * Protocol dependent migration process
+	 * 
+	 * @param destinationHost - migrating to this host
+	 */
+	void migrate(CommunicatingHostInterface destinationHost);
+
+	void init(Map<String, String> protocolArguments);
 
 }

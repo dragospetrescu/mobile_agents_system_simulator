@@ -78,9 +78,23 @@ public class Simulation {
 		initHosts();
 		initRouting();
 		initAgents();
+		initHostProtocol();
+		initAgentProtocol();
 	}
 
 	
+	private void initAgentProtocol() {
+		for (CommunicatingAgentInterface communicatingAgentInterface : agents) {
+			communicatingAgentInterface.initProtocol();
+		}
+	}
+
+	private void initHostProtocol() {
+		for (CommunicatingHostInterface communicatingHostInterface : hosts) {
+			communicatingHostInterface.initProtocol();
+		}
+	}
+
 	/**
 	 * Initializes the network
 	 */
@@ -130,7 +144,7 @@ public class Simulation {
 		hosts = gson.fromJson(reader, listType);
 
 		for (CommunicatingHostInterface host : hosts) {
-			host.createProtocolHosts();
+			host.init(hosts);
 		}
 	}
 

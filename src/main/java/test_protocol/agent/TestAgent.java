@@ -1,5 +1,7 @@
 package test_protocol.agent;
 
+import java.util.Map;
+
 import agent.communication.CommunicatingAgentInterface;
 import agent.protocol.AbstractProtocolAgent;
 import message.MessageInterface;
@@ -24,6 +26,10 @@ public class TestAgent extends AbstractProtocolAgent {
 	@Override
 	public void prepareMessageTo(CommunicatingAgentInterface randomElement) {
 		return;
+	}
+	
+	@Override
+	public void init(Map<String, String> protocolArguments) {
 	}
 
 }

@@ -49,6 +49,7 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	 * The protocol dependent parts of the host
 	 */
 	private ProtocolHost protocolHost;
+	private List<CommunicatingHostInterface> allHosts;
 	
 	/**
 	 * TODO add parameters
@@ -147,7 +148,27 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	}
 
 	@Override
-	public void createProtocolHosts() {
+	public void initProtocol() {
+		this.protocolHost.init();
+	}
+	
+	@Override
+	public void init(List<CommunicatingHostInterface> allHosts) {
 		this.protocolHost = this.protocol.getProtocolHost(this);
+		this.allHosts = allHosts;
+	}
+	
+	@Override
+	public List<CommunicatingHostInterface> getAllHosts() {
+		return allHosts;
+	}
+	
+	@Override
+	public CommunicatingHostInterface getHostById(int homeServerHostId) {
+		for (CommunicatingHostInterface host : allHosts) {
+			if(homeServerHostId == host.getId())
+				return host;
+		}
+		throw new RuntimeException("Host with id " + homeServerHostId + " not found!");
 	}
 }

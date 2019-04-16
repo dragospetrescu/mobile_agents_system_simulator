@@ -33,4 +33,6 @@ public interface ProtocolHost {
 	 * @return the protocol of this agent
 	 */
 	Protocol getProtocol();
+
+	void init();
 }

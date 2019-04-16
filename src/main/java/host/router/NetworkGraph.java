@@ -147,6 +147,6 @@ public class NetworkGraph {
     }
 
     public Integer getDistance(CommunicatingHostInterface previousHop, CommunicatingHostInterface nextHop) { 
-        return distances[previousHop.getId()][nextHop.getId()];
+    	return distances[previousHop.getId()][nextHop.getId()];
     }
 }
