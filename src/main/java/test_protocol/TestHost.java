@@ -1,4 +1,4 @@
-package test_protocol.host;
+package test_protocol;
 
 import host.communication.CommunicatingHostInterface;
 import host.protocol.AbstractProtocolHost;

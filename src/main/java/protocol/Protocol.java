@@ -11,8 +11,8 @@ import host.protocol.ProtocolHost;
 import hss.HSSHomeServerHost;
 import hss.HSSAgent;
 import hss.HSSHomeAgentHost;
-import test_protocol.agent.TestAgent;
-import test_protocol.host.TestHost;
+import test_protocol.TestAgent;
+import test_protocol.TestHost;
 
 /**
  * List of available protocols If you want to add a new protocol add a new entry

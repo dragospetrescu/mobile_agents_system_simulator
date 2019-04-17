@@ -1,4 +1,4 @@
-package test_protocol.agent;
+package test_protocol;
 
 import java.util.Map;
 
