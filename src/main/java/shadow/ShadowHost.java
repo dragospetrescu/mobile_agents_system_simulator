@@ -1,4 +1,4 @@
-package fp;
+package shadow;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,14 +11,14 @@ import message.MessageInterface;
 import message.implementation.NormalCommunicationMessage;
 
 /**
- * The Host from the FP documentation
+ * The ShadowHost from the Shadow documentation
  * 
- * If host contains the message's destination agent then it receives it.
- * Otherwise it redirects the messages to the place the agent migrated when it
- * left this host.
+ * It keeps a map agent -> host location
+ * 
+ * When agent migrates it keeps remembers where that agent left to
+ * so any message can follow the exact path of the agent.
  */
-public class FPHost extends AbstractProtocolHost {
-
+public class ShadowHost extends AbstractProtocolHost {
 	/**
 	 * Map agent to the host to which the agent migrated after it left this host
 	 */
@@ -27,7 +27,7 @@ public class FPHost extends AbstractProtocolHost {
 	/**
 	 * @param communicationHost - the CommunicatingAgent that will use this protocol
 	 */
-	public FPHost(CommunicatingHostInterface communicationHost) {
+	public ShadowHost(CommunicatingHostInterface communicationHost) {
 		super(communicationHost.getId(), communicationHost, communicationHost.getProtocol());
 	}
 
@@ -58,7 +58,6 @@ public class FPHost extends AbstractProtocolHost {
 					newHostDestination, sourceAgent, destinationAgent);
 			sourceHost.addMessageForSending(forwardedMessage);
 		}
-
 	}
 
 	/**

@@ -9,6 +9,9 @@ import fp.FPHost;
 import host.communication.CommunicatingHost;
 import host.protocol.ProtocolHost;
 import hss.HSSHomeServerHost;
+import shadow.ShadowAgent;
+import shadow.ShadowHomeServerHost;
+import shadow.ShadowHost;
 import hss.HSSAgent;
 import hss.HSSHomeAgentHost;
 import test_protocol.TestAgent;
@@ -42,7 +45,15 @@ public enum Protocol {
 	 * Forward Proxy. Every host leaves some breadcrumbs before migrating to a new host
 	 * The messages follow those breadcrumbs
 	 */
-	FP
+	FP, 
+	/**
+	 * Combination between FP and HSS based on TTL
+	 */
+	Shadow, 
+	/**
+	 * Home Server protocol for Shadow
+	 */
+	ShadowServer;
 	;
 
 	/**
@@ -63,6 +74,10 @@ public enum Protocol {
 			return new HSSHomeServerHost(communicationHost);
 		case FP:
 			return new FPHost(communicationHost);
+		case Shadow:
+			return new ShadowHost(communicationHost);
+		case ShadowServer:
+			return new ShadowHomeServerHost(communicationHost);
 		}
 		throw new RuntimeException("NO PROTOCOL HOST CREATED FOR " + this + " " + communicationHost);
 	}
@@ -85,6 +100,10 @@ public enum Protocol {
 			throw new RuntimeException("HSSServer is not an agent Protocol!");
 		case FP:
 			return new FPAgent(communicatingAgent);
+		case Shadow:
+			return new ShadowAgent(communicatingAgent);
+		case ShadowServer:
+			throw new RuntimeException("ShadowServer is not an agent Protocol!");
 		}
 		throw new RuntimeException("NO PROTOCOL AGENT CREATED FOR " + this + " " + communicatingAgent);
 	}

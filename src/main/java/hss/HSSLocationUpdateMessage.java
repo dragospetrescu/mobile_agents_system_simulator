@@ -18,8 +18,6 @@ public class HSSLocationUpdateMessage extends Message {
 	private CommunicatingHostInterface newHostLocation;
 	
 	/**
-	 * Use this constructor if you don't care about the id
-	 * 
 	 * @param sourceHost - host from where the message is sent
 	 * @param destinationHost - the host where the message has to arrive
 	 * @param sourceAgent - the agent that sends the message
