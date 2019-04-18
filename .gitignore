@@ -3,6 +3,7 @@ out/*
 moving_agent_simulation.iml
 target/*
 /target/
+bin/
 .classpath
 .project
 .settings/*
