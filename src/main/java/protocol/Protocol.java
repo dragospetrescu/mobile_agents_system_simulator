@@ -4,6 +4,9 @@ import agent.communication.CommunicatingAgent;
 import agent.protocol.ProtocolAgent;
 import broadcast.BroadcastAgent;
 import broadcast.BroadcastHost;
+import cs.CSAgent;
+import cs.CSHost;
+import cs.CSServerHost;
 import fp.FPAgent;
 import fp.FPHost;
 import host.communication.CommunicatingHost;
@@ -53,7 +56,9 @@ public enum Protocol {
 	/**
 	 * Home Server protocol for Shadow
 	 */
-	ShadowServer;
+	ShadowServer,
+	CS,
+	CSServer;
 	;
 
 	/**
@@ -78,6 +83,12 @@ public enum Protocol {
 			return new ShadowHost(communicationHost);
 		case ShadowServer:
 			return new ShadowHomeServerHost(communicationHost);
+		case CS:
+			return new CSHost(communicationHost);
+		case CSServer:
+			return new CSServerHost(communicationHost);
+		default:
+			break;
 		}
 		throw new RuntimeException("NO PROTOCOL HOST CREATED FOR " + this + " " + communicationHost);
 	}
@@ -104,6 +115,12 @@ public enum Protocol {
 			return new ShadowAgent(communicatingAgent);
 		case ShadowServer:
 			throw new RuntimeException("ShadowServer is not an agent Protocol!");
+		case CS:
+			return new CSAgent(communicatingAgent);
+		case CSServer:
+			throw new RuntimeException("CSServer is not an agent Protocol!");
+		default:
+			break;
 		}
 		throw new RuntimeException("NO PROTOCOL AGENT CREATED FOR " + this + " " + communicatingAgent);
 	}
