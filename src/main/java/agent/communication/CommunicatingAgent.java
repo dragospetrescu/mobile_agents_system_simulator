@@ -5,8 +5,9 @@ import helpers.Logger;
 import helpers.RandomAssigner;
 import host.communication.CommunicatingHost;
 import host.communication.CommunicatingHostInterface;
+import message.AgentCommunicationMessageInterface;
 import message.MessageInterface;
-import message.implementation.MigratingAgentMessage;
+import message.MigratingAgentMessage;
 import protocol.Protocol;
 import statistics.StatisticsCreator;
 
@@ -28,7 +29,7 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	 */
 	private int id;
 	/**
-	 * Unique identifier of the host the CommunicatingAgent is currently inhabiting
+	 * Unique host identifier
 	 */
 	private int hostId;
 	/**
@@ -38,7 +39,7 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	/**
 	 * All agents available in the simulation
 	 */
-	private List<CommunicatingAgentInterface> allAgents;
+	private List<Integer> allAgentsIds;
 	/**
 	 * The turns left until the next migration
 	 */
@@ -72,8 +73,7 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	@Override
 	public void work() {
 		if (work % 10 == 0) {
-			agentProtocol
-					.prepareMessageTo(RandomAssigner.getRandomElement(allAgents, ((CommunicatingAgentInterface) this)));
+			agentProtocol.prepareMessageTo(RandomAssigner.getRandomElement(allAgentsIds, getId()));
 		}
 		work--;
 	}
@@ -95,12 +95,12 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 
 	@Override
 	public MessageInterface prepareMigratingMessage() {
-		List<CommunicatingHostInterface> normalHosts = getAllNormalHosts();
-		CommunicatingHostInterface destinationHost = RandomAssigner.getRandomElement(normalHosts, host);
-		Logger.i(LogTag.AGENT_MIGRATING, toString() + " traveling from " + getHost() + " to " + destinationHost);
-		agentProtocol.migrate(destinationHost);
-		
-		return new MigratingAgentMessage(getHost(), destinationHost, this);
+		List<Integer> normalHosts = host.getAllNormalHostsIds();
+		int destinationHostId = RandomAssigner.getRandomElement(normalHosts, id);
+		Logger.i(LogTag.AGENT_MIGRATING, toString() + " traveling from " + getHost() + " to Host " + destinationHostId);
+		agentProtocol.migrate(destinationHostId);
+
+		return new MigratingAgentMessage(getHost().getId(), destinationHostId, this);
 	}
 
 	@Override
@@ -137,30 +137,16 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	}
 
 	@Override
-	public void initAgent(List<CommunicatingAgentInterface> allAgents, List<CommunicatingHostInterface> hosts) {
-		this.allAgents = allAgents;
+	public void initAgent(List<Integer> allAgentsIds, CommunicatingHostInterface host) {
+		this.allAgentsIds = allAgentsIds;
 		agentProtocol = protocol.getProtocolAgent(this);
-
-		for (CommunicatingHostInterface host : hosts) {
-			if (host.getId() == hostId) {
-				this.host = host;
-				break;
-			}
-		}
-		if (this.host == null)
-			throw new RuntimeException("Can't find host with id " + hostId);
-		this.host.addAgent(this);
-
+		this.host = host;
+		this.host.addAgent(this); // TODO REMOVE THIS
 	}
 
 	@Override
 	public void setHost(CommunicatingHost host) {
 		this.host = host;
-	}
-
-	@Override
-	public List<CommunicatingHostInterface> getAllNormalHosts() {
-		return host.getAllNormalHosts();
 	}
 
 	@Override
@@ -176,5 +162,10 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	@Override
 	public void initProtocol() {
 		agentProtocol.init(protocolArguments);
+	}
+
+	@Override
+	public int getHostId() {
+		return hostId;
 	}
 }

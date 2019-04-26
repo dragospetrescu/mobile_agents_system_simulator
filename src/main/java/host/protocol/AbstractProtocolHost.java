@@ -7,6 +7,7 @@ import agent.protocol.ProtocolAgent;
 import helpers.LogTag;
 import helpers.Logger;
 import host.communication.CommunicatingHostInterface;
+import message.AgentCommunicationMessageInterface;
 import message.MessageInterface;
 import protocol.Protocol;
 import statistics.StatisticsCreator;
@@ -31,9 +32,10 @@ public abstract class AbstractProtocolHost implements ProtocolHost {
 	private Protocol protocol;
 
 	/**
-	 * @param id - Unique identifier
-	 * @param communicationHost - The {@link CommunicatingHostInterface} that will use this ProtocolHost
-	 * @param protocol - The protocol that it is implementing
+	 * @param id                - Unique identifier
+	 * @param communicationHost - The {@link CommunicatingHostInterface} that will
+	 *                          use this ProtocolHost
+	 * @param protocol          - The protocol that it is implementing
 	 */
 	public AbstractProtocolHost(int id, CommunicatingHostInterface communicationHost, Protocol protocol) {
 		super();
@@ -44,15 +46,18 @@ public abstract class AbstractProtocolHost implements ProtocolHost {
 
 	@Override
 	public void interpretMessage(MessageInterface message) {
-		CommunicatingAgentInterface communicatingAgent = message.getAgentDestination();
-		List<CommunicatingAgentInterface> communicatingAgents = communicationHost.getActiveAgents();
-		if (communicatingAgents.contains(communicatingAgent)) {
-			ProtocolAgent protocolAgent = communicatingAgent.getProtocolAgent();
-			protocolAgent.receiveMessage(message);
-		} else {
-			Logger.w(LogTag.NORMAL_MESSAGE,
-					message + " did non find destination " + communicatingAgent + " at " + this);
-			StatisticsCreator.messageFailedDelivered(message);
+		if (message instanceof AgentCommunicationMessageInterface) {
+			AgentCommunicationMessageInterface agentCommunicationMessage = (AgentCommunicationMessageInterface) message;
+			
+			int communicatingAgentId = agentCommunicationMessage.getAgentDestinationId();
+			if (communicationHost.hasAgentWithId(communicatingAgentId)) {
+				ProtocolAgent protocolAgent = communicationHost.getProtocolAgentWithId(communicatingAgentId);
+				protocolAgent.receiveMessage(message);
+			} else {
+				Logger.w(LogTag.NORMAL_MESSAGE,
+						message + " did non find destination Agent " + communicatingAgentId + " at " + this);
+				StatisticsCreator.messageFailedDelivered(message);
+			}
 		}
 	}
 

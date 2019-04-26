@@ -7,6 +7,7 @@ import host.communication.CommunicatingHostInterface;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class NetworkGraph {
         distances = gson.fromJson(reader, int[][].class);
     }
 
-    public void addRoutingToHosts(List<CommunicatingHostInterface> hosts) {
+    public void addRoutingToHosts(Collection<CommunicatingHostInterface> hosts) {
 		Map<Integer, CommunicatingHostInterface> hostsMap = new HashMap<Integer, CommunicatingHostInterface>();
 		for (CommunicatingHostInterface host : hosts) {
 			hostsMap.put(host.getId(), host);
@@ -110,7 +111,7 @@ public class NetworkGraph {
                 get_path(A, i, j, path);
                 path.add(j);
                 CommunicatingHostInterface nextHopRouter = hostsMap.get(path.get(1));
-                router.addRouteNextHop(destinationRouter, nextHopRouter);
+                router.addRouteNextHop(destinationRouter.getId(), nextHopRouter.getId());
             }
         }
     }
@@ -146,7 +147,7 @@ public class NetworkGraph {
         return distances;
     }
 
-    public Integer getDistance(CommunicatingHostInterface previousHop, CommunicatingHostInterface nextHop) { 
-    	return distances[previousHop.getId()][nextHop.getId()];
+    public Integer getDistance(int previousHopId, int nextHopId) { 
+    	return distances[previousHopId][nextHopId];
     }
 }

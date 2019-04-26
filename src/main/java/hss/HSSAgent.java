@@ -5,7 +5,7 @@ import java.util.Map;
 import agent.communication.CommunicatingAgentInterface;
 import agent.protocol.AbstractProtocolAgent;
 import host.communication.CommunicatingHostInterface;
-import message.MessageInterface;
+import message.AgentCommunicationMessageInterface;
 
 /**
  * The Agent from the HSS documentation
@@ -50,7 +50,7 @@ public class HSSAgent extends AbstractProtocolAgent {
 	public void migrate(CommunicatingHostInterface newHost) {
 		CommunicatingAgentInterface communicatingAgent = getCommunicatingAgent();
 		CommunicatingHostInterface sourceHost = communicatingAgent.getHost();
-		MessageInterface message = new HSSLocationUpdateMessage(sourceHost, homeAgentHost, communicatingAgent, null, newHost);
+		AgentCommunicationMessageInterface message = new HSSLocationUpdateMessage(sourceHost, homeAgentHost, communicatingAgent, null, newHost);
 		communicatingAgent.addMessage(message);
 	}
 

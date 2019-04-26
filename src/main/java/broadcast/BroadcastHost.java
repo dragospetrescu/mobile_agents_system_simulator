@@ -6,7 +6,7 @@ import agent.communication.CommunicatingAgentInterface;
 import agent.protocol.ProtocolAgent;
 import host.communication.CommunicatingHostInterface;
 import host.protocol.AbstractProtocolHost;
-import message.MessageInterface;
+import message.AgentCommunicationMessageInterface;
 
 /**
  * Host implementation of the Broadcast Protocol 
@@ -23,8 +23,8 @@ public class BroadcastHost extends AbstractProtocolHost {
 	}
 
 	@Override
-	public void interpretMessage(MessageInterface message) {
-		CommunicatingAgentInterface communicatingAgent = message.getAgentDestination();
+	public void interpretMessage(AgentCommunicationMessageInterface message) {
+		CommunicatingAgentInterface communicatingAgent = message.getAgentDestinationId();
 		List<CommunicatingAgentInterface> communicatingAgents = getCommunicationHost().getActiveAgents();
 		if (communicatingAgents.contains(communicatingAgent)) {
 			ProtocolAgent protocolAgent = communicatingAgent.getProtocolAgent();

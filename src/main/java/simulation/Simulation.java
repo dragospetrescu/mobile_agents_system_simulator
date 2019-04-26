@@ -5,6 +5,7 @@ import agent.communication.CommunicatingAgentInterface;
 import host.communication.CommunicatingHost;
 import host.communication.CommunicatingHostInterface;
 import host.router.NetworkGraph;
+import message.AgentCommunicationMessageInterface;
 import message.MessageInterface;
 import message.MessagesManager;
 import statistics.StatisticsCreator;
@@ -13,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -72,7 +74,7 @@ public class Simulation {
 	/**
 	 * All hosts of the simulation
 	 */
-	private List<CommunicatingHostInterface> allHosts;
+	private Map<Integer, CommunicatingHostInterface> allHostsMap;
 
 	
 	/**
@@ -107,13 +109,18 @@ public class Simulation {
 	 * Inits all hosts
 	 */
 	private void initAllHosts() {
-		allHosts = new ArrayList<CommunicatingHostInterface>();
-		allHosts.addAll(normalHosts);
-		if (specialHosts != null)
-			allHosts.addAll(specialHosts);
+		allHostsMap = new HashMap<Integer, CommunicatingHostInterface>();
+		for (CommunicatingHostInterface host : normalHosts) {
+			allHostsMap.put(host.getId(), host);
+		}
+		if (specialHosts != null) {
+			for (CommunicatingHostInterface host : specialHosts) {
+				allHostsMap.put(host.getId(), host);
+			}
+		}
 		
-		for (CommunicatingHostInterface host : allHosts) {
-			host.init(normalHosts, specialHosts);
+		for (CommunicatingHostInterface host : allHostsMap.values()) {
+			host.init(normalHosts.stream().map(CommunicatingHostInterface::getId).collect(Collectors.toList()));
 		}	
 	}
 
@@ -150,7 +157,7 @@ public class Simulation {
 	 * Initializes host's protocol
 	 */
 	private void initHostProtocol() {
-		for (CommunicatingHostInterface communicatingHostInterface : allHosts) {
+		for (CommunicatingHostInterface communicatingHostInterface : allHostsMap.values()) {
 			communicatingHostInterface.initProtocol();
 		}
 	}
@@ -161,7 +168,7 @@ public class Simulation {
 	private void initRouting() {
 		graph = new NetworkGraph(graphFile);
 		
-		graph.addRoutingToHosts(allHosts);
+		graph.addRoutingToHosts(allHostsMap.values());
 
 		messagesManager = new MessagesManager(graph);
 	}
@@ -182,9 +189,9 @@ public class Simulation {
 		Type listType = new TypeToken<ArrayList<CommunicatingAgent>>() {
 		}.getType();
 		agents = gson.fromJson(reader, listType);
-
+		List<Integer> agentsIds = agents.stream().map(CommunicatingAgentInterface::getId).collect(Collectors.toList());
 		for (CommunicatingAgentInterface agent : agents) {
-			agent.initAgent(agents, allHosts);
+			agent.initAgent(agentsIds, normalHosts.get(agent.getHostId()));
 		}
 	}
 
@@ -218,18 +225,19 @@ public class Simulation {
 			messagesManager.travelMessages();
 			List<MessageInterface> arrivedMessages = messagesManager.getArrivedMessages();
 			for (MessageInterface message : arrivedMessages) {
-				CommunicatingHostInterface nextHopHost = message.getNextHop();
+				Integer nextHopHostId = message.getNextHopId();
+				CommunicatingHostInterface nextHopHost = allHostsMap.get(nextHopHostId);
 				nextHopHost.receiveMessage(message);
 			}
 
-			for (CommunicatingHostInterface host : allHosts) {
+			for (CommunicatingHostInterface host : allHostsMap.values()) {
 
 				if (host.wantsToSendMessage()) {
 					List<MessageInterface> messages = host.sendMessages();
 					messagesManager.addAllMessages(messages);
 				}
 
-				List<CommunicatingAgentInterface> hostActiveAgents = host.getActiveAgents();
+				Collection<CommunicatingAgentInterface> hostActiveAgents = host.getActiveAgents();
 				for (Iterator<CommunicatingAgentInterface> agentsIterator = hostActiveAgents.iterator(); agentsIterator
 						.hasNext();) {
 					CommunicatingAgentInterface agent = agentsIterator.next();

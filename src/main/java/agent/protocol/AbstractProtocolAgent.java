@@ -2,6 +2,7 @@ package agent.protocol;
 
 import agent.communication.CommunicatingAgentInterface;
 import host.communication.CommunicatingHostInterface;
+import message.AgentCommunicationMessageInterface;
 import message.MessageInterface;
 import protocol.Protocol;
 
@@ -35,7 +36,7 @@ public abstract class AbstractProtocolAgent implements ProtocolAgent {
 	}
 	
 	@Override
-	public void migrate(CommunicatingHostInterface destinationHost) {
+	public void migrate(int destinationHostId) {
 	}
 	
 	@Override

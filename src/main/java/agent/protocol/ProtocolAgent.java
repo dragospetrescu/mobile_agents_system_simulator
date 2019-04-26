@@ -36,7 +36,7 @@ public interface ProtocolAgent {
 	 * 
 	 * @param destinationAgent - the destinationAgent for the message that has to be created
 	 */
-	void prepareMessageTo(CommunicatingAgentInterface destinationAgent);
+	void prepareMessageTo(int destinationAgentId);
 
 	/**
 	 * @return id - unique identifier
@@ -53,7 +53,7 @@ public interface ProtocolAgent {
 	 * 
 	 * @param destinationHost - migrating to this host
 	 */
-	void migrate(CommunicatingHostInterface destinationHost);
+	void migrate(int destinationHostId);
 
 	/**
 	 * @param protocolArguments extra arguments for the protocol

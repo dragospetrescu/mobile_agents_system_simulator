@@ -5,8 +5,8 @@ import java.util.Map;
 import agent.communication.CommunicatingAgentInterface;
 import agent.protocol.AbstractProtocolAgent;
 import host.communication.CommunicatingHostInterface;
-import message.MessageInterface;
-import message.implementation.NormalCommunicationMessage;
+import message.AgentCommunicationMessageInterface;
+import message.NormalCommunicationMessage;
 import protocol.Protocol;
 
 /**
@@ -32,7 +32,7 @@ public class FPAgent extends AbstractProtocolAgent {
 
 		CommunicatingHostInterface destinationHost = protocolHost.getProxy(destinationAgent);
 
-		MessageInterface message = new NormalCommunicationMessage(sourceHost, destinationHost, sourceAgent,
+		AgentCommunicationMessageInterface message = new NormalCommunicationMessage(sourceHost, destinationHost, sourceAgent,
 				destinationAgent);
 		sourceAgent.addMessage(message);
 	}

@@ -2,7 +2,7 @@ package shadow;
 
 import agent.communication.CommunicatingAgentInterface;
 import host.communication.CommunicatingHostInterface;
-import message.Message;
+import message.AgentCommunicationMessage;
 
 /**
  * This message is sent to the HomeServer and then to the Home Agent
@@ -12,7 +12,7 @@ import message.Message;
  * HomeServer sends message to Agent 1 Home Agent
  * Home Agent sends message location of the Agent
  */
-public class ShadowForwardedMessage extends Message{
+public class ShadowForwardedMessage extends AgentCommunicationMessage{
 
 	/**
 	 * Use this constructor if you don't care about the id

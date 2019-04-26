@@ -7,8 +7,8 @@ import agent.communication.CommunicatingAgentInterface;
 import agent.protocol.ProtocolAgent;
 import host.communication.CommunicatingHostInterface;
 import host.protocol.AbstractProtocolHost;
-import message.MessageInterface;
-import message.implementation.NormalCommunicationMessage;
+import message.AgentCommunicationMessageInterface;
+import message.NormalCommunicationMessage;
 
 /**
  * The ShadowHost from the Shadow documentation
@@ -44,8 +44,8 @@ public class ShadowHost extends AbstractProtocolHost {
 	}
 
 	@Override
-	public void interpretMessage(MessageInterface message) {
-		CommunicatingAgentInterface destinationAgent = message.getAgentDestination();
+	public void interpretMessage(AgentCommunicationMessageInterface message) {
+		CommunicatingAgentInterface destinationAgent = message.getAgentDestinationId();
 		List<CommunicatingAgentInterface> communicatingAgents = getCommunicationHost().getActiveAgents();
 		if (communicatingAgents.contains(destinationAgent)) {
 			ProtocolAgent protocolAgent = destinationAgent.getProtocolAgent();
@@ -53,8 +53,8 @@ public class ShadowHost extends AbstractProtocolHost {
 		} else {
 			CommunicatingHostInterface newHostDestination = agentForwardingProxy.get(destinationAgent);
 			CommunicatingHostInterface sourceHost = getCommunicationHost();
-			CommunicatingAgentInterface sourceAgent = message.getAgentSource();
-			MessageInterface forwardedMessage = new NormalCommunicationMessage(message.getId(), sourceHost,
+			CommunicatingAgentInterface sourceAgent = message.getAgentSourceId();
+			AgentCommunicationMessageInterface forwardedMessage = new NormalCommunicationMessage(message.getMessageId(), sourceHost,
 					newHostDestination, sourceAgent, destinationAgent);
 			sourceHost.addMessageForSending(forwardedMessage);
 		}

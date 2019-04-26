@@ -1,15 +1,17 @@
 package host.communication;
 
 import agent.communication.CommunicatingAgentInterface;
+import agent.protocol.ProtocolAgent;
 import helpers.LogTag;
 import helpers.Logger;
 import host.protocol.ProtocolHost;
 import message.MessageInterface;
 import message.MessagesManager;
-import message.implementation.MigratingAgentMessage;
+import message.MigratingAgentMessageInterface;
 import protocol.Protocol;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,11 +30,11 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	/**
 	 * Agents that are currently residing on this host
 	 */
-	private List<CommunicatingAgentInterface> activeAgents;
+	private Map<Integer, CommunicatingAgentInterface> activeAgentsMap;
 	/**
 	 * Routing table of this host
 	 */
-	private Map<CommunicatingHostInterface, CommunicatingHostInterface> nextHopMap;
+	private Map<Integer, Integer> nextHopMap;
 	/**
 	 * List of messages that will be sent to the {@link MessagesManager}
 	 */
@@ -50,34 +52,30 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	/**
 	 * Hosts to which agents can migrate
 	 */
-	private List<CommunicatingHostInterface> normalHosts;
-	/**
-	 * Hosts to which agents cannot migrate
-	 */
-	private List<CommunicatingHostInterface> specialHosts;
+	private List<Integer> normalHosts;
 
 	/**
 	 * TODO add parameters
 	 */
 	public CommunicatingHost() {
-		activeAgents = new ArrayList<CommunicatingAgentInterface>();
-		nextHopMap = new HashMap<CommunicatingHostInterface, CommunicatingHostInterface>();
+		activeAgentsMap = new HashMap<Integer, CommunicatingAgentInterface>();
+		nextHopMap = new HashMap<Integer, Integer>();
 		messagesToBeSent = new ArrayList<MessageInterface>();
 	}
 
-	public List<CommunicatingAgentInterface> getActiveAgents() {
-		return activeAgents;
+	@Override
+	public Collection<CommunicatingAgentInterface> getActiveAgents() {
+		return activeAgentsMap.values();
 	}
 
 	public void addAgent(CommunicatingAgentInterface agent) {
-		activeAgents.add(agent);
+		activeAgentsMap.put(agent.getId(), agent);
 		agent.setHost(this);
 		agent.setWork();
 	}
 
-	public void addRouteNextHop(CommunicatingHostInterface destinationRouter,
-			CommunicatingHostInterface nextHopRouter) {
-		nextHopMap.put(destinationRouter, nextHopRouter);
+	public void addRouteNextHop(int destinationRouterId, int nextHopRouterId) {
+		nextHopMap.put(destinationRouterId, nextHopRouterId);
 	}
 
 	@Override
@@ -108,10 +106,10 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 
 	@Override
 	public void receiveMessage(MessageInterface message) {
-		CommunicatingHostInterface messageDestination = message.getHostDestination();
-		if (messageDestination.equals(this)) {
-			if (message instanceof MigratingAgentMessage) {
-				MigratingAgentMessage migratingAgentMessage = (MigratingAgentMessage) message;
+		int messageDestinationHostId = message.getHostDestinationId();
+		if (messageDestinationHostId == getId()) {
+			if (message instanceof MigratingAgentMessageInterface) {
+				MigratingAgentMessageInterface migratingAgentMessage = (MigratingAgentMessageInterface) message;
 				CommunicatingAgentInterface migratingAgent = migratingAgentMessage.getMigratingAgent();
 				addAgent(migratingAgent);
 				Logger.i(LogTag.AGENT_MIGRATING, toString() + " received " + migratingAgent);
@@ -119,8 +117,8 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 				protocolHost.interpretMessage(message);
 			}
 		} else {
-			CommunicatingHostInterface communicatingHostInterface = nextHopMap.get(messageDestination);
-			message.setNextHopHost(communicatingHostInterface);
+			int communicatingHostInterfaceId = nextHopMap.get(messageDestinationHostId);
+			message.setNextHopHostId(communicatingHostInterfaceId);
 			addMessageForSending(message);
 		}
 	}
@@ -138,7 +136,7 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	}
 
 	@Override
-	public CommunicatingHostInterface getNextHop(CommunicatingHostInterface destinationHost) {
+	public int getNextHop(int destinationHost) {
 		return nextHopMap.get(destinationHost);
 	}
 
@@ -158,34 +156,32 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	}
 
 	@Override
-	public void init(List<CommunicatingHostInterface> normalHosts, List<CommunicatingHostInterface> specialHosts) {
+	public void init(List<Integer> normalHosts) {
 		this.protocolHost = this.protocol.getProtocolHost(this);
 		this.normalHosts = normalHosts;
-		this.specialHosts = specialHosts;
 	}
 
 	@Override
-	public List<CommunicatingHostInterface> getAllNormalHosts() {
+	public List<Integer> getAllNormalHostsIds() {
 		return normalHosts;
 	}
 
 	@Override
-	public CommunicatingHostInterface getHostById(int homeServerHostId) {
-		for (CommunicatingHostInterface host : normalHosts) {
-			if (homeServerHostId == host.getId())
-				return host;
-		}
-		for (CommunicatingHostInterface host : specialHosts) {
-			if (homeServerHostId == host.getId())
-				return host;
-		}
-
-		throw new RuntimeException("Host with id " + homeServerHostId + " not found!");
-	}
-
-	
-	@Override
 	public ProtocolHost getProtocolHost(Protocol protocol) {
 		return protocolHost;
+	}
+	
+	@Override
+	public boolean hasAgentWithId(int communicatingAgentId) {
+		return activeAgentsMap.containsKey(communicatingAgentId);
+	}
+	
+	@Override
+	public ProtocolAgent getProtocolAgentWithId(int communicatingAgentId) {
+		if(!hasAgentWithId(communicatingAgentId)) {
+			throw new RuntimeException("There is no protocol agent with id " + communicatingAgentId + " on " + toString());
+		}
+		
+		return activeAgentsMap.get(communicatingAgentId).getProtocolAgent();
 	}
 }

@@ -5,7 +5,7 @@ import java.util.Map;
 import agent.communication.CommunicatingAgentInterface;
 import agent.protocol.AbstractProtocolAgent;
 import host.communication.CommunicatingHostInterface;
-import message.MessageInterface;
+import message.AgentCommunicationMessageInterface;
 import protocol.Protocol;
 
 /**
@@ -51,7 +51,7 @@ public class ShadowAgent extends AbstractProtocolAgent {
 		CommunicatingAgentInterface sourceAgent = getCommunicatingAgent();
 		if (ttl <= 0) {
 			CommunicatingHostInterface sourceHost = sourceAgent.getHost();
-			MessageInterface message = new ShadowLocationUpdateMessage(sourceHost, homeServerHost, sourceAgent,
+			AgentCommunicationMessageInterface message = new ShadowLocationUpdateMessage(sourceHost, homeServerHost, sourceAgent,
 					destinationHost);
 			ShadowHost protocolHost = (ShadowHost) sourceAgent.getHost().getProtocolHost(Protocol.Shadow);
 			protocolHost.updateProxy(sourceAgent, homeServerHost);

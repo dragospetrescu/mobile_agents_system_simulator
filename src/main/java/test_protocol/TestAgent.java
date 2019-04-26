@@ -4,7 +4,7 @@ import java.util.Map;
 
 import agent.communication.CommunicatingAgentInterface;
 import agent.protocol.AbstractProtocolAgent;
-import message.MessageInterface;
+import message.AgentCommunicationMessageInterface;
 
 /**
  * Not working. This is a test
@@ -19,7 +19,7 @@ public class TestAgent extends AbstractProtocolAgent {
 	}
 
 	@Override
-	public void receiveMessage(MessageInterface message) {
+	public void receiveMessage(AgentCommunicationMessageInterface message) {
 		return;
 	}
 

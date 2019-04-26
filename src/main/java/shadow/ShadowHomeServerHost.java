@@ -7,8 +7,8 @@ import java.util.Map;
 import agent.communication.CommunicatingAgentInterface;
 import host.communication.CommunicatingHostInterface;
 import host.protocol.AbstractProtocolHost;
-import message.MessageInterface;
-import message.implementation.NormalCommunicationMessage;
+import message.AgentCommunicationMessageInterface;
+import message.NormalCommunicationMessage;
 
 /**
  * The HomeServer from the Shadow documentation
@@ -41,19 +41,19 @@ public class ShadowHomeServerHost extends AbstractProtocolHost {
 	}
 
 	@Override
-	public void interpretMessage(MessageInterface message) {
+	public void interpretMessage(AgentCommunicationMessageInterface message) {
 		if(message instanceof ShadowLocationUpdateMessage) {
 			ShadowLocationUpdateMessage shadowMessage = (ShadowLocationUpdateMessage) message;
 			CommunicatingHostInterface migratingToHost = shadowMessage.getMigratingToHost();
-			CommunicatingAgentInterface agentSource = shadowMessage.getAgentSource();
+			CommunicatingAgentInterface agentSource = shadowMessage.getAgentSourceId();
 			agentToFirstMigrationStopHostMap.put(agentSource, migratingToHost);
 		}
 		if(message instanceof ShadowForwardedMessage) {
-			CommunicatingAgentInterface destinationAgent = message.getAgentDestination();
+			CommunicatingAgentInterface destinationAgent = message.getAgentDestinationId();
 			CommunicatingHostInterface newHostDestination = agentToFirstMigrationStopHostMap.get(destinationAgent);
 			CommunicatingHostInterface sourceHost = getCommunicationHost();
-			CommunicatingAgentInterface sourceAgent = message.getAgentSource();
-			MessageInterface forwardedMessage = new NormalCommunicationMessage(message.getId(), sourceHost,
+			CommunicatingAgentInterface sourceAgent = message.getAgentSourceId();
+			AgentCommunicationMessageInterface forwardedMessage = new NormalCommunicationMessage(message.getMessageId(), sourceHost,
 					newHostDestination, sourceAgent, destinationAgent);
 			sourceHost.addMessageForSending(forwardedMessage);
 		}

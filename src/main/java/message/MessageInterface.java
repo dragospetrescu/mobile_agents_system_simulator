@@ -1,62 +1,40 @@
 package message;
 
-import agent.communication.CommunicatingAgentInterface;
-import host.communication.CommunicatingHostInterface;
-
-/**
- * 
- * A message that will be sent from one agent or host to another agent or host
- * All message types have to implement this interface.
- * It is recommended to extend the class {@link Message} instead of implementing this class
- * 
- */
 public interface MessageInterface {
-
 	/**
 	 * @return next host to the final destination. Like in the ip protocol
 	 */
-	CommunicatingHostInterface getNextHop();
+	int getNextHopId();
 
 	/**
 	 * @return the last host that redirected the message
 	 */
-	CommunicatingHostInterface getPreviousHop();
+	int getPreviousHopId();
 
 	/**
 	 * @return the final host destination
 	 */
-	CommunicatingHostInterface getHostDestination();
+	int getHostDestinationId();
 	
 	/**
-	 * @param hostDestination - new destination of message
+	 * @param hostDestinationId - new destination of message
 	 */
-	void setHostDestination(CommunicatingHostInterface hostDestination);
+	void setHostDestinationId(int hostDestinationId);
 
 	/**
 	 * @return the host from which the message was sent
 	 */
-	CommunicatingHostInterface getHostSource();
-
+	int getHostSourceId();
+	
 	/**
-	 * @return the agent that sent the message. Can be null if the message was sent
-	 *         by a host.
-	 */
-	CommunicatingAgentInterface getAgentSource();
-
-	/**
-	 * @return the destination agent. Can be null if the destination is a host.
-	 *         Example: MigratingMessage
-	 */
-	CommunicatingAgentInterface getAgentDestination();
-
-	/**
-	 * @param nextHop - the next host to which it will be redirected in order to get
+	 * @param nextHopId - the next host to which it will be redirected in order to get
 	 *                to the destination.
 	 */
-	void setNextHopHost(CommunicatingHostInterface nextHop);
+	void setNextHopHostId(int nextHopId);
 
 	/**
 	 * @return unique id of the message
 	 */
-	int getId();
+	int getMessageId();
+
 }

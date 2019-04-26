@@ -8,8 +8,8 @@ import agent.communication.CommunicatingAgentInterface;
 import host.communication.CommunicatingHostInterface;
 import host.protocol.AbstractProtocolHost;
 import hss.HSSLocationUpdateMessage;
-import message.MessageInterface;
-import message.implementation.NormalCommunicationMessage;
+import message.AgentCommunicationMessageInterface;
+import message.NormalCommunicationMessage;
 
 public class CSServerHost extends AbstractProtocolHost {
 
@@ -35,21 +35,21 @@ public class CSServerHost extends AbstractProtocolHost {
 	}
 	
 	@Override
-	public void interpretMessage(MessageInterface message) {
+	public void interpretMessage(AgentCommunicationMessageInterface message) {
 
 		if (message instanceof NormalCommunicationMessage) {
-			CommunicatingAgentInterface agentSource = message.getAgentSource();
-			CommunicatingAgentInterface agentDestination = message.getAgentDestination();
+			CommunicatingAgentInterface agentSource = message.getAgentSourceId();
+			CommunicatingAgentInterface agentDestination = message.getAgentDestinationId();
 			CommunicatingHostInterface hostSource = getCommunicationHost();
 			CommunicatingHostInterface hostDestination = agentToHostDatabase.get(agentDestination);
-			NormalCommunicationMessage forwardedMessage = new NormalCommunicationMessage(message.getId(), hostSource,
+			NormalCommunicationMessage forwardedMessage = new NormalCommunicationMessage(message.getMessageId(), hostSource,
 					hostDestination, agentSource, agentDestination);
 
 			hostSource.addMessageForSending(forwardedMessage);
 		} else if (message instanceof CSLocationUpdateMessage) {
 			CSLocationUpdateMessage hssMessage = (CSLocationUpdateMessage) message;
 			CommunicatingHostInterface newInhabitingHost = hssMessage.getNewHostLocation();
-			CommunicatingAgentInterface agentSource = hssMessage.getAgentSource();
+			CommunicatingAgentInterface agentSource = hssMessage.getAgentSourceId();
 			agentToHostDatabase.put(agentSource, newInhabitingHost);
 		} else {
 			super.interpretMessage(message);

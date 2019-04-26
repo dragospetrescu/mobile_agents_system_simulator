@@ -7,7 +7,7 @@ import java.util.Map;
 import agent.communication.CommunicatingAgentInterface;
 import host.communication.CommunicatingHostInterface;
 import host.protocol.AbstractProtocolHost;
-import message.MessageInterface;
+import message.AgentCommunicationMessageInterface;
 
 /**
  * The HomeServer from the HSS documentation
@@ -36,15 +36,15 @@ public class HSSHomeServerHost extends AbstractProtocolHost {
 	}
 
 	@Override
-	public void interpretMessage(MessageInterface message) {
+	public void interpretMessage(AgentCommunicationMessageInterface message) {
 
 		if (message instanceof HSSForwardedMessage) {
 			HSSForwardedMessage hssMessage = (HSSForwardedMessage) message;
-			CommunicatingAgentInterface agentSource = message.getAgentSource();
-			CommunicatingAgentInterface agentDestination = message.getAgentDestination();
+			CommunicatingAgentInterface agentSource = message.getAgentSourceId();
+			CommunicatingAgentInterface agentDestination = message.getAgentDestinationId();
 			CommunicatingHostInterface communicationHost = getCommunicationHost();
 			CommunicatingHostInterface hostDestination = agentToHomeDatabase.get(agentDestination);
-			HSSForwardedMessage forwardedMessage = new HSSForwardedMessage(hssMessage.getId(), communicationHost,
+			HSSForwardedMessage forwardedMessage = new HSSForwardedMessage(hssMessage.getMessageId(), communicationHost,
 					hostDestination, agentSource, agentDestination);
 
 			communicationHost.addMessageForSending(forwardedMessage);

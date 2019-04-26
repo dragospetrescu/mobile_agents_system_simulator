@@ -1,5 +1,6 @@
 package agent.communication;
 
+import message.AgentCommunicationMessageInterface;
 import message.MessageInterface;
 import protocol.Protocol;
 
@@ -89,7 +90,7 @@ public interface CommunicatingAgentInterface {
 	 * @param allAgents - all CommunicatingAgents of the simulation
 	 * @param hosts - all CommunicatingHosts of the simulation
 	 */
-	void initAgent(List<CommunicatingAgentInterface> allAgents, List<CommunicatingHostInterface> hosts);
+	void initAgent(List<Integer> allAgentsIds, CommunicatingHostInterface host);
 
 	/**
 	 * @return - the unique id of each CommunicatingAgentInterface
@@ -102,15 +103,11 @@ public interface CommunicatingAgentInterface {
 	 * @param communicatingHost
 	 */
 	void setHost(CommunicatingHost communicatingHost);
-
-	/**
-	 * @return all hosts of the simulation
-	 */
-	List<CommunicatingHostInterface> getAllNormalHosts();
-
 	/**
 	 * Calls protocol.init()
 	 */
 	void initProtocol();
+
+	int getHostId();
 
 }

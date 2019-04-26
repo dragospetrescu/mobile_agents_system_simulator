@@ -39,7 +39,7 @@ public class MessagesManager {
      * @param message - the traveling message
      */
     public void addMessage(MessageInterface message) {
-        travelingMessages.put(message, networkGraph.getDistance(message.getPreviousHop(), message.getNextHop()));
+        travelingMessages.put(message, networkGraph.getDistance(message.getPreviousHopId(), message.getNextHopId()));
     }
 
     /**

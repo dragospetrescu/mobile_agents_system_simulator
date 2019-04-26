@@ -3,6 +3,7 @@ package statistics;
 import java.util.HashMap;
 import java.util.Map;
 
+import message.AgentCommunicationMessageInterface;
 import message.MessageInterface;
 
 /**

@@ -6,9 +6,9 @@ import java.util.Map;
 import agent.communication.CommunicatingAgentInterface;
 import agent.protocol.AbstractProtocolAgent;
 import host.communication.CommunicatingHostInterface;
-import message.Message;
-import message.MessageInterface;
-import message.implementation.NormalCommunicationMessage;
+import message.AgentCommunicationMessage;
+import message.AgentCommunicationMessageInterface;
+import message.NormalCommunicationMessage;
 import statistics.StatisticsCreator;
 
 /**
@@ -26,7 +26,7 @@ public class BroadcastAgent extends AbstractProtocolAgent {
 	}
 
 	@Override
-	public void receiveMessage(MessageInterface message) {
+	public void receiveMessage(AgentCommunicationMessageInterface message) {
 		super.receiveMessage(message);
 	}
 
@@ -36,13 +36,13 @@ public class BroadcastAgent extends AbstractProtocolAgent {
 		List<CommunicatingHostInterface> allHosts = communicatingAgent.getAllNormalHosts();
 		for (CommunicatingHostInterface communicatingHostDestination : allHosts) {
 			if (!communicatingHostDestination.equals(communicatingAgent.getHost())) {
-				MessageInterface message = new NormalCommunicationMessage(Message.noMessages, communicatingAgent.getHost(),
+				AgentCommunicationMessageInterface message = new NormalCommunicationMessage(AgentCommunicationMessage.noMessages, communicatingAgent.getHost(),
 						communicatingHostDestination, communicatingAgent, destinationAgent);
 				communicatingAgent.addMessage(message);
 				StatisticsCreator.messageFailedDelivered(message);
 			}
 		}
-		Message.noMessages++;
+		AgentCommunicationMessage.noMessages++;
 	}
 
 	@Override

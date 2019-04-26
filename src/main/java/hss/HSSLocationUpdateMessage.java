@@ -2,7 +2,7 @@ package hss;
 
 import agent.communication.CommunicatingAgentInterface;
 import host.communication.CommunicatingHostInterface;
-import message.Message;
+import message.AgentCommunicationMessage;
 
 /**
  * The Update message sent when agent migrates
@@ -10,7 +10,7 @@ import message.Message;
  * When agent migrates it sends to it's home host message
  * that updates the location database
  */
-public class HSSLocationUpdateMessage extends Message {
+public class HSSLocationUpdateMessage extends AgentCommunicationMessage {
 
 	/**
 	 * The host to which the agent is migrating

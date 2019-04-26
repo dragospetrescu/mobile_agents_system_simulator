@@ -2,7 +2,7 @@ package cs;
 
 import agent.communication.CommunicatingAgentInterface;
 import host.communication.CommunicatingHostInterface;
-import message.Message;
+import message.AgentCommunicationMessage;
 
 /**
  * The Update message sent when agent migrates
@@ -10,7 +10,7 @@ import message.Message;
  * When agent migrates it sends to it's home host message
  * that updates the location database
  */
-public class CSLocationUpdateMessage extends Message {
+public class CSLocationUpdateMessage extends AgentCommunicationMessage {
 
 	/**
 	 * The host to which the agent is migrating
@@ -24,9 +24,9 @@ public class CSLocationUpdateMessage extends Message {
 	 * @param destinationAgent - the agent that has to receive the message
 	 * @param newHostLocation - the host to which the agent is migrating
 	 */
-	public CSLocationUpdateMessage(CommunicatingHostInterface sourceHost, CommunicatingHostInterface destinationHost,
-			CommunicatingAgentInterface sourceAgent, CommunicatingAgentInterface destinationAgent, CommunicatingHostInterface newHostLocation) {
-		super(sourceHost, destinationHost, sourceAgent, destinationAgent);
+	public CSLocationUpdateMessage(int sourceHost, int destinationHost,
+			int sourceAgent, CommunicatingHostInterface newHostLocation) {
+		super(sourceHost, destinationHost, sourceAgent, -1);
 		this.newHostLocation = newHostLocation;
 	}
 

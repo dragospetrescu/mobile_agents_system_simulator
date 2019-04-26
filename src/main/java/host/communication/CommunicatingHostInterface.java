@@ -1,13 +1,16 @@
 package host.communication;
 
 import agent.communication.CommunicatingAgentInterface;
+import agent.protocol.ProtocolAgent;
 import host.protocol.AbstractProtocolHost;
 import host.protocol.ProtocolHost;
+import message.AgentCommunicationMessageInterface;
 import message.MessageInterface;
 import message.MessagesManager;
-import message.implementation.MigratingAgentMessage;
+import message.MigratingAgentMessage;
 import protocol.Protocol;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -53,9 +56,11 @@ public interface CommunicatingHostInterface {
 	List<MessageInterface> sendMessages();
 
 	/**
+	 * 
+	 * TODO REMOVE THIS????
 	 * @return list of agents that are currently residing on this host
 	 */
-	List<CommunicatingAgentInterface> getActiveAgents();
+	Collection<CommunicatingAgentInterface> getActiveAgents();
 
 	/**
 	 * @param agent - add a new agent to the list of active agents, list of agents
@@ -70,7 +75,7 @@ public interface CommunicatingHostInterface {
 	 * @param destinationHost - final destination of the message
 	 * @return - next hop towards the final destination
 	 */
-	CommunicatingHostInterface getNextHop(CommunicatingHostInterface destinationHost);
+	int getNextHop(int destinationHostId);
 
 	/**
 	 * @return id - unique identifier of the host
@@ -83,10 +88,11 @@ public interface CommunicatingHostInterface {
 	 * @param destinationRouter - final host destination 
 	 * @param nextHopRouter - next hop in order to get tot the final destination
 	 */
-	void addRouteNextHop(CommunicatingHostInterface destinationRouter, CommunicatingHostInterface nextHopRouter);
+	void addRouteNextHop(int destinationRouterId, int nextHopRouterId);
 
 	/**
 	 * Calls protocol.init
+	 * TODO CHECK THIS
 	 */
 	void initProtocol();
 
@@ -96,24 +102,20 @@ public interface CommunicatingHostInterface {
 	 * @param normalHosts - agents can migrate to those
 	 * @param specialHosts - agent cannot migrate to those
 	 */
-	void init(List<CommunicatingHostInterface> normalHosts, List<CommunicatingHostInterface> specialHosts);
+	void init(List<Integer> normalHostsIds);
 	
 	/**
 	 * @return all hosts to which the agent can migrate to
 	 */
-	List<CommunicatingHostInterface> getAllNormalHosts();
+	List<Integer> getAllNormalHostsIds();
 
-	/**
-	 * Gets host by id. Should only be used in init
-	 * 
-	 * @param id 
-	 * @return host with this id
-	 */
-	CommunicatingHostInterface getHostById(int id);
-	
 	/**
 	 * @param protocol 
 	 * @return implementation of protocol
 	 */
 	ProtocolHost getProtocolHost(Protocol protocol);
+
+	boolean hasAgentWithId(int communicatingAgentId);
+
+	ProtocolAgent getProtocolAgentWithId(int communicatingAgentId);
 }

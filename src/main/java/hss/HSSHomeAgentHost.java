@@ -7,8 +7,8 @@ import java.util.Map;
 import agent.communication.CommunicatingAgentInterface;
 import host.communication.CommunicatingHostInterface;
 import host.protocol.AbstractProtocolHost;
-import message.MessageInterface;
-import message.implementation.NormalCommunicationMessage;
+import message.AgentCommunicationMessageInterface;
+import message.NormalCommunicationMessage;
 
 /**
  * The HomeServer from the HSS documentation
@@ -34,13 +34,13 @@ public class HSSHomeAgentHost extends AbstractProtocolHost {
 	}
 
 	@Override
-	public void interpretMessage(MessageInterface message) {
+	public void interpretMessage(AgentCommunicationMessageInterface message) {
 		if (message instanceof HSSForwardedMessage) {
-			CommunicatingAgentInterface agentDestination = message.getAgentDestination();
+			CommunicatingAgentInterface agentDestination = message.getAgentDestinationId();
 			CommunicatingHostInterface communicationHost = getCommunicationHost();
 			CommunicatingHostInterface hostDestination = agentToAddressDatabase.get(agentDestination);
-			MessageInterface forwardedNormalMessage = new NormalCommunicationMessage(message.getId(), communicationHost, hostDestination,
-					message.getAgentSource(), message.getAgentDestination());
+			AgentCommunicationMessageInterface forwardedNormalMessage = new NormalCommunicationMessage(message.getMessageId(), communicationHost, hostDestination,
+					message.getAgentSourceId(), message.getAgentDestinationId());
 			if(hostDestination.equals(communicationHost)) {
 				interpretMessage(forwardedNormalMessage);
 			} else {
@@ -49,7 +49,7 @@ public class HSSHomeAgentHost extends AbstractProtocolHost {
 		} else if (message instanceof HSSLocationUpdateMessage) {
 			HSSLocationUpdateMessage hssMessage = (HSSLocationUpdateMessage) message;
 			CommunicatingHostInterface newInhabitingHost = hssMessage.getNewHostLocation();
-			CommunicatingAgentInterface agentSource = hssMessage.getAgentSource();
+			CommunicatingAgentInterface agentSource = hssMessage.getAgentSourceId();
 			agentToAddressDatabase.put(agentSource, newInhabitingHost);
 		} else {
 			super.interpretMessage(message);

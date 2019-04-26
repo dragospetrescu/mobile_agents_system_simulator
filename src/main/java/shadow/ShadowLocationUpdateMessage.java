@@ -2,7 +2,7 @@ package shadow;
 
 import agent.communication.CommunicatingAgentInterface;
 import host.communication.CommunicatingHostInterface;
-import message.Message;
+import message.AgentCommunicationMessage;
 
 /**
  * The Update message sent when agent migrates
@@ -10,7 +10,7 @@ import message.Message;
  * When agent migrates more than ttl times it sends this message to the home
  * server that updates the location database
  */
-public class ShadowLocationUpdateMessage extends Message {
+public class ShadowLocationUpdateMessage extends AgentCommunicationMessage {
 
 	/**
 	 * The host to which the agent is traveling.

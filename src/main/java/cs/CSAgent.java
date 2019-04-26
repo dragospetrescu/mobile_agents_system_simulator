@@ -6,12 +6,12 @@ import agent.communication.CommunicatingAgentInterface;
 import agent.protocol.AbstractProtocolAgent;
 import host.communication.CommunicatingHostInterface;
 import hss.HSSLocationUpdateMessage;
-import message.MessageInterface;
-import message.implementation.NormalCommunicationMessage;
+import message.AgentCommunicationMessageInterface;
+import message.NormalCommunicationMessage;
 
 public class CSAgent extends AbstractProtocolAgent {
 
-	private CommunicatingHostInterface serverHost;
+	private int serverHost;
 
 	/**
 	 * @param communicatingAgent - the CommunicatingAgent that will use this protocol
@@ -21,24 +21,23 @@ public class CSAgent extends AbstractProtocolAgent {
 	}
 
 	@Override
-	public void prepareMessageTo(CommunicatingAgentInterface destinationAgent) {
+	public void prepareMessageTo(int destinationAgentId) {
 		CommunicatingAgentInterface sourceAgent = getCommunicatingAgent();
 		CommunicatingHostInterface sourceHost = sourceAgent.getHost();
-		MessageInterface message = new NormalCommunicationMessage(sourceHost, serverHost, sourceAgent, destinationAgent);
+		AgentCommunicationMessageInterface message = new NormalCommunicationMessage(sourceHost.getId(), serverHost, sourceAgent.getId(), destinationAgentId);
 		sourceAgent.addMessage(message);
 	}
 
 	@Override
 	public void init(Map<String, String> protocolArguments) {
-		int homeServerHostId = Integer.parseInt(protocolArguments.get("serverHost"));
-		serverHost = getCommunicatingAgent().getHost().getHostById(homeServerHostId);
+		int serverHost = Integer.parseInt(protocolArguments.get("serverHost"));
 	}
 	
 	@Override
-	public void migrate(CommunicatingHostInterface destinationHost) {
+	public void migrate(int destinationHostId) {
 		CommunicatingAgentInterface communicatingAgent = getCommunicatingAgent();
 		CommunicatingHostInterface sourceHost = communicatingAgent.getHost();
-		MessageInterface message = new CSLocationUpdateMessage(sourceHost, serverHost, communicatingAgent, null, destinationHost);
+		AgentCommunicationMessageInterface message = new CSLocationUpdateMessage(sourceHost.getId(), serverHost, communicatingAgent.getId(), destinationHostId);
 		communicatingAgent.addMessage(message);
 	
 	}
