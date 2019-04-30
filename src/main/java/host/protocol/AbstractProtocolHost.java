@@ -56,7 +56,6 @@ public abstract class AbstractProtocolHost implements ProtocolHost {
 			} else {
 				Logger.w(LogTag.NORMAL_MESSAGE,
 						message + " did non find destination Agent " + communicatingAgentId + " at " + this);
-				StatisticsCreator.messageFailedDelivered(message);
 			}
 		}
 	}

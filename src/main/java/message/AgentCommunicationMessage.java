@@ -1,5 +1,7 @@
 package message;
 
+import statistics.StatisticsCreator;
+
 /**
  * Generic message, implements the next hop logic Can be extended to create
  * custom, protocol specific messages
@@ -26,6 +28,8 @@ public class AgentCommunicationMessage extends AbstractMessage implements AgentC
 		super(id, sourceHostId, destinationHostId);
 		this.sourceAgentId = sourceAgent;
 		this.destinationAgentId = destinationAgent;
+		StatisticsCreator statistics = StatisticsCreator.getStatistics();
+		statistics.messageFailedDelivered(this);
 	}
 
 	/**

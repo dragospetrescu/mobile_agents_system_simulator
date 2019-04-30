@@ -10,18 +10,33 @@ import message.MessageInterface;
  * Will create statistics for each protocol in order to compare them
  */
 public class StatisticsCreator {
+	
+	
+	public static StatisticsCreator statistics;
+	
+	public static synchronized StatisticsCreator getStatistics() {
+		if(statistics == null) {
+			statistics = new StatisticsCreator();
+		}
+		return statistics;
+	}
+	
+	private StatisticsCreator() {
+		messagesDeliveryStatusMap = new HashMap<>();
+	}
+	
 
 	/**
 	 * Maps each message to its delivery status
 	 */
-	private static Map<MessageInterface, Boolean> messagesDeliveryStatusMap = new HashMap<>();
+	private Map<MessageInterface, Boolean> messagesDeliveryStatusMap;
 
 	/**
 	 * Marks a message was successfully to be delivered.
 	 * 
 	 * @param message that was successfully delivered
 	 */
-	public static void messageSuccesfullyDelivered(MessageInterface message) {
+	public void messageSuccesfullyDelivered(MessageInterface message) {
 		messagesDeliveryStatusMap.put(message, true);
 	}
 
@@ -30,7 +45,7 @@ public class StatisticsCreator {
 	 * 
 	 * @param message that failed
 	 */
-	public static void messageFailedDelivered(MessageInterface message) {
+	public void messageFailedDelivered(MessageInterface message) {
 		messagesDeliveryStatusMap.put(message, false);
 	}
 
@@ -39,7 +54,7 @@ public class StatisticsCreator {
 	 * 
 	 * @return number of failed transmitted messages
 	 */
-	public static long getNumberOfFailed() {
+	public long getNumberOfFailed() {
 		return messagesDeliveryStatusMap.keySet().stream().filter(message -> !messagesDeliveryStatusMap.get(message))
 				.count();
 	}
@@ -49,7 +64,7 @@ public class StatisticsCreator {
 	 * 
 	 * @return number of successfully transmitted messages
 	 */
-	public static long getNumberOfSuccess() {
+	public long getNumberOfSuccess() {
 		return messagesDeliveryStatusMap.keySet().stream().filter(message -> messagesDeliveryStatusMap.get(message))
 				.count();
 	}
@@ -59,7 +74,7 @@ public class StatisticsCreator {
 	 * 
 	 * @return total number of messages
 	 */
-	public static long getNumberOfMessages() {
+	public long getNumberOfMessages() {
 		return messagesDeliveryStatusMap.keySet().size();
 	}
 }

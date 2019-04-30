@@ -100,7 +100,8 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 
 	@Override
 	public void receiveMessage(MessageInterface message) {
-		StatisticsCreator.messageSuccesfullyDelivered(message);
+		StatisticsCreator statistics = StatisticsCreator.getStatistics();
+		statistics.messageSuccesfullyDelivered(message);
 		Logger.i(LogTag.NORMAL_MESSAGE, this + " received " + message);
 	}
 

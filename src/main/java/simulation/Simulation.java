@@ -258,6 +258,7 @@ public class Simulation {
 	 * TODO: change this
 	 */
 	public void printStatistics() {
-		System.out.println(1.0 * StatisticsCreator.getNumberOfSuccess() / StatisticsCreator.getNumberOfMessages() + " success rate");
+		StatisticsCreator statistics = StatisticsCreator.getStatistics();
+		System.out.println(1.0 * statistics.getNumberOfSuccess() / statistics.getNumberOfMessages() + " success rate");
 	}
 }

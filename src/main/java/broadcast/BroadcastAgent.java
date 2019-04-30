@@ -35,7 +35,6 @@ public class BroadcastAgent extends AbstractProtocolAgent {
 					AgentCommunicationMessage.noMessages, communicatingAgent.getHostId(), hostId,
 					communicatingAgent.getId(), destinationAgentId);
 			protocolHost.sendMessage(message);
-			StatisticsCreator.messageFailedDelivered(message);
 		}
 		AgentCommunicationMessage.noMessages++;
 	}
