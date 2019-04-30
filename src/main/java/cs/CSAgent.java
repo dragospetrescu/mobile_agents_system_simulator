@@ -2,15 +2,15 @@ package cs;
 
 import java.util.Map;
 
-import agent.communication.CommunicatingAgentInterface;
-import agent.protocol.AbstractProtocolAgent;
-import host.communication.CommunicatingHostInterface;
-import host.protocol.ProtocolHost;
-import message.AgentCommunicationMessage;
-import message.AgentCommunicationMessageInterface;
-import message.LocationUpdateMessage;
-import message.MessageInterface;
-import message.MigratingAgentMessageInterface;
+import core.agent.communication.CommunicatingAgentInterface;
+import core.agent.protocol.AbstractProtocolAgent;
+import core.host.communication.CommunicatingHostInterface;
+import core.host.protocol.ProtocolHost;
+import core.message.AgentCommunicationMessage;
+import core.message.AgentCommunicationMessageInterface;
+import core.message.LocationUpdateMessage;
+import core.message.MessageInterface;
+import core.message.MigratingAgentMessageInterface;
 import protocol.Protocol;
 
 public class CSAgent extends AbstractProtocolAgent {

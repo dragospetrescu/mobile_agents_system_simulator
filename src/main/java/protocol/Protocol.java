@@ -1,18 +1,15 @@
 package protocol;
-/**
- * Test, should be ignored.
- */
-import agent.communication.CommunicatingAgent;
-import agent.protocol.ProtocolAgent;
 import broadcast.BroadcastAgent;
 import broadcast.BroadcastHost;
+import core.agent.communication.CommunicatingAgent;
+import core.agent.protocol.ProtocolAgent;
+import core.host.communication.CommunicatingHost;
+import core.host.protocol.ProtocolHost;
 import cs.CSAgent;
 import cs.CSHost;
 import cs.CSServerHost;
 import fp.FPAgent;
 import fp.FPHost;
-import host.communication.CommunicatingHost;
-import host.protocol.ProtocolHost;
 import hss.HSSHomeServerHost;
 import shadow.ShadowAgent;
 import shadow.ShadowHomeServerHost;

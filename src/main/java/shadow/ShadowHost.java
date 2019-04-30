@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import agent.communication.CommunicatingAgentInterface;
-import host.communication.CommunicatingHostInterface;
-import host.protocol.AbstractProtocolHost;
-import message.AgentCommunicationMessageInterface;
-import message.LocationUpdateMessageInterface;
-import message.MessageInterface;
+import core.agent.communication.CommunicatingAgentInterface;
+import core.host.communication.CommunicatingHostInterface;
+import core.host.protocol.AbstractProtocolHost;
+import core.message.AgentCommunicationMessageInterface;
+import core.message.LocationUpdateMessageInterface;
+import core.message.MessageInterface;
 
 /**
  * The ShadowHost from the Shadow documentation

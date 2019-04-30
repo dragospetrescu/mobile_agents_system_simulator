@@ -3,12 +3,12 @@ package fp;
 import java.util.HashMap;
 import java.util.List;
 
-import agent.protocol.ProtocolAgent;
-import host.communication.CommunicatingHostInterface;
-import host.protocol.AbstractProtocolHost;
-import message.AgentCommunicationMessageInterface;
-import message.LocationUpdateMessageInterface;
-import message.MessageInterface;
+import core.agent.protocol.ProtocolAgent;
+import core.host.communication.CommunicatingHostInterface;
+import core.host.protocol.AbstractProtocolHost;
+import core.message.AgentCommunicationMessageInterface;
+import core.message.LocationUpdateMessageInterface;
+import core.message.MessageInterface;
 
 /**
  * The Host from the FP documentation

@@ -2,15 +2,15 @@ package broadcast;
 
 import java.util.List;
 
-import agent.communication.CommunicatingAgentInterface;
-import agent.protocol.ProtocolAgent;
-import helpers.LogTag;
-import helpers.Logger;
-import host.communication.CommunicatingHostInterface;
-import host.protocol.AbstractProtocolHost;
-import message.AgentCommunicationMessage;
-import message.AgentCommunicationMessageInterface;
-import message.MessageInterface;
+import core.agent.communication.CommunicatingAgentInterface;
+import core.agent.protocol.ProtocolAgent;
+import core.helpers.LogTag;
+import core.helpers.Logger;
+import core.host.communication.CommunicatingHostInterface;
+import core.host.protocol.AbstractProtocolHost;
+import core.message.AgentCommunicationMessage;
+import core.message.AgentCommunicationMessageInterface;
+import core.message.MessageInterface;
 
 /**
  * Host implementation of the Broadcast Protocol If this host does not contain

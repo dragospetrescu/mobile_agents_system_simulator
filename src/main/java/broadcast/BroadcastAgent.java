@@ -2,11 +2,11 @@ package broadcast;
 
 import java.util.List;
 
-import agent.communication.CommunicatingAgentInterface;
-import agent.protocol.AbstractProtocolAgent;
-import message.AgentCommunicationMessage;
-import message.AgentCommunicationMessageInterface;
-import statistics.StatisticsCreator;
+import core.agent.communication.CommunicatingAgentInterface;
+import core.agent.protocol.AbstractProtocolAgent;
+import core.message.AgentCommunicationMessage;
+import core.message.AgentCommunicationMessageInterface;
+import core.statistics.StatisticsCreator;
 
 /**
  * Agent implementation of the Broadcast Protocol The agent sends a message to

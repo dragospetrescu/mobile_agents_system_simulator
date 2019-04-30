@@ -4,14 +4,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import agent.communication.CommunicatingAgentInterface;
-import host.communication.CommunicatingHostInterface;
-import host.protocol.AbstractProtocolHost;
-import message.AgentCommunicationMessage;
-import message.AgentCommunicationMessageInterface;
-import message.LocationUpdateMessage;
-import message.LocationUpdateMessageInterface;
-import message.MessageInterface;
+import core.agent.communication.CommunicatingAgentInterface;
+import core.host.communication.CommunicatingHostInterface;
+import core.host.protocol.AbstractProtocolHost;
+import core.message.AgentCommunicationMessage;
+import core.message.AgentCommunicationMessageInterface;
+import core.message.LocationUpdateMessage;
+import core.message.LocationUpdateMessageInterface;
+import core.message.MessageInterface;
 
 public class CSServerHost extends AbstractProtocolHost {
 

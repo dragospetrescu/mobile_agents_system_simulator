@@ -1,7 +1,7 @@
 package cs;
 
-import host.communication.CommunicatingHostInterface;
-import host.protocol.AbstractProtocolHost;
+import core.host.communication.CommunicatingHostInterface;
+import core.host.protocol.AbstractProtocolHost;
 import protocol.Protocol;
 
 public class CSHost extends AbstractProtocolHost {
