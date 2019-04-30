@@ -1,6 +1,10 @@
 package core.message;
 
-public class AbstractMessage implements MessageInterface {
+/**
+ * All messages need to extend this.
+ * Takes care of routing part
+ */
+public class Message implements MessageInterface {
 
 	/**
 	 * Unique id
@@ -35,7 +39,7 @@ public class AbstractMessage implements MessageInterface {
 	 * @param sourceHost       - host from where the message is sent
 	 * @param destinationHost  - the host where the message has to arrive
 	 */
-	public AbstractMessage(Integer id, Integer sourceHost, Integer destinationHost) {
+	public Message(Integer id, Integer sourceHost, Integer destinationHost) {
 		this.id = id;
 		this.sourceHostId = sourceHost;
 		this.destinationHostId = destinationHost;
@@ -47,7 +51,7 @@ public class AbstractMessage implements MessageInterface {
 	 * @param sourceHost       - host from where the message is sent
 	 * @param destinationHost  - the host where the message has to arrive
 	 */
-	public AbstractMessage(Integer sourceHost, Integer destinationHost) {
+	public Message(Integer sourceHost, Integer destinationHost) {
 		this(noMessages, sourceHost, destinationHost);
 		noMessages++;
 	}
@@ -98,7 +102,7 @@ public class AbstractMessage implements MessageInterface {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AbstractMessage other = (AbstractMessage) obj;
+		Message other = (Message) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

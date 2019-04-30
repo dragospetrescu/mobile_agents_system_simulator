@@ -15,7 +15,6 @@ import core.agent.communication.CommunicatingAgentInterface;
 import core.host.communication.CommunicatingHost;
 import core.host.communication.CommunicatingHostInterface;
 import core.host.router.NetworkGraph;
-import core.message.AgentCommunicationMessageInterface;
 import core.message.MessageInterface;
 import core.message.MessagesManager;
 import core.statistics.StatisticsCreator;

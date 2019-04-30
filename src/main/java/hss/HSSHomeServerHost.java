@@ -1,14 +1,11 @@
 package hss;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import core.agent.communication.CommunicatingAgentInterface;
 import core.host.communication.CommunicatingHostInterface;
 import core.host.protocol.AbstractProtocolHost;
 import core.message.AgentCommunicationMessageInterface;
-import core.message.LocationUpdateMessage;
 import core.message.LocationUpdateMessageInterface;
 import core.message.MessageInterface;
 

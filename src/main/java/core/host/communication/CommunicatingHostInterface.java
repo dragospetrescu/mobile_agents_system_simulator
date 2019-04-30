@@ -4,7 +4,6 @@ import core.agent.communication.CommunicatingAgentInterface;
 import core.agent.protocol.ProtocolAgent;
 import core.host.protocol.AbstractProtocolHost;
 import core.host.protocol.ProtocolHost;
-import core.message.AgentCommunicationMessageInterface;
 import core.message.MessageInterface;
 import core.message.MessagesManager;
 import core.message.MigratingAgentMessage;
@@ -76,8 +75,8 @@ public interface CommunicatingHostInterface {
 	/**
 	 * Used when creating re-routing table
 	 * 
-	 * @param destinationRouter - final host destination 
-	 * @param nextHopRouter - next hop in order to get tot the final destination
+	 * @param destinationRouterId - final host destination id
+	 * @param nextHopRouterId - next hop id in order to get to the final destination
 	 */
 	void addRouteNextHop(Integer destinationRouterId, Integer nextHopRouterId);
 
@@ -90,8 +89,7 @@ public interface CommunicatingHostInterface {
 	/**
 	 * Sends all existing hosts
 	 * 
-	 * @param normalHosts - agents can migrate to those
-	 * @param specialHosts - agent cannot migrate to those
+	 * @param normalHostsIds - ids of agents that can migrate to those
 	 */
 	void init(List<Integer> normalHostsIds);
 	
@@ -106,11 +104,30 @@ public interface CommunicatingHostInterface {
 	 */
 	ProtocolHost getProtocolHost(Protocol protocol);
 
+	/**
+	 * @param communicatingAgentId
+	 * @return whether or not it has an active agent with the provided id
+	 */
 	boolean hasAgentWithId(Integer communicatingAgentId);
 
+	/**
+	 * @param communicatingAgentId
+	 * @return the protocol agent of the communicating agent with the provided id.
+	 */
 	ProtocolAgent getProtocolAgentWithId(Integer communicatingAgentId);
 	
+	/**
+	 * Rerouts the message to a new destination.
+	 * 
+	 * @param message
+	 * @param newDestinationHostId
+	 */
 	void reRouteMessage(MessageInterface message, Integer newDestinationHostId);
 	
+	/**
+	 * Routs the message to the existing destination
+	 * 
+	 * @param message
+	 */
 	public void routeMessage(MessageInterface message);
 }

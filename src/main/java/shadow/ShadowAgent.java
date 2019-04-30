@@ -5,14 +5,11 @@ import java.util.Map;
 
 import core.agent.communication.CommunicatingAgentInterface;
 import core.agent.protocol.AbstractProtocolAgent;
-import core.host.communication.CommunicatingHostInterface;
 import core.host.protocol.ProtocolHost;
 import core.message.AgentCommunicationMessage;
-import core.message.AgentCommunicationMessageInterface;
 import core.message.LocationUpdateMessage;
 import core.message.MessageInterface;
 import core.message.MigratingAgentMessageInterface;
-import fp.FPHost;
 import protocol.Protocol;
 
 /**
@@ -33,6 +30,9 @@ public class ShadowAgent extends AbstractProtocolAgent {
 	 * agent's migration decision
 	 */
 	private int ttl;
+	/**
+	 * Keeps the original value of the ttl so it can be restarted.
+	 */
 	private int originalTtl;
 
 	/**
@@ -83,7 +83,7 @@ public class ShadowAgent extends AbstractProtocolAgent {
 				communicatingAgent.getId(), communicatingAgent.getHostId(), Protocol.FP);
 		fpProtocolHost.sendMessage(message);
 
-		List<Integer> allNormalHosts = fpProtocolHost.getAllNormalHosts();
+		List<Integer> allNormalHosts = fpProtocolHost.getAllHosts();
 		for (Integer hostId : allNormalHosts) {
 			message = new LocationUpdateMessage(communicatingAgent.getHostId(), hostId, getId(),
 					communicatingAgent.getHostId(), Protocol.FP);

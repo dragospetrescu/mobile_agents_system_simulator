@@ -1,20 +1,26 @@
 package cs;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import core.agent.communication.CommunicatingAgentInterface;
 import core.host.communication.CommunicatingHostInterface;
 import core.host.protocol.AbstractProtocolHost;
 import core.message.AgentCommunicationMessage;
 import core.message.AgentCommunicationMessageInterface;
-import core.message.LocationUpdateMessage;
 import core.message.LocationUpdateMessageInterface;
 import core.message.MessageInterface;
 
+/**
+ * Central server from the CS protocol. Every time an agent migrates it sends a
+ * location update to the server. When an agent wants to send a message to an
+ * agent, it sends the message to this server which redirects it to the last
+ * known host of the destination agent
+ */
 public class CSServerHost extends AbstractProtocolHost {
 
+	/**
+	 * Map that tracks the position of each host
+	 */
 	Map<Integer, Integer> agentToHostDatabase;
 
 	/**
@@ -38,8 +44,8 @@ public class CSServerHost extends AbstractProtocolHost {
 			Integer agentDestination = agentCommunicationMessage.getAgentDestinationId();
 			Integer hostDestination = agentToHostDatabase.get(agentDestination);
 			CommunicatingHostInterface communicationHost = getCommunicationHost();
-			AgentCommunicationMessageInterface forwardedMessage = new AgentCommunicationMessage(
-					message.getMessageId(), communicationHost.getId(), hostDestination, agentSource, agentDestination);
+			AgentCommunicationMessageInterface forwardedMessage = new AgentCommunicationMessage(message.getMessageId(),
+					communicationHost.getId(), hostDestination, agentSource, agentDestination);
 			communicationHost.routeMessage(forwardedMessage);
 			communicationHost.addMessageForSending(forwardedMessage);
 		} else if (message instanceof LocationUpdateMessageInterface) {

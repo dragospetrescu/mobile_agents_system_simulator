@@ -3,14 +3,17 @@ package core.message;
 import core.statistics.StatisticsCreator;
 
 /**
- * Generic message, implements the next hop logic Can be extended to create
- * custom, protocol specific messages
+ * All agent communication will use this kind of messages.
+ * This is the only kind of message that counts for the statistics
  */
-public class AgentCommunicationMessage extends AbstractMessage implements AgentCommunicationMessageInterface {
+public class AgentCommunicationMessage extends Message implements AgentCommunicationMessageInterface {
 
+	/**
+	 * The source agent id.
+	 */
 	private Integer sourceAgentId;
 	/**
-	 * The destination agent. Can be null if the destination is a host.
+	 * The destination agent id. 
 	 */
 	private Integer destinationAgentId;
 

@@ -6,7 +6,6 @@ import core.agent.communication.CommunicatingAgentInterface;
 import core.agent.protocol.AbstractProtocolAgent;
 import core.message.AgentCommunicationMessage;
 import core.message.AgentCommunicationMessageInterface;
-import core.statistics.StatisticsCreator;
 
 /**
  * Agent implementation of the Broadcast Protocol The agent sends a message to
@@ -28,7 +27,7 @@ public class BroadcastAgent extends AbstractProtocolAgent {
 		CommunicatingAgentInterface communicatingAgent = getCommunicatingAgent();
 		BroadcastHost protocolHost = (BroadcastHost) getProtocolHost();
 
-		List<Integer> allHostsIds = protocolHost.getAllNormalHosts();
+		List<Integer> allHostsIds = protocolHost.getAllHosts();
 
 		for (Integer hostId : allHostsIds) {
 			AgentCommunicationMessageInterface message = new AgentCommunicationMessage(

@@ -5,10 +5,8 @@ import java.util.Map;
 
 import core.agent.communication.CommunicatingAgentInterface;
 import core.agent.protocol.AbstractProtocolAgent;
-import core.host.communication.CommunicatingHostInterface;
 import core.host.protocol.ProtocolHost;
 import core.message.AgentCommunicationMessage;
-import core.message.AgentCommunicationMessageInterface;
 import core.message.LocationUpdateMessage;
 import core.message.MessageInterface;
 import core.message.MigratingAgentMessageInterface;
@@ -56,13 +54,12 @@ public class FPAgent extends AbstractProtocolAgent {
 		super.init(protocolArguments, protocolHost);
 		CommunicatingAgentInterface communicatingAgent = getCommunicatingAgent();
 		FPHost fpProtocolHost = (FPHost) protocolHost;
-		List<Integer> allNormalHosts = fpProtocolHost.getAllNormalHosts();
+		List<Integer> allNormalHosts = fpProtocolHost.getAllHosts();
 		for (Integer hostId : allNormalHosts) {
 			LocationUpdateMessage message = new LocationUpdateMessage(communicatingAgent.getHostId(), hostId, getId(),
 					communicatingAgent.getHostId(), Protocol.FP);
 			fpProtocolHost.sendMessage(message);
 
 		}
-
 	}
 }

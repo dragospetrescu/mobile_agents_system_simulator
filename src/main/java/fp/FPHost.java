@@ -1,7 +1,6 @@
 package fp;
 
 import java.util.HashMap;
-import java.util.List;
 
 import core.agent.protocol.ProtocolAgent;
 import core.host.communication.CommunicatingHostInterface;
@@ -87,10 +86,4 @@ public class FPHost extends AbstractProtocolHost {
 	public void init() {
 		agentForwardingProxy = new HashMap<Integer, Integer>();
 	}
-	
-	public List<Integer> getAllNormalHosts() {
-		CommunicatingHostInterface communicationHost = getCommunicationHost();
-		return communicationHost.getAllNormalHostsIds();
-	}
-	
 }

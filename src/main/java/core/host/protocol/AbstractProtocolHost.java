@@ -2,14 +2,12 @@ package core.host.protocol;
 
 import java.util.List;
 
-import core.agent.communication.CommunicatingAgentInterface;
 import core.agent.protocol.ProtocolAgent;
 import core.helpers.LogTag;
 import core.helpers.Logger;
 import core.host.communication.CommunicatingHostInterface;
 import core.message.AgentCommunicationMessageInterface;
 import core.message.MessageInterface;
-import core.statistics.StatisticsCreator;
 import protocol.Protocol;
 
 /**
@@ -84,5 +82,11 @@ public abstract class AbstractProtocolHost implements ProtocolHost {
 	@Override
 	public String toString() {
 		return protocol + " HOST " + id;
+	}
+	
+	@Override
+	public List<Integer> getAllHosts() {
+		CommunicatingHostInterface communicationHost = getCommunicationHost();
+		return communicationHost.getAllNormalHostsIds();
 	}
 }

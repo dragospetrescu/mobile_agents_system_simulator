@@ -1,14 +1,10 @@
 package broadcast;
 
-import java.util.List;
-
-import core.agent.communication.CommunicatingAgentInterface;
 import core.agent.protocol.ProtocolAgent;
 import core.helpers.LogTag;
 import core.helpers.Logger;
 import core.host.communication.CommunicatingHostInterface;
 import core.host.protocol.AbstractProtocolHost;
-import core.message.AgentCommunicationMessage;
 import core.message.AgentCommunicationMessageInterface;
 import core.message.MessageInterface;
 
@@ -42,10 +38,5 @@ public class BroadcastHost extends AbstractProtocolHost {
 
 	@Override
 	public void init() {
-	}
-
-	public List<Integer> getAllNormalHosts() {
-		CommunicatingHostInterface communicationHost = getCommunicationHost();
-		return communicationHost.getAllNormalHostsIds();
 	}
 }

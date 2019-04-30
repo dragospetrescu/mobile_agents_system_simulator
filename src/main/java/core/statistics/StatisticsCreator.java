@@ -3,7 +3,6 @@ package core.statistics;
 import java.util.HashMap;
 import java.util.Map;
 
-import core.message.AgentCommunicationMessageInterface;
 import core.message.MessageInterface;
 
 /**
@@ -11,9 +10,16 @@ import core.message.MessageInterface;
  */
 public class StatisticsCreator {
 	
-	
+	/**
+	 * Singleton pattern
+	 */
 	public static StatisticsCreator statistics;
 	
+	/**
+	 * Singleton pattern.
+	 * 
+	 * @return a unique StatisticsCreator object 
+	 */
 	public static synchronized StatisticsCreator getStatistics() {
 		if(statistics == null) {
 			statistics = new StatisticsCreator();
@@ -21,6 +27,9 @@ public class StatisticsCreator {
 		return statistics;
 	}
 	
+	/**
+	 * Singleton pattern
+	 */
 	private StatisticsCreator() {
 		messagesDeliveryStatusMap = new HashMap<>();
 	}

@@ -6,7 +6,7 @@ import core.agent.communication.CommunicatingAgentInterface;
  * Protocol independent message All agents will migrate using this kind of
  * messages.
  */
-public class MigratingAgentMessage extends AbstractMessage implements MigratingAgentMessageInterface {
+public class MigratingAgentMessage extends Message implements MigratingAgentMessageInterface {
 
 	/**
 	 * The agent that is migrating from the sourceHost to the destinationHost

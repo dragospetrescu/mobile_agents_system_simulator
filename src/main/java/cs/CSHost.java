@@ -2,8 +2,10 @@ package cs;
 
 import core.host.communication.CommunicatingHostInterface;
 import core.host.protocol.AbstractProtocolHost;
-import protocol.Protocol;
 
+/**
+ * Dummy CSHost. Does not have anny functionality
+ */
 public class CSHost extends AbstractProtocolHost {
 
 	/**

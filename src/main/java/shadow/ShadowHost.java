@@ -1,11 +1,8 @@
 package shadow;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import core.agent.communication.CommunicatingAgentInterface;
 import core.host.communication.CommunicatingHostInterface;
 import core.host.protocol.AbstractProtocolHost;
 import core.message.AgentCommunicationMessageInterface;
@@ -90,10 +87,5 @@ public class ShadowHost extends AbstractProtocolHost {
 	 */
 	public void updateProxy(Integer agent, Integer host) {
 		agentForwardingProxy.put(agent, host);
-	}
-
-	public List<Integer> getAllNormalHosts() {
-		CommunicatingHostInterface communicationHost = getCommunicationHost();
-		return communicationHost.getAllNormalHostsIds();
 	}
 }

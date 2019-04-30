@@ -49,7 +49,13 @@ public enum Protocol {
 	 * Home Server protocol for Shadow
 	 */
 	ShadowServer,
+	/**
+	 * Central Server protocol
+	 */
 	CS,
+	/**
+	 * The server part of the Central Server protocol
+	 */
 	CSServer;
 	;
 

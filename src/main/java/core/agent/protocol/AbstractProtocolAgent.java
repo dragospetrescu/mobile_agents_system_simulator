@@ -3,9 +3,7 @@ package core.agent.protocol;
 import java.util.Map;
 
 import core.agent.communication.CommunicatingAgentInterface;
-import core.host.communication.CommunicatingHostInterface;
 import core.host.protocol.ProtocolHost;
-import core.message.AgentCommunicationMessageInterface;
 import core.message.MessageInterface;
 import core.message.MigratingAgentMessageInterface;
 import protocol.Protocol;
@@ -24,6 +22,11 @@ public abstract class AbstractProtocolAgent implements ProtocolAgent {
 	 */
 	private CommunicatingAgentInterface communicatingAgent;
 	
+	/**
+	 * Gets the protocol host corresponding to:
+	 * - the host it is inhabiting
+	 * - the protocol it is using
+	 */
 	private ProtocolHost protocolHost;
 	/**
 	 * The protocol that it is implementing

@@ -7,7 +7,6 @@ import java.util.List;
 import core.agent.protocol.ProtocolAgent;
 import core.host.communication.CommunicatingHost;
 import core.host.communication.CommunicatingHostInterface;
-import core.message.AgentCommunicationMessageInterface;
 import core.message.MessageInterface;
 
 /**
@@ -24,8 +23,6 @@ public interface CommunicatingAgentInterface {
 	 * When the agent decides to migrate from one host to another it has to prepare
 	 * a MigratingMessage The removing from the current host will be done by the
 	 * simulation
-	 * 
-	 * @return MigratingMessage that contains the migrating agent
 	 */
 	void prepareMigratingMessage();
 
@@ -69,8 +66,8 @@ public interface CommunicatingAgentInterface {
 	/**
 	 * Sets for each agent the allAgents of the simulations and allHosts of the simulation
 	 * 
-	 * @param allAgents - all CommunicatingAgents of the simulation
-	 * @param hosts - all CommunicatingHosts of the simulation
+	 * @param allAgentsIds - all CommunicatingAgents ids of the simulation
+	 * @param host - all CommunicatingHosts of the simulation
 	 */
 	void initAgent(List<Integer> allAgentsIds, CommunicatingHostInterface host);
 
@@ -90,6 +87,9 @@ public interface CommunicatingAgentInterface {
 	 */
 	void initProtocol();
 
+	/**
+	 * @return id of the host that this agent is inhabiting
+	 */
 	Integer getHostId();
 
 }

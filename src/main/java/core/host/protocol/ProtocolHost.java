@@ -1,5 +1,7 @@
 package core.host.protocol;
 
+import java.util.List;
+
 import core.host.communication.CommunicatingHostInterface;
 import core.message.MessageInterface;
 import protocol.Protocol;
@@ -39,5 +41,17 @@ public interface ProtocolHost {
 	 */
 	void init();
 	
+	/**
+	 * Communicating line is:
+	 * CommunicatingAgent -> ProtocolAgent -> ProtocolHost -> CommunicationHost -> MessageManager ->
+	 * CommunicationHost -> ProtocolHost -> ProtocolAgent -> CommuncatingAgent
+	 * 
+	 * @param message - the message that will be delivered to the communicationgHost
+	 */
 	void sendMessage(MessageInterface message);
+
+	/**
+	 * @return list of ids of all hosts in simulation
+	 */
+	public List<Integer> getAllHosts();
 }
