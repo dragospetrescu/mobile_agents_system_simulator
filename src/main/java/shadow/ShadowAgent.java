@@ -33,6 +33,7 @@ public class ShadowAgent extends AbstractProtocolAgent {
 	 * agent's migration decision
 	 */
 	private int ttl;
+	private int originalTtl;
 
 	/**
 	 * @param communicatingAgent that is going to use this protocol
@@ -55,31 +56,33 @@ public class ShadowAgent extends AbstractProtocolAgent {
 	public void migrate(Integer destinationHostId, MigratingAgentMessageInterface migratingMessage) {
 		super.migrate(destinationHostId, migratingMessage);
 		CommunicatingAgentInterface sourceAgent = getCommunicatingAgent();
-		ShadowHost protocolHost = (ShadowHost)getProtocolHost();
+		ShadowHost protocolHost = (ShadowHost) getProtocolHost();
 		ttl--;
 		if (ttl <= 0) {
 			MessageInterface locationUpdatMessage = new LocationUpdateMessage(sourceAgent.getHostId(), homeServerHostId,
 					sourceAgent.getId(), destinationHostId, Protocol.Shadow);
 
 			protocolHost.sendMessage(locationUpdatMessage);
+			ttl = originalTtl;
 		}
-		protocolHost.updateProxy(sourceAgent.getHostId(), homeServerHostId);
+		protocolHost.updateProxy(sourceAgent.getId(), destinationHostId);
+
 	}
 
 	@Override
 	public void init(Map<String, String> protocolArguments, ProtocolHost protocolHost) {
 		super.init(protocolArguments, protocolHost);
-		
+
 		ttl = Integer.parseInt(protocolArguments.get("ttl"));
+		originalTtl = ttl;
 		homeServerHostId = Integer.parseInt(protocolArguments.get("homeServerHost"));
 		CommunicatingAgentInterface communicatingAgent = getCommunicatingAgent();
 		ShadowHost fpProtocolHost = (ShadowHost) protocolHost;
-		
-		MessageInterface message = new LocationUpdateMessage(communicatingAgent.getHostId(), homeServerHostId, communicatingAgent.getId(),
-				communicatingAgent.getHostId(), Protocol.FP);
+
+		MessageInterface message = new LocationUpdateMessage(communicatingAgent.getHostId(), homeServerHostId,
+				communicatingAgent.getId(), communicatingAgent.getHostId(), Protocol.FP);
 		fpProtocolHost.sendMessage(message);
-		
-		
+
 		List<Integer> allNormalHosts = fpProtocolHost.getAllNormalHosts();
 		for (Integer hostId : allNormalHosts) {
 			message = new LocationUpdateMessage(communicatingAgent.getHostId(), hostId, getId(),

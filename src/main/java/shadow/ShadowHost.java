@@ -1,9 +1,11 @@
 package shadow;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import agent.communication.CommunicatingAgentInterface;
 import host.communication.CommunicatingHostInterface;
 import host.protocol.AbstractProtocolHost;
 import message.AgentCommunicationMessageInterface;
@@ -39,11 +41,18 @@ public class ShadowHost extends AbstractProtocolHost {
 	@Override
 	public void interpretMessage(MessageInterface message) {
 		if (message instanceof AgentCommunicationMessageInterface) {
+			
 			AgentCommunicationMessageInterface agentCommunicationMessage = (AgentCommunicationMessageInterface) message;
 			Integer agentDestinationId = agentCommunicationMessage.getAgentDestinationId();
 			CommunicatingHostInterface communicationHost = getCommunicationHost();
+			
+			if(communicationHost.hasAgentWithId(agentDestinationId)) {
+				super.interpretMessage(agentCommunicationMessage);
+				return;
+			}
 
 			if (agentForwardingProxy.containsKey(agentDestinationId)) {
+				
 				Integer hostDestination = agentForwardingProxy.get(agentDestinationId);
 				if (!hostDestination.equals(communicationHost.getId())) {
 					communicationHost.reRouteMessage(agentCommunicationMessage, hostDestination);
@@ -51,6 +60,7 @@ public class ShadowHost extends AbstractProtocolHost {
 					return;
 				}
 			}
+			
 			super.interpretMessage(agentCommunicationMessage);
 
 		} else if (message instanceof LocationUpdateMessageInterface) {
