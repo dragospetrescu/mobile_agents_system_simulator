@@ -53,13 +53,13 @@ public class FPHost extends AbstractProtocolHost {
 			} else {
 				Integer newHostDestinationId = agentForwardingProxy.get(destinationAgentId);
 				CommunicatingHostInterface sourceHost = getCommunicationHost();
-				Integer sourceAgentId = agentCommunicationMessage.getAgentSourceId();
 				sourceHost.reRouteMessage(agentCommunicationMessage, newHostDestinationId);
 				communicationHost.routeMessage(agentCommunicationMessage);
 				communicationHost.addMessageForSending(agentCommunicationMessage);
-				
 			}
 			
+		} else {
+			super.interpretMessage(message);
 		}
 
 	}

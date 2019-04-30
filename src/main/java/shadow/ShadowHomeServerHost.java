@@ -8,7 +8,8 @@ import agent.communication.CommunicatingAgentInterface;
 import host.communication.CommunicatingHostInterface;
 import host.protocol.AbstractProtocolHost;
 import message.AgentCommunicationMessageInterface;
-import message.NormalCommunicationMessage;
+import message.LocationUpdateMessageInterface;
+import message.MessageInterface;
 
 /**
  * The HomeServer from the Shadow documentation
@@ -31,7 +32,7 @@ public class ShadowHomeServerHost extends AbstractProtocolHost {
 	 * Map agent -> first Migration Stop Host Map
 	 * See {@link ShadowHomeServerHost}
 	 */
-	Map<CommunicatingAgentInterface, CommunicatingHostInterface> agentToFirstMigrationStopHostMap;
+	Map<Integer, Integer> agentToFirstMigrationStopHostMap;
 
 	/**
 	 * @param communicationHost - the CommunicatingAgent that will use this protocol
@@ -41,34 +42,25 @@ public class ShadowHomeServerHost extends AbstractProtocolHost {
 	}
 
 	@Override
-	public void interpretMessage(AgentCommunicationMessageInterface message) {
-		if(message instanceof ShadowLocationUpdateMessage) {
-			ShadowLocationUpdateMessage shadowMessage = (ShadowLocationUpdateMessage) message;
-			CommunicatingHostInterface migratingToHost = shadowMessage.getMigratingToHost();
-			CommunicatingAgentInterface agentSource = shadowMessage.getAgentSourceId();
-			agentToFirstMigrationStopHostMap.put(agentSource, migratingToHost);
-		}
-		if(message instanceof ShadowForwardedMessage) {
-			CommunicatingAgentInterface destinationAgent = message.getAgentDestinationId();
-			CommunicatingHostInterface newHostDestination = agentToFirstMigrationStopHostMap.get(destinationAgent);
-			CommunicatingHostInterface sourceHost = getCommunicationHost();
-			CommunicatingAgentInterface sourceAgent = message.getAgentSourceId();
-			AgentCommunicationMessageInterface forwardedMessage = new NormalCommunicationMessage(message.getMessageId(), sourceHost,
-					newHostDestination, sourceAgent, destinationAgent);
-			sourceHost.addMessageForSending(forwardedMessage);
+	public void interpretMessage(MessageInterface message) {
+		if (message instanceof AgentCommunicationMessageInterface) {
+			AgentCommunicationMessageInterface agentCommunicationMessage = (AgentCommunicationMessageInterface) message;
+			Integer agentDestination = agentCommunicationMessage.getAgentDestinationId();
+			CommunicatingHostInterface communicationHost = getCommunicationHost();
+			Integer hostDestination = agentToFirstMigrationStopHostMap.get(agentDestination);
+			communicationHost.reRouteMessage(agentCommunicationMessage, hostDestination);
+			communicationHost.addMessageForSending(agentCommunicationMessage);
+		} else if (message instanceof LocationUpdateMessageInterface){
+			LocationUpdateMessageInterface locationUpdateMessage = (LocationUpdateMessageInterface) message;
+			Integer agentId = locationUpdateMessage.getAgentId();
+			Integer newHostId = locationUpdateMessage.getNewHostId();
+			agentToFirstMigrationStopHostMap.put(agentId, newHostId);
 		}
 
 	}
 
 	@Override
 	public void init() {
-		agentToFirstMigrationStopHostMap = new HashMap<CommunicatingAgentInterface, CommunicatingHostInterface>();
-		List<CommunicatingHostInterface> allHosts = getCommunicationHost().getAllNormalHosts();
-		for (CommunicatingHostInterface communicatingHostInterface : allHosts) {
-			List<CommunicatingAgentInterface> activeAgents = communicatingHostInterface.getActiveAgents();
-			for (CommunicatingAgentInterface activeAgent : activeAgents) {
-				agentToFirstMigrationStopHostMap.put(activeAgent, communicatingHostInterface);
-			}
-		}
+		agentToFirstMigrationStopHostMap = new HashMap<Integer, Integer>();
 	}
 }

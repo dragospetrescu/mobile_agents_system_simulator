@@ -82,14 +82,11 @@ public class AbstractMessage implements MessageInterface {
 		return sourceHostId;
 	}
 
-
 	@Override
 	public int hashCode() {
-		final Integer prime = 31;
+		final int prime = 31;
 		int result = 1;
-		result = prime * result + destinationHostId;
-		result = prime * result + id;
-		result = prime * result + sourceHostId;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -102,11 +99,10 @@ public class AbstractMessage implements MessageInterface {
 		if (getClass() != obj.getClass())
 			return false;
 		AbstractMessage other = (AbstractMessage) obj;
-		if (destinationHostId != other.destinationHostId)
-			return false;
-		if (id != other.id)
-			return false;
-		if (sourceHostId != other.sourceHostId)
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}

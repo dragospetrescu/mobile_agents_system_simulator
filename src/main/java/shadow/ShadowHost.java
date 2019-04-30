@@ -2,27 +2,27 @@ package shadow;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import agent.communication.CommunicatingAgentInterface;
-import agent.protocol.ProtocolAgent;
 import host.communication.CommunicatingHostInterface;
 import host.protocol.AbstractProtocolHost;
 import message.AgentCommunicationMessageInterface;
-import message.NormalCommunicationMessage;
+import message.LocationUpdateMessageInterface;
+import message.MessageInterface;
 
 /**
  * The ShadowHost from the Shadow documentation
  * 
  * It keeps a map agent -> host location
  * 
- * When agent migrates it keeps remembers where that agent left to
- * so any message can follow the exact path of the agent.
+ * When agent migrates it keeps remembers where that agent left to so any
+ * message can follow the exact path of the agent.
  */
 public class ShadowHost extends AbstractProtocolHost {
 	/**
 	 * Map agent to the host to which the agent migrated after it left this host
 	 */
-	private HashMap<CommunicatingAgentInterface, CommunicatingHostInterface> agentForwardingProxy;
+	private Map<Integer, Integer> agentForwardingProxy;
 
 	/**
 	 * @param communicationHost - the CommunicatingAgent that will use this protocol
@@ -33,30 +33,33 @@ public class ShadowHost extends AbstractProtocolHost {
 
 	@Override
 	public void init() {
-		agentForwardingProxy = new HashMap<CommunicatingAgentInterface, CommunicatingHostInterface>();
-		List<CommunicatingHostInterface> allHosts = getCommunicationHost().getAllNormalHosts();
-		for (CommunicatingHostInterface host : allHosts) {
-			List<CommunicatingAgentInterface> activeAgents = host.getActiveAgents();
-			for (CommunicatingAgentInterface agent : activeAgents) {
-				agentForwardingProxy.put(agent, host);
-			}
-		}
+		agentForwardingProxy = new HashMap<Integer, Integer>();
 	}
 
 	@Override
-	public void interpretMessage(AgentCommunicationMessageInterface message) {
-		CommunicatingAgentInterface destinationAgent = message.getAgentDestinationId();
-		List<CommunicatingAgentInterface> communicatingAgents = getCommunicationHost().getActiveAgents();
-		if (communicatingAgents.contains(destinationAgent)) {
-			ProtocolAgent protocolAgent = destinationAgent.getProtocolAgent();
-			protocolAgent.receiveMessage(message);
+	public void interpretMessage(MessageInterface message) {
+		if (message instanceof AgentCommunicationMessageInterface) {
+			AgentCommunicationMessageInterface agentCommunicationMessage = (AgentCommunicationMessageInterface) message;
+			Integer agentDestinationId = agentCommunicationMessage.getAgentDestinationId();
+			CommunicatingHostInterface communicationHost = getCommunicationHost();
+
+			if (agentForwardingProxy.containsKey(agentDestinationId)) {
+				Integer hostDestination = agentForwardingProxy.get(agentDestinationId);
+				if (!hostDestination.equals(communicationHost.getId())) {
+					communicationHost.reRouteMessage(agentCommunicationMessage, hostDestination);
+					communicationHost.addMessageForSending(agentCommunicationMessage);
+					return;
+				}
+			}
+			super.interpretMessage(agentCommunicationMessage);
+
+		} else if (message instanceof LocationUpdateMessageInterface) {
+			LocationUpdateMessageInterface locationUpdateMessage = (LocationUpdateMessageInterface) message;
+			Integer newInhabitingHostId = locationUpdateMessage.getNewHostId();
+			Integer agentSourceId = locationUpdateMessage.getAgentId();
+			agentForwardingProxy.put(agentSourceId, newInhabitingHostId);
 		} else {
-			CommunicatingHostInterface newHostDestination = agentForwardingProxy.get(destinationAgent);
-			CommunicatingHostInterface sourceHost = getCommunicationHost();
-			CommunicatingAgentInterface sourceAgent = message.getAgentSourceId();
-			AgentCommunicationMessageInterface forwardedMessage = new NormalCommunicationMessage(message.getMessageId(), sourceHost,
-					newHostDestination, sourceAgent, destinationAgent);
-			sourceHost.addMessageForSending(forwardedMessage);
+			super.interpretMessage(message);
 		}
 	}
 
@@ -64,7 +67,7 @@ public class ShadowHost extends AbstractProtocolHost {
 	 * @param agent we are currently trying to find
 	 * @return the host to which the agent migrated when it left this host
 	 */
-	public CommunicatingHostInterface getProxy(CommunicatingAgentInterface agent) {
+	public Integer getProxy(Integer agent) {
 		return agentForwardingProxy.get(agent);
 	}
 
@@ -75,7 +78,12 @@ public class ShadowHost extends AbstractProtocolHost {
 	 * @param agent - migrating agent
 	 * @param host  - new host of agent
 	 */
-	public void updateProxy(CommunicatingAgentInterface agent, CommunicatingHostInterface host) {
+	public void updateProxy(Integer agent, Integer host) {
 		agentForwardingProxy.put(agent, host);
+	}
+
+	public List<Integer> getAllNormalHosts() {
+		CommunicatingHostInterface communicationHost = getCommunicationHost();
+		return communicationHost.getAllNormalHostsIds();
 	}
 }
