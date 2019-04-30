@@ -142,7 +142,6 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 
 	@Override
 	public void addMessageForSending(MessageInterface message) {
-		routeMessage(message);
 		messagesToBeSent.add(message);
 	}
 
@@ -181,6 +180,7 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 		return activeAgentsMap.get(communicatingAgentId).getProtocolAgent();
 	}
 
+	@Override
 	public void routeMessage(MessageInterface message) {
 		Integer hostDestinationId = message.getHostDestinationId();
 		Integer nextHopHostId = nextHopMap.get(hostDestinationId);

@@ -111,4 +111,6 @@ public interface CommunicatingHostInterface {
 	ProtocolAgent getProtocolAgentWithId(Integer communicatingAgentId);
 	
 	void reRouteMessage(MessageInterface message, Integer newDestinationHostId);
+	
+	public void routeMessage(MessageInterface message);
 }

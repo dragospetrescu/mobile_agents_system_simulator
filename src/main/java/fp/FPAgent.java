@@ -1,19 +1,24 @@
 package fp;
 
+import java.util.List;
 import java.util.Map;
 
 import agent.communication.CommunicatingAgentInterface;
 import agent.protocol.AbstractProtocolAgent;
 import host.communication.CommunicatingHostInterface;
+import host.protocol.ProtocolHost;
+import message.AgentCommunicationMessage;
 import message.AgentCommunicationMessageInterface;
-import message.NormalCommunicationMessage;
+import message.LocationUpdateMessage;
+import message.MessageInterface;
+import message.MigratingAgentMessageInterface;
 import protocol.Protocol;
 
 /**
  * The Agent from the FP documentation
  * 
- * Uses protocolHost forwarding proxy to find out agent location
- * When agent migrates it updates future location to its current host
+ * Uses protocolHost forwarding proxy to find out agent location When agent
+ * migrates it updates future location to its current host
  */
 public class FPAgent extends AbstractProtocolAgent {
 
@@ -25,27 +30,39 @@ public class FPAgent extends AbstractProtocolAgent {
 	}
 
 	@Override
-	public void prepareMessageTo(CommunicatingAgentInterface destinationAgent) {
+	public void prepareMessageTo(Integer destinationAgentId) {
 		CommunicatingAgentInterface sourceAgent = getCommunicatingAgent();
-		CommunicatingHostInterface sourceHost = sourceAgent.getHost();
-		FPHost protocolHost = (FPHost) sourceAgent.getHost().getProtocolHost(Protocol.FP);
+		FPHost protocolHost = (FPHost) getProtocolHost();
 
-		CommunicatingHostInterface destinationHost = protocolHost.getProxy(destinationAgent);
+		Integer destinationHostId = protocolHost.getProxy(destinationAgentId);
 
-		AgentCommunicationMessageInterface message = new NormalCommunicationMessage(sourceHost, destinationHost, sourceAgent,
-				destinationAgent);
-		sourceAgent.addMessage(message);
+		MessageInterface message = new AgentCommunicationMessage(sourceAgent.getHostId(), destinationHostId,
+				sourceAgent.getId(), destinationAgentId);
+		protocolHost.sendMessage(message);
 	}
 
 	@Override
-	public void migrate(CommunicatingHostInterface destinationHost) {
+	public void migrate(Integer destinationHostId, MigratingAgentMessageInterface migratingMessage) {
+		super.migrate(destinationHostId, migratingMessage);
+
 		CommunicatingAgentInterface sourceAgent = getCommunicatingAgent();
-		FPHost protocolHost = (FPHost) sourceAgent.getHost().getProtocolHost(Protocol.FP);
-		protocolHost.updateProxy(sourceAgent, destinationHost);
+		FPHost protocolHost = (FPHost) getProtocolHost();
+
+		protocolHost.updateProxy(sourceAgent.getId(), destinationHostId);
 	}
 
 	@Override
-	public void init(Map<String, String> protocolArguments) {
-	}
+	public void init(Map<String, String> protocolArguments, ProtocolHost protocolHost) {
+		super.init(protocolArguments, protocolHost);
+		CommunicatingAgentInterface communicatingAgent = getCommunicatingAgent();
+		FPHost fpProtocolHost = (FPHost) protocolHost;
+		List<Integer> allNormalHosts = fpProtocolHost.getAllNormalHosts();
+		for (Integer hostId : allNormalHosts) {
+			LocationUpdateMessage message = new LocationUpdateMessage(communicatingAgent.getHostId(), hostId, getId(),
+					communicatingAgent.getHostId(), Protocol.FP);
+			fpProtocolHost.sendMessage(message);
 
+		}
+
+	}
 }

@@ -78,6 +78,7 @@ public abstract class AbstractProtocolHost implements ProtocolHost {
 	
 	@Override
 	public void sendMessage(MessageInterface message) {
+		communicationHost.routeMessage(message);
 		communicationHost.addMessageForSending(message);
 	}
 

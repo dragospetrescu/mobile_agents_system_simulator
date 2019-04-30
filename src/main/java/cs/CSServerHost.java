@@ -41,7 +41,7 @@ public class CSServerHost extends AbstractProtocolHost {
 			CommunicatingHostInterface communicationHost = getCommunicationHost();
 			AgentCommunicationMessageInterface forwardedMessage = new AgentCommunicationMessage(
 					message.getMessageId(), communicationHost.getId(), hostDestination, agentSource, agentDestination);
-
+			communicationHost.routeMessage(forwardedMessage);
 			communicationHost.addMessageForSending(forwardedMessage);
 		} else if (message instanceof LocationUpdateMessageInterface) {
 			LocationUpdateMessageInterface csMessage = (LocationUpdateMessageInterface) message;

@@ -3,12 +3,12 @@ package fp;
 import java.util.HashMap;
 import java.util.List;
 
-import agent.communication.CommunicatingAgentInterface;
 import agent.protocol.ProtocolAgent;
 import host.communication.CommunicatingHostInterface;
 import host.protocol.AbstractProtocolHost;
 import message.AgentCommunicationMessageInterface;
-import message.NormalCommunicationMessage;
+import message.LocationUpdateMessageInterface;
+import message.MessageInterface;
 
 /**
  * The Host from the FP documentation
@@ -22,7 +22,7 @@ public class FPHost extends AbstractProtocolHost {
 	/**
 	 * Map agent to the host to which the agent migrated after it left this host
 	 */
-	private HashMap<CommunicatingAgentInterface, CommunicatingHostInterface> agentForwardingProxy;
+	private HashMap<Integer, Integer> agentForwardingProxy;
 
 	/**
 	 * @param communicationHost - the CommunicatingAgent that will use this protocol
@@ -32,51 +32,65 @@ public class FPHost extends AbstractProtocolHost {
 	}
 
 	@Override
-	public void init() {
-		agentForwardingProxy = new HashMap<CommunicatingAgentInterface, CommunicatingHostInterface>();
-		List<CommunicatingHostInterface> allHosts = getCommunicationHost().getAllNormalHosts();
-		for (CommunicatingHostInterface host : allHosts) {
-			List<CommunicatingAgentInterface> activeAgents = host.getActiveAgents();
-			for (CommunicatingAgentInterface agent : activeAgents) {
-				agentForwardingProxy.put(agent, host);
+	public void interpretMessage(MessageInterface message) {
+		
+		if(message instanceof LocationUpdateMessageInterface) {
+			LocationUpdateMessageInterface locationUpdateMessage = (LocationUpdateMessageInterface) message;
+			
+			Integer agentId = locationUpdateMessage.getAgentId();
+			Integer hostSourceId = locationUpdateMessage.getHostSourceId();
+			agentForwardingProxy.put(agentId, hostSourceId);
+			
+		} else if (message instanceof AgentCommunicationMessageInterface) {
+			AgentCommunicationMessageInterface agentCommunicationMessage = (AgentCommunicationMessageInterface) message;
+			
+			Integer destinationAgentId = agentCommunicationMessage.getAgentDestinationId();
+			CommunicatingHostInterface communicationHost = getCommunicationHost();
+			
+			if (communicationHost.hasAgentWithId(destinationAgentId)) {
+				ProtocolAgent protocolAgent = communicationHost.getProtocolAgentWithId(destinationAgentId);
+				protocolAgent.receiveMessage(message);
+			} else {
+				Integer newHostDestinationId = agentForwardingProxy.get(destinationAgentId);
+				CommunicatingHostInterface sourceHost = getCommunicationHost();
+				Integer sourceAgentId = agentCommunicationMessage.getAgentSourceId();
+				sourceHost.reRouteMessage(agentCommunicationMessage, newHostDestinationId);
+				communicationHost.routeMessage(agentCommunicationMessage);
+				communicationHost.addMessageForSending(agentCommunicationMessage);
+				
 			}
-		}
-	}
-
-	@Override
-	public void interpretMessage(AgentCommunicationMessageInterface message) {
-		CommunicatingAgentInterface destinationAgent = message.getAgentDestinationId();
-		List<CommunicatingAgentInterface> communicatingAgents = getCommunicationHost().getActiveAgents();
-		if (communicatingAgents.contains(destinationAgent)) {
-			ProtocolAgent protocolAgent = destinationAgent.getProtocolAgent();
-			protocolAgent.receiveMessage(message);
-		} else {
-			CommunicatingHostInterface newHostDestination = agentForwardingProxy.get(destinationAgent);
-			CommunicatingHostInterface sourceHost = getCommunicationHost();
-			CommunicatingAgentInterface sourceAgent = message.getAgentSourceId();
-			AgentCommunicationMessageInterface forwardedMessage = new NormalCommunicationMessage(message.getMessageId(), sourceHost,
-					newHostDestination, sourceAgent, destinationAgent);
-			sourceHost.addMessageForSending(forwardedMessage);
+			
 		}
 
 	}
 
 	/**
-	 * @param agent we are currently trying to find
+	 * @param agentId we are currently trying to find
 	 * @return the host to which the agent migrated when it left this host
 	 */
-	public CommunicatingHostInterface getProxy(CommunicatingAgentInterface agent) {
-		return agentForwardingProxy.get(agent);
+	public Integer getProxy(Integer agentId) {
+		return agentForwardingProxy.get(agentId);
 	}
 
 	/**
 	 * Agent is going to migrate to host so it leaves behind some breadcrumbs so the
 	 * messages can follow him.
 	 * 
-	 * @param agent - migrating agent
-	 * @param host  - new host of agent
+	 * @param agentId - migrating agent
+	 * @param hostId  - new host of agent
 	 */
-	public void updateProxy(CommunicatingAgentInterface agent, CommunicatingHostInterface host) {
-		agentForwardingProxy.put(agent, host);
+	public void updateProxy(Integer agentId, Integer hostId) {
+		agentForwardingProxy.put(agentId, hostId);
 	}
+	
+	@Override
+	public void init() {
+		agentForwardingProxy = new HashMap<Integer, Integer>();
+	}
+	
+	public List<Integer> getAllNormalHosts() {
+		CommunicatingHostInterface communicationHost = getCommunicationHost();
+		return communicationHost.getAllNormalHostsIds();
+	}
+	
 }

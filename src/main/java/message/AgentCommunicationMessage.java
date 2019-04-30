@@ -26,7 +26,6 @@ public class AgentCommunicationMessage extends AbstractMessage implements AgentC
 		super(id, sourceHostId, destinationHostId);
 		this.sourceAgentId = sourceAgent;
 		this.destinationAgentId = destinationAgent;
-//		TODO SET NEXT HOP !!!!!!!!!!
 	}
 
 	/**
