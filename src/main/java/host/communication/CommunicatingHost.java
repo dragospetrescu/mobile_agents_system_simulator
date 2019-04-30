@@ -112,13 +112,13 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 				MigratingAgentMessageInterface migratingAgentMessage = (MigratingAgentMessageInterface) message;
 				CommunicatingAgentInterface migratingAgent = migratingAgentMessage.getMigratingAgent();
 				addAgent(migratingAgent);
+				migratingAgent.getProtocolAgent().setProtocolHost(getProtocolHost(migratingAgent.getProtocol()));
 				Logger.i(LogTag.AGENT_MIGRATING, toString() + " received " + migratingAgent);
 			} else {
 				protocolHost.interpretMessage(message);
 			}
 		} else {
-			int communicatingHostInterfaceId = nextHopMap.get(messageDestinationHostId);
-			message.setNextHopHostId(communicatingHostInterfaceId);
+			routeMessage(message);
 			addMessageForSending(message);
 		}
 	}
@@ -133,11 +133,6 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	@Override
 	public boolean wantsToSendMessage() {
 		return !messagesToBeSent.isEmpty();
-	}
-
-	@Override
-	public int getNextHop(int destinationHost) {
-		return nextHopMap.get(destinationHost);
 	}
 
 	@Override
@@ -183,5 +178,20 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 		}
 		
 		return activeAgentsMap.get(communicatingAgentId).getProtocolAgent();
+	}
+
+	@Override
+	public void routeMessage(MessageInterface message) {
+		int hostDestinationId = message.getHostDestinationId();
+		int nextHopHostId = nextHopMap.get(hostDestinationId);
+		
+		message.route(nextHopHostId);
+		
+	}
+
+	@Override
+	public void reRouteMessage(MessageInterface message, int newDestinationHostId) {
+		int nextHopHostId = nextHopMap.get(newDestinationHostId);
+		message.route(nextHopHostId, newDestinationHostId);
 	}
 }

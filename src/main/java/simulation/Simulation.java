@@ -220,12 +220,12 @@ public class Simulation {
 	 */
 	public void start() {
 
-		for (int step = 0; step < Constants.NO_WORKING_STEPS + Constants.STEPS_WAITING_FOR_LAST_MESSAGES; step++) {
+		for (int step = 0; step < Constants.NO_WORKING_STEPS + 2 * Constants.STEPS_WAITING_FOR_LAST_MESSAGES; step++) {
 			
 			messagesManager.travelMessages();
 			List<MessageInterface> arrivedMessages = messagesManager.getArrivedMessages();
 			for (MessageInterface message : arrivedMessages) {
-				Integer nextHopHostId = message.getNextHopId();
+				int nextHopHostId = message.getNextHopId();
 				CommunicatingHostInterface nextHopHost = allHostsMap.get(nextHopHostId);
 				nextHopHost.receiveMessage(message);
 			}
@@ -242,19 +242,14 @@ public class Simulation {
 						.hasNext();) {
 					CommunicatingAgentInterface agent = agentsIterator.next();
 
-					if (agent.wantsToSendMessage()) {
-						List<MessageInterface> messages = agent.sendMessages();
-						messagesManager.addAllMessages(messages);
-					}
-
-					if(step < Constants.NO_WORKING_STEPS)
-					if (agent.wantsToMigrate()) {
-						MessageInterface message = agent.prepareMigratingMessage();
-						messagesManager.addMessage(message);
-						agentsIterator.remove();
-					} else {
-						agent.work();
-					}
+					if(step >= Constants.STEPS_WAITING_FOR_LAST_MESSAGES && step <= Constants.STEPS_WAITING_FOR_LAST_MESSAGES + Constants.NO_WORKING_STEPS)
+						if (agent.wantsToMigrate()) {
+							MessageInterface message = agent.prepareMigratingMessage();
+							messagesManager.addMessage(message);
+							agentsIterator.remove();
+						} else {
+							agent.work();
+						}
 				}
 			}
 		}

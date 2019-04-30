@@ -50,24 +50,6 @@ public interface CommunicatingAgentInterface {
 	boolean wantsToMigrate();
 
 	/**
-	 * @return true if it has any message ready to be sent through the network
-	 */
-	boolean wantsToSendMessage();
-
-	/**
-	 * @return the list of messages it wants to send through the network
-	 */
-	List<MessageInterface> sendMessages();
-
-	/**
-	 * Adds the received message to the the list that will be sent to the Message
-	 * Manager
-	 * 
-	 * @param message - message to be sent
-	 */
-	void addMessage(MessageInterface message);
-
-	/**
 	 * Receives message and creates statistics
 	 * 
 	 * @param message

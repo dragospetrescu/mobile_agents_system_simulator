@@ -39,7 +39,6 @@ public class AbstractMessage implements MessageInterface {
 		this.id = id;
 		this.sourceHostId = sourceHost;
 		this.destinationHostId = destinationHost;
-//		TODO SET NEXT HOP !!!!!!!!!!
 	}
 
 	/**
@@ -83,23 +82,14 @@ public class AbstractMessage implements MessageInterface {
 		return sourceHostId;
 	}
 
-	@Override
-	public void setHostDestinationId(int destinationHostId) {
-		this.destinationHostId = destinationHostId;
-	}
-
-	@Override
-	public void setNextHopHostId(int nextHopId) {
-//		 TODO CHECK THIS SHIT
-		this.previousHopHostId = this.nextHopHostId;
-		this.nextHopHostId = nextHopId;
-	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + destinationHostId;
 		result = prime * result + id;
+		result = prime * result + sourceHostId;
 		return result;
 	}
 
@@ -112,9 +102,27 @@ public class AbstractMessage implements MessageInterface {
 		if (getClass() != obj.getClass())
 			return false;
 		AbstractMessage other = (AbstractMessage) obj;
+		if (destinationHostId != other.destinationHostId)
+			return false;
 		if (id != other.id)
 			return false;
+		if (sourceHostId != other.sourceHostId)
+			return false;
 		return true;
+	}
+
+	@Override
+	public void route(int nextHopHostId) {
+		previousHopHostId = this.nextHopHostId;
+		this.nextHopHostId = nextHopHostId;
+	}
+	
+	@Override
+	public void route(int nextHopHostId, int newHostDestinationId) {
+		route(nextHopHostId);
+		this.sourceHostId = this.destinationHostId;
+		this.destinationHostId = newHostDestinationId;
+		
 	}
 
 }

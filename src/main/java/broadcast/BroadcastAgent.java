@@ -1,51 +1,42 @@
 package broadcast;
 
 import java.util.List;
-import java.util.Map;
 
 import agent.communication.CommunicatingAgentInterface;
 import agent.protocol.AbstractProtocolAgent;
-import host.communication.CommunicatingHostInterface;
 import message.AgentCommunicationMessage;
 import message.AgentCommunicationMessageInterface;
-import message.NormalCommunicationMessage;
 import statistics.StatisticsCreator;
 
 /**
- * Agent implementation of the Broadcast Protocol
- * The agent sends a message to all the hosts hoping that one of them
- * will be inhabited by the destinationAgent
+ * Agent implementation of the Broadcast Protocol The agent sends a message to
+ * all the hosts hoping that one of them will be inhabited by the
+ * destinationAgent
  */
 public class BroadcastAgent extends AbstractProtocolAgent {
 
 	/**
-	 * @param communicatingAgent - the CommunicatingAgent that will use this protocol
+	 * @param communicatingAgent - the CommunicatingAgent that will use this
+	 *                           protocol
 	 */
 	public BroadcastAgent(CommunicatingAgentInterface communicatingAgent) {
 		super(communicatingAgent.getId(), communicatingAgent, communicatingAgent.getProtocol());
 	}
 
 	@Override
-	public void receiveMessage(AgentCommunicationMessageInterface message) {
-		super.receiveMessage(message);
-	}
-
-	@Override
-	public void prepareMessageTo(CommunicatingAgentInterface destinationAgent) {
+	public void prepareMessageTo(int destinationAgentId) {
 		CommunicatingAgentInterface communicatingAgent = getCommunicatingAgent();
-		List<CommunicatingHostInterface> allHosts = communicatingAgent.getAllNormalHosts();
-		for (CommunicatingHostInterface communicatingHostDestination : allHosts) {
-			if (!communicatingHostDestination.equals(communicatingAgent.getHost())) {
-				AgentCommunicationMessageInterface message = new NormalCommunicationMessage(AgentCommunicationMessage.noMessages, communicatingAgent.getHost(),
-						communicatingHostDestination, communicatingAgent, destinationAgent);
-				communicatingAgent.addMessage(message);
-				StatisticsCreator.messageFailedDelivered(message);
-			}
+		BroadcastHost protocolHost = (BroadcastHost) getProtocolHost();
+
+		List<Integer> allHostsIds = protocolHost.getAllNormalHosts();
+
+		for (int hostId : allHostsIds) {
+			AgentCommunicationMessageInterface message = new AgentCommunicationMessage(
+					AgentCommunicationMessage.noMessages, communicatingAgent.getHostId(), hostId,
+					communicatingAgent.getId(), destinationAgentId);
+			protocolHost.sendMessage(message);
+			StatisticsCreator.messageFailedDelivered(message);
 		}
 		AgentCommunicationMessage.noMessages++;
-	}
-
-	@Override
-	public void init(Map<String, String> protocolArguments) {
 	}
 }

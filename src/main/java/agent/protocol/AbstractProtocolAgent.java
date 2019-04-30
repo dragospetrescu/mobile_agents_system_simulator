@@ -1,7 +1,10 @@
 package agent.protocol;
 
+import java.util.Map;
+
 import agent.communication.CommunicatingAgentInterface;
 import host.communication.CommunicatingHostInterface;
+import host.protocol.ProtocolHost;
 import message.AgentCommunicationMessageInterface;
 import message.MessageInterface;
 import protocol.Protocol;
@@ -19,6 +22,8 @@ public abstract class AbstractProtocolAgent implements ProtocolAgent {
 	 * The {@link CommunicatingAgentInterface} that is currently using this ProtocolAgent
 	 */
 	private CommunicatingAgentInterface communicatingAgent;
+	
+	private ProtocolHost protocolHost;
 	/**
 	 * The protocol that it is implementing
 	 */
@@ -50,6 +55,11 @@ public abstract class AbstractProtocolAgent implements ProtocolAgent {
 	}
 
 	@Override
+	public ProtocolHost getProtocolHost() {
+		return protocolHost;
+	}
+	
+	@Override
 	public int getId() {
 		return id;
 	}
@@ -62,5 +72,15 @@ public abstract class AbstractProtocolAgent implements ProtocolAgent {
 	@Override
 	public String toString() {
 		return protocol + " Agent " + id;
+	}
+	
+	@Override
+	public void init(Map<String, String> protocolArguments, ProtocolHost protocolHost) {
+		this.protocolHost = protocolHost;
+	}
+	
+	@Override
+	public void setProtocolHost(ProtocolHost protocolHost) {
+		this.protocolHost = protocolHost;
 	}
 }

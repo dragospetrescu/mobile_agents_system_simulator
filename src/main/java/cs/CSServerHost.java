@@ -8,13 +8,16 @@ import agent.communication.CommunicatingAgentInterface;
 import host.communication.CommunicatingHostInterface;
 import host.protocol.AbstractProtocolHost;
 import hss.HSSLocationUpdateMessage;
+import message.AgentCommunicationMessage;
 import message.AgentCommunicationMessageInterface;
-import message.NormalCommunicationMessage;
+import message.LocationUpdateMessage;
+import message.LocationUpdateMessageInterface;
+import message.MessageInterface;
 
 public class CSServerHost extends AbstractProtocolHost {
 
-	Map<CommunicatingAgentInterface, CommunicatingHostInterface> agentToHostDatabase;
-	
+	Map<Integer, Integer> agentToHostDatabase;
+
 	/**
 	 * @param communicationHost - the CommunicatingAgent that will use this protocol
 	 */
@@ -24,33 +27,27 @@ public class CSServerHost extends AbstractProtocolHost {
 
 	@Override
 	public void init() {
-		agentToHostDatabase = new HashMap<CommunicatingAgentInterface, CommunicatingHostInterface>();
-		List<CommunicatingHostInterface> allHosts = getCommunicationHost().getAllNormalHosts();
-		for (CommunicatingHostInterface communicatingHostInterface : allHosts) {
-			List<CommunicatingAgentInterface> activeAgents = communicatingHostInterface.getActiveAgents();
-			for (CommunicatingAgentInterface activeAgent : activeAgents) {
-				agentToHostDatabase.put(activeAgent, communicatingHostInterface);
-			}
-		}
+		agentToHostDatabase = new HashMap<Integer, Integer>();
 	}
-	
+
 	@Override
-	public void interpretMessage(AgentCommunicationMessageInterface message) {
+	public void interpretMessage(MessageInterface message) {
 
-		if (message instanceof NormalCommunicationMessage) {
-			CommunicatingAgentInterface agentSource = message.getAgentSourceId();
-			CommunicatingAgentInterface agentDestination = message.getAgentDestinationId();
-			CommunicatingHostInterface hostSource = getCommunicationHost();
-			CommunicatingHostInterface hostDestination = agentToHostDatabase.get(agentDestination);
-			NormalCommunicationMessage forwardedMessage = new NormalCommunicationMessage(message.getMessageId(), hostSource,
-					hostDestination, agentSource, agentDestination);
+		if (message instanceof AgentCommunicationMessageInterface) {
+			AgentCommunicationMessageInterface agentCommunicationMessage = (AgentCommunicationMessageInterface) message;
+			int agentSource = agentCommunicationMessage.getAgentSourceId();
+			int agentDestination = agentCommunicationMessage.getAgentDestinationId();
+			int hostDestination = agentToHostDatabase.get(agentDestination);
+			CommunicatingHostInterface communicationHost = getCommunicationHost();
+			AgentCommunicationMessageInterface forwardedMessage = new AgentCommunicationMessage(
+					message.getMessageId(), communicationHost.getId(), hostDestination, agentSource, agentDestination);
 
-			hostSource.addMessageForSending(forwardedMessage);
-		} else if (message instanceof CSLocationUpdateMessage) {
-			CSLocationUpdateMessage hssMessage = (CSLocationUpdateMessage) message;
-			CommunicatingHostInterface newInhabitingHost = hssMessage.getNewHostLocation();
-			CommunicatingAgentInterface agentSource = hssMessage.getAgentSourceId();
-			agentToHostDatabase.put(agentSource, newInhabitingHost);
+			communicationHost.addMessageForSending(forwardedMessage);
+		} else if (message instanceof LocationUpdateMessageInterface) {
+			LocationUpdateMessageInterface csMessage = (LocationUpdateMessageInterface) message;
+			int newInhabitingHostId = csMessage.getNewHostId();
+			int agentSource = csMessage.getAgentId();
+			agentToHostDatabase.put(agentSource, newInhabitingHostId);
 		} else {
 			super.interpretMessage(message);
 		}

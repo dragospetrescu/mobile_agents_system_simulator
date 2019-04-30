@@ -69,15 +69,6 @@ public interface CommunicatingHostInterface {
 	void addAgent(CommunicatingAgentInterface agent);
 
 	/**
-	 * 
-	 * Used to reroute message to the destination host by giving him the next hop
-	 * 
-	 * @param destinationHost - final destination of the message
-	 * @return - next hop towards the final destination
-	 */
-	int getNextHop(int destinationHostId);
-
-	/**
 	 * @return id - unique identifier of the host
 	 */
 	int getId();
@@ -118,4 +109,7 @@ public interface CommunicatingHostInterface {
 	boolean hasAgentWithId(int communicatingAgentId);
 
 	ProtocolAgent getProtocolAgentWithId(int communicatingAgentId);
+	
+	void routeMessage(MessageInterface message);
+	void reRouteMessage(MessageInterface message, int newDestinationHostId);
 }

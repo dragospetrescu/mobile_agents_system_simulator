@@ -5,16 +5,21 @@ import java.util.Map;
 import agent.communication.CommunicatingAgentInterface;
 import agent.protocol.AbstractProtocolAgent;
 import host.communication.CommunicatingHostInterface;
+import host.protocol.ProtocolHost;
 import hss.HSSLocationUpdateMessage;
+import message.AgentCommunicationMessage;
 import message.AgentCommunicationMessageInterface;
-import message.NormalCommunicationMessage;
+import message.LocationUpdateMessage;
+import message.MessageInterface;
+import protocol.Protocol;
 
 public class CSAgent extends AbstractProtocolAgent {
 
-	private int serverHost;
+	private int serverHostId;
 
 	/**
-	 * @param communicatingAgent - the CommunicatingAgent that will use this protocol
+	 * @param communicatingAgent - the CommunicatingAgent that will use this
+	 *                           protocol
 	 */
 	public CSAgent(CommunicatingAgentInterface communicatingAgent) {
 		super(communicatingAgent.getId(), communicatingAgent, communicatingAgent.getProtocol());
@@ -23,23 +28,30 @@ public class CSAgent extends AbstractProtocolAgent {
 	@Override
 	public void prepareMessageTo(int destinationAgentId) {
 		CommunicatingAgentInterface sourceAgent = getCommunicatingAgent();
-		CommunicatingHostInterface sourceHost = sourceAgent.getHost();
-		AgentCommunicationMessageInterface message = new NormalCommunicationMessage(sourceHost.getId(), serverHost, sourceAgent.getId(), destinationAgentId);
-		sourceAgent.addMessage(message);
+		MessageInterface message = new AgentCommunicationMessage(sourceAgent.getHostId(), serverHostId,
+				sourceAgent.getId(), destinationAgentId);
+		ProtocolHost protocolHost = getProtocolHost();
+		protocolHost.sendMessage(message);
 	}
 
 	@Override
-	public void init(Map<String, String> protocolArguments) {
-		int serverHost = Integer.parseInt(protocolArguments.get("serverHost"));
+	public void init(Map<String, String> protocolArguments, ProtocolHost protocolHost) {
+		super.init(protocolArguments, protocolHost);
+		serverHostId = Integer.parseInt(protocolArguments.get("serverHost"));
+		CommunicatingAgentInterface communicatingAgent = getCommunicatingAgent();
+		MessageInterface message = new LocationUpdateMessage(communicatingAgent.getHostId(),
+				serverHostId, communicatingAgent.getId(), communicatingAgent.getHostId(),
+				Protocol.CS);
+		protocolHost.sendMessage(message);
 	}
-	
+
 	@Override
 	public void migrate(int destinationHostId) {
 		CommunicatingAgentInterface communicatingAgent = getCommunicatingAgent();
-		CommunicatingHostInterface sourceHost = communicatingAgent.getHost();
-		AgentCommunicationMessageInterface message = new CSLocationUpdateMessage(sourceHost.getId(), serverHost, communicatingAgent.getId(), destinationHostId);
-		communicatingAgent.addMessage(message);
-	
+		MessageInterface message = new LocationUpdateMessage(communicatingAgent.getHostId(), serverHostId,
+				communicatingAgent.getId(), destinationHostId, Protocol.CS);
+		ProtocolHost protocolHost = getProtocolHost();
+		protocolHost.sendMessage(message);
 	}
 
 }

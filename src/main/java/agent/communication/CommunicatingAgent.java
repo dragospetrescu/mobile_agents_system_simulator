@@ -55,10 +55,6 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	 */
 	private ProtocolAgent agentProtocol;
 	/**
-	 * List of messages to be delivered to be sent
-	 */
-	private List<MessageInterface> messages;
-	/**
 	 * Extra arguments for the protocol
 	 */
 	private Map<String, String> protocolArguments;
@@ -67,13 +63,14 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	 * TODO add parameters
 	 */
 	public CommunicatingAgent() {
-		messages = new ArrayList<MessageInterface>();
 	}
 
 	@Override
 	public void work() {
 		if (work % 10 == 0) {
-			agentProtocol.prepareMessageTo(RandomAssigner.getRandomElement(allAgentsIds, getId()));
+			int destinationAgentId = RandomAssigner.getRandomElement(allAgentsIds, getId());
+			Logger.i(LogTag.NORMAL_MESSAGE, this + " sending message to Agent " + destinationAgentId);
+			agentProtocol.prepareMessageTo(destinationAgentId);
 		}
 		work--;
 	}
@@ -104,26 +101,9 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	}
 
 	@Override
-	public boolean wantsToSendMessage() {
-		return !messages.isEmpty();
-	}
-
-	@Override
-	public List<MessageInterface> sendMessages() {
-		List<MessageInterface> messagesToBeSent = messages;
-		messages = new ArrayList<MessageInterface>();
-		return messagesToBeSent;
-	}
-
-	@Override
 	public void receiveMessage(MessageInterface message) {
 		StatisticsCreator.messageSuccesfullyDelivered(message);
 		Logger.i(LogTag.NORMAL_MESSAGE, this + " received " + message);
-	}
-
-	@Override
-	public void addMessage(MessageInterface message) {
-		messages.add(message);
 	}
 
 	@Override
@@ -147,6 +127,7 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	@Override
 	public void setHost(CommunicatingHost host) {
 		this.host = host;
+		this.hostId = host.getId();
 	}
 
 	@Override
@@ -161,7 +142,7 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 
 	@Override
 	public void initProtocol() {
-		agentProtocol.init(protocolArguments);
+		agentProtocol.init(protocolArguments, host.getProtocolHost(protocol));
 	}
 
 	@Override

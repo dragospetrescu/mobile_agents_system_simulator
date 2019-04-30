@@ -7,6 +7,7 @@ import java.util.Map;
 
 import agent.communication.CommunicatingAgentInterface;
 import host.communication.CommunicatingHostInterface;
+import host.protocol.ProtocolHost;
 
 /**
  * ProtocolAgent represents the protocol-dependent part of the Agent. It's
@@ -30,6 +31,11 @@ public interface ProtocolAgent {
 	 * @return the CommunicatingAgent that is currently using this ProtocolAgent
 	 */
 	CommunicatingAgentInterface getCommunicatingAgent();
+	
+	/**
+	 * @return the CommunicatingAgent that is currently using this ProtocolAgent
+	 */
+	ProtocolHost getProtocolHost();
 
 	/**
 	 * The CommunicatingAgent asks to prepare a message for the destinationAgent received as a param
@@ -57,7 +63,9 @@ public interface ProtocolAgent {
 
 	/**
 	 * @param protocolArguments extra arguments for the protocol
+	 * @param protocolHost 
 	 */
-	void init(Map<String, String> protocolArguments);
+	void init(Map<String, String> protocolArguments, ProtocolHost protocolHost);
 
+	void setProtocolHost(ProtocolHost protocolHost);
 }

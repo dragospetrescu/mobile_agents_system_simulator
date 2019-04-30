@@ -104,8 +104,8 @@ public class NetworkGraph {
         for (int i = 0; i < V; i++) {
         	CommunicatingHostInterface router = hostsMap.get(i);
             for (int j = 0; j < V; j++) {
-                if (i == j)
-                    continue;
+//                if (i == j)
+//                    continue;
                 CommunicatingHostInterface destinationRouter = hostsMap.get(j);
                 List<Integer> path = new ArrayList<Integer>();
                 get_path(A, i, j, path);
@@ -147,7 +147,7 @@ public class NetworkGraph {
         return distances;
     }
 
-    public Integer getDistance(int previousHopId, int nextHopId) { 
+    public int getDistance(int previousHopId, int nextHopId) { 
     	return distances[previousHopId][nextHopId];
     }
 }

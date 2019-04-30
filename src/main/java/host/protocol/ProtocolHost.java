@@ -38,4 +38,6 @@ public interface ProtocolHost {
 	 * Protocol init
 	 */
 	void init();
+	
+	void sendMessage(MessageInterface message);
 }
