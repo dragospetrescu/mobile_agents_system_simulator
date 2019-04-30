@@ -1,5 +1,6 @@
 package hss;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,24 +8,25 @@ import java.util.Map;
 import agent.communication.CommunicatingAgentInterface;
 import host.communication.CommunicatingHostInterface;
 import host.protocol.AbstractProtocolHost;
+import message.AgentCommunicationMessage;
 import message.AgentCommunicationMessageInterface;
-import message.NormalCommunicationMessage;
+import message.LocationUpdateMessageInterface;
+import message.MessageInterface;
 
 /**
  * The HomeServer from the HSS documentation
  * 
  * It keeps a map agent -> host location
  * 
- * When agent migrates it sends to it's home host message
- * that updates the location database
+ * When agent migrates it sends to it's home host message that updates the
+ * location database
  */
 public class HSSHomeAgentHost extends AbstractProtocolHost {
 
 	/**
-	 * Map agent to current location
-	 * It is updated every time agent migrates
+	 * Map agent to current location It is updated every time agent migrates
 	 */
-	Map<CommunicatingAgentInterface, CommunicatingHostInterface> agentToAddressDatabase;
+	Map<Integer, Integer> agentToAddressDatabase;
 
 	/**
 	 * @param communicationHost - the CommunicatingAgent that will use this protocol
@@ -34,35 +36,37 @@ public class HSSHomeAgentHost extends AbstractProtocolHost {
 	}
 
 	@Override
-	public void interpretMessage(AgentCommunicationMessageInterface message) {
-		if (message instanceof HSSForwardedMessage) {
-			CommunicatingAgentInterface agentDestination = message.getAgentDestinationId();
+	public void interpretMessage(MessageInterface message) {
+		if (message instanceof AgentCommunicationMessageInterface) {
+			AgentCommunicationMessageInterface agentCommunicationMessage = (AgentCommunicationMessageInterface) message;
+			Integer agentDestinationId = agentCommunicationMessage.getAgentDestinationId();
 			CommunicatingHostInterface communicationHost = getCommunicationHost();
-			CommunicatingHostInterface hostDestination = agentToAddressDatabase.get(agentDestination);
-			AgentCommunicationMessageInterface forwardedNormalMessage = new NormalCommunicationMessage(message.getMessageId(), communicationHost, hostDestination,
-					message.getAgentSourceId(), message.getAgentDestinationId());
-			if(hostDestination.equals(communicationHost)) {
-				interpretMessage(forwardedNormalMessage);
-			} else {
-				communicationHost.addMessageForSending(forwardedNormalMessage);
+
+			if (agentToAddressDatabase.containsKey(agentDestinationId)) {
+				Integer hostDestination = agentToAddressDatabase.get(agentDestinationId);
+				if (!hostDestination.equals(communicationHost.getId())) {
+					communicationHost.reRouteMessage(agentCommunicationMessage, hostDestination);
+					communicationHost.addMessageForSending(agentCommunicationMessage);
+					return;
+				}
 			}
-		} else if (message instanceof HSSLocationUpdateMessage) {
-			HSSLocationUpdateMessage hssMessage = (HSSLocationUpdateMessage) message;
-			CommunicatingHostInterface newInhabitingHost = hssMessage.getNewHostLocation();
-			CommunicatingAgentInterface agentSource = hssMessage.getAgentSourceId();
-			agentToAddressDatabase.put(agentSource, newInhabitingHost);
-		} else {
-			super.interpretMessage(message);
+			super.interpretMessage(agentCommunicationMessage);
+
+		} else if (message instanceof LocationUpdateMessageInterface) {
+			LocationUpdateMessageInterface locationUpdateMessage = (LocationUpdateMessageInterface) message;
+			Integer newInhabitingHostId = locationUpdateMessage.getNewHostId();
+			Integer agentSourceId = locationUpdateMessage.getAgentId();
+			agentToAddressDatabase.put(agentSourceId, newInhabitingHostId);
 		}
 	}
 
 	@Override
 	public void init() {
-		agentToAddressDatabase = new HashMap<CommunicatingAgentInterface, CommunicatingHostInterface>();
+		agentToAddressDatabase = new HashMap<Integer, Integer>();
 		CommunicatingHostInterface communicationHost = getCommunicationHost();
-		List<CommunicatingAgentInterface> activeAgents = communicationHost.getActiveAgents();
+		Collection<CommunicatingAgentInterface> activeAgents = communicationHost.getActiveAgents();
 		for (CommunicatingAgentInterface communicatingAgentInterface : activeAgents) {
-			agentToAddressDatabase.put(communicatingAgentInterface, communicationHost);
+			agentToAddressDatabase.put(communicatingAgentInterface.getId(), communicationHost.getId());
 		}
 	}
 

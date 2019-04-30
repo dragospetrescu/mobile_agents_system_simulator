@@ -1,5 +1,7 @@
 package protocol;
-
+/**
+ * Test, should be ignored.
+ */
 import agent.communication.CommunicatingAgent;
 import agent.protocol.ProtocolAgent;
 import broadcast.BroadcastAgent;
@@ -17,8 +19,6 @@ import shadow.ShadowHomeServerHost;
 import shadow.ShadowHost;
 import hss.HSSAgent;
 import hss.HSSHomeAgentHost;
-import test_protocol.TestAgent;
-import test_protocol.TestHost;
 
 /**
  * List of available protocols If you want to add a new protocol add a new entry
@@ -27,11 +27,6 @@ import test_protocol.TestHost;
  * 
  */
 public enum Protocol {
-
-	/**
-	 * Test, should be ignored.
-	 */
-	TEST_PROTOCOL, 
 	/**
 	 * Agents broadcast all their messages.
 	 */
@@ -69,8 +64,6 @@ public enum Protocol {
 	 */
 	public ProtocolHost getProtocolHost(CommunicatingHost communicationHost) {
 		switch (this) {
-		case TEST_PROTOCOL:
-			return new TestHost(communicationHost);
 		case BROADCAST:
 			return new BroadcastHost(communicationHost);
 		case HSS:
@@ -101,8 +94,6 @@ public enum Protocol {
 	 */
 	public ProtocolAgent getProtocolAgent(CommunicatingAgent communicatingAgent) {
 		switch (this) {
-		case TEST_PROTOCOL:
-			return new TestAgent(communicatingAgent);
 		case BROADCAST:
 			return new BroadcastAgent(communicatingAgent);
 		case HSS:

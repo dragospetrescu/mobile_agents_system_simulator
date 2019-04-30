@@ -7,7 +7,6 @@ import java.util.Map;
 import agent.communication.CommunicatingAgentInterface;
 import host.communication.CommunicatingHostInterface;
 import host.protocol.AbstractProtocolHost;
-import hss.HSSLocationUpdateMessage;
 import message.AgentCommunicationMessage;
 import message.AgentCommunicationMessageInterface;
 import message.LocationUpdateMessage;

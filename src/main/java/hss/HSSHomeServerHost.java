@@ -8,6 +8,9 @@ import agent.communication.CommunicatingAgentInterface;
 import host.communication.CommunicatingHostInterface;
 import host.protocol.AbstractProtocolHost;
 import message.AgentCommunicationMessageInterface;
+import message.LocationUpdateMessage;
+import message.LocationUpdateMessageInterface;
+import message.MessageInterface;
 
 /**
  * The HomeServer from the HSS documentation
@@ -26,7 +29,7 @@ public class HSSHomeServerHost extends AbstractProtocolHost {
 	 * Map agent -> home agent
 	 * See {@link HSSHomeAgentHost}
 	 */
-	Map<CommunicatingAgentInterface, CommunicatingHostInterface> agentToHomeDatabase;
+	Map<Integer, Integer> agentToHomeDatabase;
 
 	/**
 	 * @param communicationHost - the CommunicatingAgent that will use this protocol
@@ -36,32 +39,25 @@ public class HSSHomeServerHost extends AbstractProtocolHost {
 	}
 
 	@Override
-	public void interpretMessage(AgentCommunicationMessageInterface message) {
+	public void interpretMessage(MessageInterface message) {
 
-		if (message instanceof HSSForwardedMessage) {
-			HSSForwardedMessage hssMessage = (HSSForwardedMessage) message;
-			CommunicatingAgentInterface agentSource = message.getAgentSourceId();
-			CommunicatingAgentInterface agentDestination = message.getAgentDestinationId();
+		if (message instanceof AgentCommunicationMessageInterface) {
+			AgentCommunicationMessageInterface agentCommunicationMessage = (AgentCommunicationMessageInterface) message;
+			Integer agentDestination = agentCommunicationMessage.getAgentDestinationId();
 			CommunicatingHostInterface communicationHost = getCommunicationHost();
-			CommunicatingHostInterface hostDestination = agentToHomeDatabase.get(agentDestination);
-			HSSForwardedMessage forwardedMessage = new HSSForwardedMessage(hssMessage.getMessageId(), communicationHost,
-					hostDestination, agentSource, agentDestination);
-
-			communicationHost.addMessageForSending(forwardedMessage);
-		} else {
-			super.interpretMessage(message);
+			Integer hostDestination = agentToHomeDatabase.get(agentDestination);
+			communicationHost.reRouteMessage(agentCommunicationMessage, hostDestination);
+			communicationHost.addMessageForSending(agentCommunicationMessage);
+		} else if (message instanceof LocationUpdateMessageInterface){
+			LocationUpdateMessageInterface locationUpdateMessage = (LocationUpdateMessageInterface) message;
+			Integer agentId = locationUpdateMessage.getAgentId();
+			Integer newHostId = locationUpdateMessage.getNewHostId();
+			agentToHomeDatabase.put(agentId, newHostId);
 		}
 	}
 
 	@Override
 	public void init() {
-		agentToHomeDatabase = new HashMap<CommunicatingAgentInterface, CommunicatingHostInterface>();
-		List<CommunicatingHostInterface> allHosts = getCommunicationHost().getAllNormalHosts();
-		for (CommunicatingHostInterface communicatingHostInterface : allHosts) {
-			List<CommunicatingAgentInterface> activeAgents = communicatingHostInterface.getActiveAgents();
-			for (CommunicatingAgentInterface activeAgent : activeAgents) {
-				agentToHomeDatabase.put(activeAgent, communicatingHostInterface);
-			}
-		}
+		agentToHomeDatabase = new HashMap<Integer, Integer>();
 	}
 }

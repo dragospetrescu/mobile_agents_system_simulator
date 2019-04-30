@@ -6,7 +6,6 @@ import agent.communication.CommunicatingAgentInterface;
 import agent.protocol.AbstractProtocolAgent;
 import host.communication.CommunicatingHostInterface;
 import host.protocol.ProtocolHost;
-import hss.HSSLocationUpdateMessage;
 import message.AgentCommunicationMessage;
 import message.AgentCommunicationMessageInterface;
 import message.LocationUpdateMessage;
