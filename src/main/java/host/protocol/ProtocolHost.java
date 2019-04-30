@@ -27,7 +27,7 @@ public interface ProtocolHost {
 	/**
 	 * @return id - unique identifier
 	 */
-	int getId();
+	Integer getId();
 
 	/**
 	 * @return the protocol of this agent

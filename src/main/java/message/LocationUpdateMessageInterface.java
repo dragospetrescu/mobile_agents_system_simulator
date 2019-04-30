@@ -4,7 +4,7 @@ import protocol.Protocol;
 
 public interface LocationUpdateMessageInterface extends MessageInterface {
 
-	public int getAgentId();
+	public Integer getAgentId();
 	public Protocol getProtocol();
-	public int getNewHostId();
+	public Integer getNewHostId();
 }

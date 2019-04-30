@@ -20,7 +20,7 @@ public abstract class AbstractProtocolHost implements ProtocolHost {
 	/**
 	 * Unique identifier
 	 */
-	private int id;
+	private Integer id;
 	/**
 	 * The {@link CommunicatingHostInterface} that is currently using this
 	 * ProtocolHost
@@ -37,7 +37,7 @@ public abstract class AbstractProtocolHost implements ProtocolHost {
 	 *                          use this ProtocolHost
 	 * @param protocol          - The protocol that it is implementing
 	 */
-	public AbstractProtocolHost(int id, CommunicatingHostInterface communicationHost, Protocol protocol) {
+	public AbstractProtocolHost(Integer id, CommunicatingHostInterface communicationHost, Protocol protocol) {
 		super();
 		this.id = id;
 		this.communicationHost = communicationHost;
@@ -49,7 +49,7 @@ public abstract class AbstractProtocolHost implements ProtocolHost {
 		if (message instanceof AgentCommunicationMessageInterface) {
 			AgentCommunicationMessageInterface agentCommunicationMessage = (AgentCommunicationMessageInterface) message;
 			
-			int communicatingAgentId = agentCommunicationMessage.getAgentDestinationId();
+			Integer communicatingAgentId = agentCommunicationMessage.getAgentDestinationId();
 			if (communicationHost.hasAgentWithId(communicatingAgentId)) {
 				ProtocolAgent protocolAgent = communicationHost.getProtocolAgentWithId(communicatingAgentId);
 				protocolAgent.receiveMessage(message);
@@ -67,7 +67,7 @@ public abstract class AbstractProtocolHost implements ProtocolHost {
 	}
 
 	@Override
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
@@ -78,7 +78,6 @@ public abstract class AbstractProtocolHost implements ProtocolHost {
 	
 	@Override
 	public void sendMessage(MessageInterface message) {
-		communicationHost.routeMessage(message);
 		communicationHost.addMessageForSending(message);
 	}
 

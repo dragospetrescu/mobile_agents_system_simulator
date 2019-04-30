@@ -24,13 +24,13 @@ public class BroadcastAgent extends AbstractProtocolAgent {
 	}
 
 	@Override
-	public void prepareMessageTo(int destinationAgentId) {
+	public void prepareMessageTo(Integer destinationAgentId) {
 		CommunicatingAgentInterface communicatingAgent = getCommunicatingAgent();
 		BroadcastHost protocolHost = (BroadcastHost) getProtocolHost();
 
 		List<Integer> allHostsIds = protocolHost.getAllNormalHosts();
 
-		for (int hostId : allHostsIds) {
+		for (Integer hostId : allHostsIds) {
 			AgentCommunicationMessageInterface message = new AgentCommunicationMessage(
 					AgentCommunicationMessage.noMessages, communicatingAgent.getHostId(), hostId,
 					communicatingAgent.getId(), destinationAgentId);

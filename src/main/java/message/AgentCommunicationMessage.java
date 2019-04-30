@@ -6,11 +6,11 @@ package message;
  */
 public class AgentCommunicationMessage extends AbstractMessage implements AgentCommunicationMessageInterface {
 
-	private int sourceAgentId;
+	private Integer sourceAgentId;
 	/**
 	 * The destination agent. Can be null if the destination is a host.
 	 */
-	private int destinationAgentId;
+	private Integer destinationAgentId;
 
 	/**
 	 * Warning. You should only use this constructor if the id provided is unique
@@ -21,8 +21,8 @@ public class AgentCommunicationMessage extends AbstractMessage implements AgentC
 	 * @param sourceAgent - the agent that sends the message
 	 * @param destinationAgent - the agent that has to receive the message
 	 */
-	public AgentCommunicationMessage(int id, int sourceHostId, int destinationHostId,
-			int sourceAgent, int destinationAgent) {
+	public AgentCommunicationMessage(Integer id, Integer sourceHostId, Integer destinationHostId,
+			Integer sourceAgent, Integer destinationAgent) {
 		super(id, sourceHostId, destinationHostId);
 		this.sourceAgentId = sourceAgent;
 		this.destinationAgentId = destinationAgent;
@@ -37,18 +37,18 @@ public class AgentCommunicationMessage extends AbstractMessage implements AgentC
 	 * @param sourceAgent - the agent that sends the message
 	 * @param destinationAgent - the agent that has to receive the message
 	 */
-	public AgentCommunicationMessage(int sourceHost, int destinationHost,	int sourceAgent, int destinationAgent) {
+	public AgentCommunicationMessage(Integer sourceHost, Integer destinationHost,	Integer sourceAgent, Integer destinationAgent) {
 		this(noMessages, sourceHost, destinationHost, sourceAgent, destinationAgent);
 		noMessages++;
 	}
 
 	@Override
-	public int getAgentSourceId() {
+	public Integer getAgentSourceId() {
 		return sourceAgentId;
 	}
 
 	@Override
-	public int getAgentDestinationId() {
+	public Integer getAgentDestinationId() {
 		return destinationAgentId;
 	}
 }

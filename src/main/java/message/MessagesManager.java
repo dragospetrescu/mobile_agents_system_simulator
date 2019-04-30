@@ -39,7 +39,11 @@ public class MessagesManager {
      * @param message - the traveling message
      */
     public void addMessage(MessageInterface message) {
-        travelingMessages.put(message, networkGraph.getDistance(message.getPreviousHopId(), message.getNextHopId()));
+    	Integer prevId = message.getPreviousHopId();
+    	Integer nextId = message.getNextHopId();
+    	if(prevId == null)
+    	System.out.println(prevId + " " + nextId);
+        travelingMessages.put(message, networkGraph.getDistance(prevId, nextId));
     }
 
     /**
@@ -49,7 +53,7 @@ public class MessagesManager {
         Set<MessageInterface> messages = travelingMessages.keySet();
         Set<MessageInterface> messagesToBeRemoved = new HashSet<>();
         for (MessageInterface message : messages) {
-            int leftDistance = travelingMessages.get(message) - 1;
+            Integer leftDistance = travelingMessages.get(message) - 1;
             if (leftDistance <= 0) {
                 messagesToBeRemoved.add(message);
                 arrivedMessages.add(message);

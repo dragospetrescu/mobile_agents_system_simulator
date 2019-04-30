@@ -22,7 +22,7 @@ import message.NormalCommunicationMessage;
  * ...
  * Host ttl from Agent 0 migration Path redirects message to HomeServer
  * 
- * if at any point the agent is present in the host, the agent receives the message
+ * if at any poInteger the agent is present in the host, the agent receives the message
  * 
  */
 public class ShadowHomeServerHost extends AbstractProtocolHost {

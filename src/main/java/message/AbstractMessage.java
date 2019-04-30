@@ -5,28 +5,28 @@ public class AbstractMessage implements MessageInterface {
 	/**
 	 * Unique id
 	 */
-	private int id;
+	private Integer id;
 	/**
 	 * The host from which the message was sent
 	 */
-	private int sourceHostId;
+	private Integer sourceHostId;
 	/**
 	 * The final host destination
 	 */
-	private int destinationHostId;
+	private Integer destinationHostId;
 	/**
 	 * The last host that redirected the message
 	 */
-	private int previousHopHostId;
+	private Integer previousHopHostId;
 	/**
 	 * The next host to the final destination
 	 */
-	private int nextHopHostId;
+	private Integer nextHopHostId;
 
 	/**
 	 * Used to make sure each message receives a unique id
 	 */
-	public static int noMessages = 0;
+	public static Integer noMessages = 0;
 
 	/**
 	 * Warning. You should only use this constructor if the id provided is unique
@@ -35,7 +35,7 @@ public class AbstractMessage implements MessageInterface {
 	 * @param sourceHost       - host from where the message is sent
 	 * @param destinationHost  - the host where the message has to arrive
 	 */
-	public AbstractMessage(int id, int sourceHost, int destinationHost) {
+	public AbstractMessage(Integer id, Integer sourceHost, Integer destinationHost) {
 		this.id = id;
 		this.sourceHostId = sourceHost;
 		this.destinationHostId = destinationHost;
@@ -47,18 +47,18 @@ public class AbstractMessage implements MessageInterface {
 	 * @param sourceHost       - host from where the message is sent
 	 * @param destinationHost  - the host where the message has to arrive
 	 */
-	public AbstractMessage(int sourceHost, int destinationHost) {
+	public AbstractMessage(Integer sourceHost, Integer destinationHost) {
 		this(noMessages, sourceHost, destinationHost);
 		noMessages++;
 	}
 
 	@Override
-	public int getHostDestinationId() {
+	public Integer getHostDestinationId() {
 		return destinationHostId;
 	}
 
 	@Override
-	public int getMessageId() {
+	public Integer getMessageId() {
 		return id;
 	}
 
@@ -68,24 +68,24 @@ public class AbstractMessage implements MessageInterface {
 	}
 
 	@Override
-	public int getNextHopId() {
+	public Integer getNextHopId() {
 		return nextHopHostId;
 	}
 
 	@Override
-	public int getPreviousHopId() {
+	public Integer getPreviousHopId() {
 		return previousHopHostId;
 	}
 
 	@Override
-	public int getHostSourceId() {
+	public Integer getHostSourceId() {
 		return sourceHostId;
 	}
 
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
+		final Integer prime = 31;
 		int result = 1;
 		result = prime * result + destinationHostId;
 		result = prime * result + id;
@@ -112,13 +112,17 @@ public class AbstractMessage implements MessageInterface {
 	}
 
 	@Override
-	public void route(int nextHopHostId) {
-		previousHopHostId = this.nextHopHostId;
+	public void route(Integer nextHopHostId) {
+		if(this.nextHopHostId == null) {
+			previousHopHostId = this.sourceHostId;
+		} else {
+			previousHopHostId = this.nextHopHostId;
+		}
 		this.nextHopHostId = nextHopHostId;
 	}
 	
 	@Override
-	public void route(int nextHopHostId, int newHostDestinationId) {
+	public void route(Integer nextHopHostId, Integer newHostDestinationId) {
 		route(nextHopHostId);
 		this.sourceHostId = this.destinationHostId;
 		this.destinationHostId = newHostDestinationId;

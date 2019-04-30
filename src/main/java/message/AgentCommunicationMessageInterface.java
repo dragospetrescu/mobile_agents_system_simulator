@@ -13,11 +13,11 @@ public interface AgentCommunicationMessageInterface extends MessageInterface {
 	 * @return the agent that sent the message. Can be null if the message was sent
 	 *         by a host.
 	 */
-	int getAgentSourceId();
+	Integer getAgentSourceId();
 
 	/**
 	 * @return the destination agent. Can be null if the destination is a host.
 	 *         Example: MigratingMessage
 	 */
-	int getAgentDestinationId();
+	Integer getAgentDestinationId();
 }

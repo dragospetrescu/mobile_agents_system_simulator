@@ -71,7 +71,7 @@ public interface CommunicatingHostInterface {
 	/**
 	 * @return id - unique identifier of the host
 	 */
-	int getId();
+	Integer getId();
 
 	/**
 	 * Used when creating re-routing table
@@ -79,7 +79,7 @@ public interface CommunicatingHostInterface {
 	 * @param destinationRouter - final host destination 
 	 * @param nextHopRouter - next hop in order to get tot the final destination
 	 */
-	void addRouteNextHop(int destinationRouterId, int nextHopRouterId);
+	void addRouteNextHop(Integer destinationRouterId, Integer nextHopRouterId);
 
 	/**
 	 * Calls protocol.init
@@ -106,10 +106,9 @@ public interface CommunicatingHostInterface {
 	 */
 	ProtocolHost getProtocolHost(Protocol protocol);
 
-	boolean hasAgentWithId(int communicatingAgentId);
+	boolean hasAgentWithId(Integer communicatingAgentId);
 
-	ProtocolAgent getProtocolAgentWithId(int communicatingAgentId);
+	ProtocolAgent getProtocolAgentWithId(Integer communicatingAgentId);
 	
-	void routeMessage(MessageInterface message);
-	void reRouteMessage(MessageInterface message, int newDestinationHostId);
+	void reRouteMessage(MessageInterface message, Integer newDestinationHostId);
 }

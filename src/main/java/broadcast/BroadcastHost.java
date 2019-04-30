@@ -29,7 +29,7 @@ public class BroadcastHost extends AbstractProtocolHost {
 	public void interpretMessage(MessageInterface message) {
 		if (message instanceof AgentCommunicationMessageInterface) {
 			AgentCommunicationMessageInterface agentCommunicationMessage = (AgentCommunicationMessageInterface) message;
-			int communicatingAgentId = agentCommunicationMessage.getAgentDestinationId();
+			Integer communicatingAgentId = agentCommunicationMessage.getAgentDestinationId();
 			CommunicatingHostInterface communicationHost = getCommunicationHost();
 			if (communicationHost.hasAgentWithId(communicatingAgentId)) {
 				ProtocolAgent protocolAgent = communicationHost.getProtocolAgentWithId(communicatingAgentId);

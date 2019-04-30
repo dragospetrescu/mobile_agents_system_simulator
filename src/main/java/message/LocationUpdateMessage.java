@@ -4,22 +4,22 @@ import protocol.Protocol;
 
 public class LocationUpdateMessage extends AbstractMessage implements LocationUpdateMessageInterface {
 
-	private int agentId;
-	private int newHostId;
+	private Integer agentId;
+	private Integer newHostId;
 	private Protocol protocol;
 
-	public LocationUpdateMessage(int sourceHost, int destinationHost, int agentId, int newHostId, Protocol protocol) {
+	public LocationUpdateMessage(Integer sourceHost, Integer destinationHost, Integer agentId, Integer newHostId, Protocol protocol) {
 		super(sourceHost, destinationHost);
 		this.agentId = agentId;
 		this.newHostId = newHostId;
 		this.protocol = protocol;
 	}
 
-	public int getAgentId() {
+	public Integer getAgentId() {
 		return agentId;
 	}
 
-	public int getNewHostId() {
+	public Integer getNewHostId() {
 		return newHostId;
 	}
 

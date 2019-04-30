@@ -26,7 +26,7 @@ public class ShadowAgent extends AbstractProtocolAgent {
 	 * Time to live - migrations until the home server receives update about the
 	 * agent's migration decision
 	 */
-	private int ttl;
+	private Integer ttl;
 
 	/**
 	 * @param communicatingAgent that is going to use this protocol
@@ -65,7 +65,7 @@ public class ShadowAgent extends AbstractProtocolAgent {
 	@Override
 	public void init(Map<String, String> protocolArguments) {
 		ttl = Integer.parseInt(protocolArguments.get("ttl"));
-		int homeServerHostId = Integer.parseInt(protocolArguments.get("homeServerHost"));
+		Integer homeServerHostId = Integer.parseInt(protocolArguments.get("homeServerHost"));
 		homeServerHost = getCommunicatingAgent().getHost().getHostById(homeServerHostId);
 	}
 

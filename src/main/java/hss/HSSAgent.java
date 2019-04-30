@@ -56,7 +56,7 @@ public class HSSAgent extends AbstractProtocolAgent {
 
 	@Override
 	public void init(Map<String, String> protocolArguments) {
-		int homeServerHostId = Integer.parseInt(protocolArguments.get("homeServerHost"));
+		Integer homeServerHostId = Integer.parseInt(protocolArguments.get("homeServerHost"));
 		homeServerHost = getCommunicatingAgent().getHost().getHostById(homeServerHostId);
 		homeAgentHost = getCommunicatingAgent().getHost();
 	}

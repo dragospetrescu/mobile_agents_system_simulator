@@ -26,7 +26,7 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	/**
 	 * Unique identifier
 	 */
-	public int id;
+	public Integer id;
 	/**
 	 * Agents that are currently residing on this host
 	 */
@@ -74,7 +74,7 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 		agent.setWork();
 	}
 
-	public void addRouteNextHop(int destinationRouterId, int nextHopRouterId) {
+	public void addRouteNextHop(Integer destinationRouterId, Integer nextHopRouterId) {
 		nextHopMap.put(destinationRouterId, nextHopRouterId);
 	}
 
@@ -83,7 +83,7 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 		return "Host " + id;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
@@ -106,7 +106,7 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 
 	@Override
 	public void receiveMessage(MessageInterface message) {
-		int messageDestinationHostId = message.getHostDestinationId();
+		Integer messageDestinationHostId = message.getHostDestinationId();
 		if (messageDestinationHostId == getId()) {
 			if (message instanceof MigratingAgentMessageInterface) {
 				MigratingAgentMessageInterface migratingAgentMessage = (MigratingAgentMessageInterface) message;
@@ -142,6 +142,7 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 
 	@Override
 	public void addMessageForSending(MessageInterface message) {
+		routeMessage(message);
 		messagesToBeSent.add(message);
 	}
 
@@ -167,12 +168,12 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	}
 	
 	@Override
-	public boolean hasAgentWithId(int communicatingAgentId) {
+	public boolean hasAgentWithId(Integer communicatingAgentId) {
 		return activeAgentsMap.containsKey(communicatingAgentId);
 	}
 	
 	@Override
-	public ProtocolAgent getProtocolAgentWithId(int communicatingAgentId) {
+	public ProtocolAgent getProtocolAgentWithId(Integer communicatingAgentId) {
 		if(!hasAgentWithId(communicatingAgentId)) {
 			throw new RuntimeException("There is no protocol agent with id " + communicatingAgentId + " on " + toString());
 		}
@@ -180,18 +181,17 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 		return activeAgentsMap.get(communicatingAgentId).getProtocolAgent();
 	}
 
-	@Override
 	public void routeMessage(MessageInterface message) {
-		int hostDestinationId = message.getHostDestinationId();
-		int nextHopHostId = nextHopMap.get(hostDestinationId);
+		Integer hostDestinationId = message.getHostDestinationId();
+		Integer nextHopHostId = nextHopMap.get(hostDestinationId);
 		
 		message.route(nextHopHostId);
 		
 	}
 
 	@Override
-	public void reRouteMessage(MessageInterface message, int newDestinationHostId) {
-		int nextHopHostId = nextHopMap.get(newDestinationHostId);
+	public void reRouteMessage(MessageInterface message, Integer newDestinationHostId) {
+		Integer nextHopHostId = nextHopMap.get(newDestinationHostId);
 		message.route(nextHopHostId, newDestinationHostId);
 	}
 }

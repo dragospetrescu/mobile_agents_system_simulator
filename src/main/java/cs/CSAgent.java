@@ -11,11 +11,12 @@ import message.AgentCommunicationMessage;
 import message.AgentCommunicationMessageInterface;
 import message.LocationUpdateMessage;
 import message.MessageInterface;
+import message.MigratingAgentMessageInterface;
 import protocol.Protocol;
 
 public class CSAgent extends AbstractProtocolAgent {
 
-	private int serverHostId;
+	private Integer serverHostId;
 
 	/**
 	 * @param communicatingAgent - the CommunicatingAgent that will use this
@@ -26,7 +27,7 @@ public class CSAgent extends AbstractProtocolAgent {
 	}
 
 	@Override
-	public void prepareMessageTo(int destinationAgentId) {
+	public void prepareMessageTo(Integer destinationAgentId) {
 		CommunicatingAgentInterface sourceAgent = getCommunicatingAgent();
 		MessageInterface message = new AgentCommunicationMessage(sourceAgent.getHostId(), serverHostId,
 				sourceAgent.getId(), destinationAgentId);
@@ -46,7 +47,9 @@ public class CSAgent extends AbstractProtocolAgent {
 	}
 
 	@Override
-	public void migrate(int destinationHostId) {
+	public void migrate(Integer destinationHostId, MigratingAgentMessageInterface migratingMessage) {
+		super.migrate(destinationHostId, migratingMessage);
+		
 		CommunicatingAgentInterface communicatingAgent = getCommunicatingAgent();
 		MessageInterface message = new LocationUpdateMessage(communicatingAgent.getHostId(), serverHostId,
 				communicatingAgent.getId(), destinationHostId, Protocol.CS);

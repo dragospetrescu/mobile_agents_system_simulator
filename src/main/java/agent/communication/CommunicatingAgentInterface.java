@@ -27,7 +27,7 @@ public interface CommunicatingAgentInterface {
 	 * 
 	 * @return MigratingMessage that contains the migrating agent
 	 */
-	MessageInterface prepareMigratingMessage();
+	void prepareMigratingMessage();
 
 	/**
 	 * @return the host that the agent is currently on
@@ -77,7 +77,7 @@ public interface CommunicatingAgentInterface {
 	/**
 	 * @return - the unique id of each CommunicatingAgentInterface
 	 */
-	int getId();
+	Integer getId();
 
 	/**
 	 * Sets the host this CommunicatingAgent is currently inhabiting
@@ -90,6 +90,6 @@ public interface CommunicatingAgentInterface {
 	 */
 	void initProtocol();
 
-	int getHostId();
+	Integer getHostId();
 
 }

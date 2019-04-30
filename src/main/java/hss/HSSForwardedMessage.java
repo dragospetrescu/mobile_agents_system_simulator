@@ -36,7 +36,7 @@ public class HSSForwardedMessage extends AgentCommunicationMessage{
 	 * @param sourceAgent - the agent that sends the message
 	 * @param destinationAgent - the agent that has to receive the message
 	 */
-	public HSSForwardedMessage(int id, CommunicatingHostInterface sourceHost, CommunicatingHostInterface destinationHost,
+	public HSSForwardedMessage(Integer id, CommunicatingHostInterface sourceHost, CommunicatingHostInterface destinationHost,
 			CommunicatingAgentInterface sourceAgent, CommunicatingAgentInterface destinationAgent) {
 		super(id, sourceHost, destinationHost, sourceAgent, destinationAgent);
 	}

@@ -220,12 +220,12 @@ public class Simulation {
 	 */
 	public void start() {
 
-		for (int step = 0; step < Constants.NO_WORKING_STEPS + 2 * Constants.STEPS_WAITING_FOR_LAST_MESSAGES; step++) {
+		for (Integer step = 0; step < Constants.NO_WORKING_STEPS + 2 * Constants.STEPS_WAITING_FOR_LAST_MESSAGES; step++) {
 			
 			messagesManager.travelMessages();
 			List<MessageInterface> arrivedMessages = messagesManager.getArrivedMessages();
 			for (MessageInterface message : arrivedMessages) {
-				int nextHopHostId = message.getNextHopId();
+				Integer nextHopHostId = message.getNextHopId();
 				CommunicatingHostInterface nextHopHost = allHostsMap.get(nextHopHostId);
 				nextHopHost.receiveMessage(message);
 			}
@@ -244,8 +244,7 @@ public class Simulation {
 
 					if(step >= Constants.STEPS_WAITING_FOR_LAST_MESSAGES && step <= Constants.STEPS_WAITING_FOR_LAST_MESSAGES + Constants.NO_WORKING_STEPS)
 						if (agent.wantsToMigrate()) {
-							MessageInterface message = agent.prepareMigratingMessage();
-							messagesManager.addMessage(message);
+							agent.prepareMigratingMessage();
 							agentsIterator.remove();
 						} else {
 							agent.work();

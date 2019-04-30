@@ -22,15 +22,15 @@ public class RandomAssigner {
      * @param max
      * @return random number in between min and max
      */
-    private static int getRandomNumberInRange(int min, int max) {
+    private static Integer getRandomNumberInRange(Integer min, Integer max) {
         return random.nextInt((max - min) + 1) + min;
     }
 
     /**
      * @return random time units until next migration
      */
-    public static int assignWork() {
-        int workTime = getRandomNumberInRange(Constants.MAXIMUM_WORK_TIME / 10, Constants.MAXIMUM_WORK_TIME);
+    public static Integer assignWork() {
+        Integer workTime = getRandomNumberInRange(Constants.MAXIMUM_WORK_TIME / 10, Constants.MAXIMUM_WORK_TIME);
         return workTime;
     }
     

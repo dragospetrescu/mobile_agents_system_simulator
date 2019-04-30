@@ -19,7 +19,7 @@ public class MigratingAgentMessage extends AbstractMessage implements MigratingA
 	 * @param migratingAgent  - the agent that is migrating from the sourceHost to
 	 *                        the destinationHost
 	 */
-	public MigratingAgentMessage(int sourceHost, int destinationHost, CommunicatingAgentInterface migratingAgent) {
+	public MigratingAgentMessage(Integer sourceHost, Integer destinationHost, CommunicatingAgentInterface migratingAgent) {
 		super(sourceHost, destinationHost);
 		this.migratingAgent = migratingAgent;
 	}

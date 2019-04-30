@@ -4,30 +4,30 @@ public interface MessageInterface {
 	/**
 	 * @return next host to the final destination. Like in the ip protocol
 	 */
-	int getNextHopId();
+	Integer getNextHopId();
 
 	/**
 	 * @return the last host that redirected the message
 	 */
-	int getPreviousHopId();
+	Integer getPreviousHopId();
 
 	/**
 	 * @return the final host destination
 	 */
-	int getHostDestinationId();
+	Integer getHostDestinationId();
 	
 	/**
 	 * @return the host from which the message was sent
 	 */
-	int getHostSourceId();
+	Integer getHostSourceId();
 	
 	/**
 	 * @return unique id of the message
 	 */
-	int getMessageId();
+	Integer getMessageId();
 
-	void route(int nextHopHostId);
+	void route(Integer nextHopHostId);
 	
-	void route(int nextHopHostId, int newHostDestinationId);
+	void route(Integer nextHopHostId, Integer newHostDestinationId);
 	
 }

@@ -1,6 +1,7 @@
 package agent.protocol;
 
 import message.MessageInterface;
+import message.MigratingAgentMessageInterface;
 import protocol.Protocol;
 
 import java.util.Map;
@@ -42,12 +43,12 @@ public interface ProtocolAgent {
 	 * 
 	 * @param destinationAgent - the destinationAgent for the message that has to be created
 	 */
-	void prepareMessageTo(int destinationAgentId);
+	void prepareMessageTo(Integer destinationAgentId);
 
 	/**
 	 * @return id - unique identifier
 	 */
-	int getId();
+	Integer getId();
 
 	/**
 	 * @return the protocol of this agent
@@ -56,10 +57,11 @@ public interface ProtocolAgent {
 
 	/**
 	 * Protocol dependent migration process
+	 * @param message 
 	 * 
 	 * @param destinationHost - migrating to this host
 	 */
-	void migrate(int destinationHostId);
+	void migrate(Integer destinationHostId, MigratingAgentMessageInterface migratingMessage);
 
 	/**
 	 * @param protocolArguments extra arguments for the protocol

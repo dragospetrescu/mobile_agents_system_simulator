@@ -7,6 +7,7 @@ import host.communication.CommunicatingHostInterface;
 import host.protocol.ProtocolHost;
 import message.AgentCommunicationMessageInterface;
 import message.MessageInterface;
+import message.MigratingAgentMessageInterface;
 import protocol.Protocol;
 
 /**
@@ -17,7 +18,7 @@ public abstract class AbstractProtocolAgent implements ProtocolAgent {
 	/**
 	 * Unique identifier
 	 */
-	private int id;
+	private Integer id;
 	/**
 	 * The {@link CommunicatingAgentInterface} that is currently using this ProtocolAgent
 	 */
@@ -34,14 +35,16 @@ public abstract class AbstractProtocolAgent implements ProtocolAgent {
 	 * @param communicatingAgent - The {@link CommunicatingAgentInterface} that will use this ProtocolAgent
 	 * @param protocol - The protocol that it is implementing
 	 */
-	public AbstractProtocolAgent(int id, CommunicatingAgentInterface communicatingAgent, Protocol protocol) {
+	public AbstractProtocolAgent(Integer id, CommunicatingAgentInterface communicatingAgent, Protocol protocol) {
 		this.id = id;
 		this.communicatingAgent = communicatingAgent;
 		this.protocol = protocol;
 	}
 	
 	@Override
-	public void migrate(int destinationHostId) {
+	public void migrate(Integer destinationHostId, MigratingAgentMessageInterface migratingMessage) {
+		ProtocolHost protocolHost = getProtocolHost();
+		protocolHost.sendMessage(migratingMessage);
 	}
 	
 	@Override
@@ -60,7 +63,7 @@ public abstract class AbstractProtocolAgent implements ProtocolAgent {
 	}
 	
 	@Override
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 

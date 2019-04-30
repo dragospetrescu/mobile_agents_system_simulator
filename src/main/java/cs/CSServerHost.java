@@ -35,9 +35,9 @@ public class CSServerHost extends AbstractProtocolHost {
 
 		if (message instanceof AgentCommunicationMessageInterface) {
 			AgentCommunicationMessageInterface agentCommunicationMessage = (AgentCommunicationMessageInterface) message;
-			int agentSource = agentCommunicationMessage.getAgentSourceId();
-			int agentDestination = agentCommunicationMessage.getAgentDestinationId();
-			int hostDestination = agentToHostDatabase.get(agentDestination);
+			Integer agentSource = agentCommunicationMessage.getAgentSourceId();
+			Integer agentDestination = agentCommunicationMessage.getAgentDestinationId();
+			Integer hostDestination = agentToHostDatabase.get(agentDestination);
 			CommunicatingHostInterface communicationHost = getCommunicationHost();
 			AgentCommunicationMessageInterface forwardedMessage = new AgentCommunicationMessage(
 					message.getMessageId(), communicationHost.getId(), hostDestination, agentSource, agentDestination);
@@ -45,8 +45,8 @@ public class CSServerHost extends AbstractProtocolHost {
 			communicationHost.addMessageForSending(forwardedMessage);
 		} else if (message instanceof LocationUpdateMessageInterface) {
 			LocationUpdateMessageInterface csMessage = (LocationUpdateMessageInterface) message;
-			int newInhabitingHostId = csMessage.getNewHostId();
-			int agentSource = csMessage.getAgentId();
+			Integer newInhabitingHostId = csMessage.getNewHostId();
+			Integer agentSource = csMessage.getAgentId();
 			agentToHostDatabase.put(agentSource, newInhabitingHostId);
 		} else {
 			super.interpretMessage(message);
