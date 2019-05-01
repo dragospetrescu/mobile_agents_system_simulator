@@ -44,4 +44,14 @@ public interface MessageInterface {
 	 */
 	void route(Integer nextHopHostId, Integer newHostDestinationId);
 
+	/**
+	 * @param distance - distance from one hop to another 
+	 */
+	void addTravelingTime(long distance);
+	
+	/**
+	 * @return total time spent traveling to the final destination
+	 */
+	public long getTimeSpentToFinalDestination();
+
 }

@@ -51,7 +51,7 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	 * host destination of an agent destination. Should always be in sync with
 	 * protocol
 	 */
-	private ProtocolAgent agentProtocol;
+	private ProtocolAgent protocolAgent;
 	/**
 	 * Extra arguments for the protocol
 	 */
@@ -68,7 +68,7 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 		if (work % 10 == 0) {
 			Integer destinationAgentId = RandomAssigner.getRandomElement(allAgentsIds, getId());
 			Logger.i(LogTag.NORMAL_MESSAGE, this + " sending message to Agent " + destinationAgentId);
-			agentProtocol.prepareMessageTo(destinationAgentId);
+			protocolAgent.prepareMessageTo(destinationAgentId);
 		}
 		work--;
 	}
@@ -94,7 +94,7 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 		Integer destinationHostId = RandomAssigner.getRandomElement(normalHosts, hostId);
 		Logger.i(LogTag.AGENT_MIGRATING, toString() + " traveling from " + getHost() + " to Host " + destinationHostId);
 		MigratingAgentMessage message = new MigratingAgentMessage(getHost().getId(), destinationHostId, this);
-		agentProtocol.migrate(destinationHostId, message);
+		protocolAgent.migrate(destinationHostId, message);
 
 	}
 
@@ -118,7 +118,7 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	@Override
 	public void initAgent(List<Integer> allAgentsIds, CommunicatingHostInterface host) {
 		this.allAgentsIds = allAgentsIds;
-		agentProtocol = protocol.getProtocolAgent(this);
+		protocolAgent = protocol.getProtocolAgent(this);
 		this.host = host;
 		this.host.addAgent(this); // TODO REMOVE THIS
 	}
@@ -136,12 +136,12 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 
 	@Override
 	public ProtocolAgent getProtocolAgent() {
-		return agentProtocol;
+		return protocolAgent;
 	}
 
 	@Override
 	public void initProtocol() {
-		agentProtocol.init(protocolArguments, host.getProtocolHost(protocol));
+		protocolAgent.init(protocolArguments, host.getProtocolHost(protocol));
 	}
 
 	@Override

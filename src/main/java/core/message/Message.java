@@ -26,6 +26,11 @@ public class Message implements MessageInterface {
 	 * The next host to the final destination
 	 */
 	private Integer nextHopHostId;
+	
+	/**
+	 * Time spent to deliver the message
+	 */
+	private long timeSpentToFinalDestination;
 
 	/**
 	 * Used to make sure each message receives a unique id
@@ -43,6 +48,7 @@ public class Message implements MessageInterface {
 		this.id = id;
 		this.sourceHostId = sourceHost;
 		this.destinationHostId = destinationHost;
+		timeSpentToFinalDestination = 0;
 	}
 
 	/**
@@ -127,6 +133,15 @@ public class Message implements MessageInterface {
 		this.sourceHostId = this.destinationHostId;
 		this.destinationHostId = newHostDestinationId;
 		
+	}
+
+	@Override
+	public void addTravelingTime(long distance) {
+		timeSpentToFinalDestination += distance;		
+	}
+	
+	public long getTimeSpentToFinalDestination() {
+		return timeSpentToFinalDestination;
 	}
 
 }

@@ -259,5 +259,6 @@ public class Simulation {
 	public void printStatistics() {
 		StatisticsCreator statistics = StatisticsCreator.getStatistics();
 		System.out.println(1.0 * statistics.getNumberOfSuccess() / statistics.getNumberOfMessages() + " success rate");
+		System.out.println("Average time to deliver message: " + statistics.getAverageDeliveryTime());
 	}
 }
