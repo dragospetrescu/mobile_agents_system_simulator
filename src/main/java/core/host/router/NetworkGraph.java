@@ -21,7 +21,7 @@ import java.util.Map;
 public class NetworkGraph {
 
     private int[][] distances;
-    private int INF = -1;
+    private int INF = 0;
 
 //    public static Graph createGraph(String filename) {
 //    }
@@ -66,7 +66,7 @@ public class NetworkGraph {
                 } else if (graph[i][j] != 0 && graph[i][j] != INF) {
                     A[i][j] = j;
                 } else {
-                    A[i][j] = -1;
+                    A[i][j] = INF;
                 }
 
             }
