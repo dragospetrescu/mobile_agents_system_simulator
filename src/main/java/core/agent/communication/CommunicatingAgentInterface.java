@@ -92,4 +92,9 @@ public interface CommunicatingAgentInterface {
 	 */
 	Integer getHostId();
 
+	/**
+	 * Mark that agent should not create and send new messages any more
+	 */
+	void stopCreatingNewMessages();
+
 }

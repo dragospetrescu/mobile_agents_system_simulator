@@ -56,16 +56,23 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	 * Extra arguments for the protocol
 	 */
 	private Map<String, String> protocolArguments;
+	/**
+	 * At the simulation end an agent should continue to travel but it should not
+	 * send new messages because they might not have enough time to reach
+	 * destination and these will ruin statistics
+	 */
+	private boolean shouldSendMessages;
 
 	/**
 	 * TODO add parameters
 	 */
 	public CommunicatingAgent() {
+		shouldSendMessages = true;
 	}
 
 	@Override
 	public void work() {
-		if (work % 10 == 0) {
+		if (work % 10 == 0 && shouldSendMessages) {
 			Integer destinationAgentId = RandomAssigner.getRandomElement(allAgentsIds, getId());
 			Logger.i(LogTag.NORMAL_MESSAGE, this + " sending message to Agent " + destinationAgentId);
 			protocolAgent.prepareMessageTo(destinationAgentId);
@@ -147,5 +154,10 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	@Override
 	public Integer getHostId() {
 		return hostId;
+	}
+
+	@Override
+	public void stopCreatingNewMessages() {
+		shouldSendMessages = false;
 	}
 }

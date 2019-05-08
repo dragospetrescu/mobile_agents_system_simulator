@@ -23,7 +23,7 @@ import core.statistics.StatisticsCreator;
  * 
  * This is where the simulation is initiated and run
  * 
- * Should not be extended. 
+ * Should not be extended.
  *
  */
 public class Simulation {
@@ -32,12 +32,12 @@ public class Simulation {
 	 * Normal hosts of the simulation. They are protocol independent.
 	 */
 	private List<CommunicatingHostInterface> normalHosts;
-	
+
 	/**
 	 * All CommunicatingAgents of the simulation. They are protocol independent.
 	 */
 	private List<CommunicatingAgentInterface> agents;
-	
+
 	/**
 	 * Represents the network as a graph
 	 */
@@ -60,8 +60,8 @@ public class Simulation {
 	private String hostsFile;
 
 	/**
-	 * Json file where the simulation's special hosts are described (protocol specific)
-	 * May be null
+	 * Json file where the simulation's special hosts are described (protocol
+	 * specific) May be null
 	 */
 	private String specialHostsFile;
 
@@ -75,12 +75,14 @@ public class Simulation {
 	 */
 	private Map<Integer, CommunicatingHostInterface> allHostsMap;
 
-	
 	/**
-	 * @param graphFile - Json file where the simulation's agents are described
-	 * @param hostsFile - Json file where the network is described
-	 * @param agentsFile - Json file where the simulation's hosts are described
-	 * @param specialHostsFile - Json file where the simulation's special hosts are described
+	 * @param graphFile        - Json file where the simulation's agents are
+	 *                         described
+	 * @param hostsFile        - Json file where the network is described
+	 * @param agentsFile       - Json file where the simulation's hosts are
+	 *                         described
+	 * @param specialHostsFile - Json file where the simulation's special hosts are
+	 *                         described
 	 */
 	public Simulation(String graphFile, String hostsFile, String agentsFile, String specialHostsFile) {
 		this.graphFile = graphFile;
@@ -103,7 +105,6 @@ public class Simulation {
 		initAgentProtocol();
 	}
 
-	
 	/**
 	 * Inits all hosts
 	 */
@@ -117,15 +118,15 @@ public class Simulation {
 				allHostsMap.put(host.getId(), host);
 			}
 		}
-		
+
 		for (CommunicatingHostInterface host : allHostsMap.values()) {
 			host.init(normalHosts.stream().map(CommunicatingHostInterface::getId).collect(Collectors.toList()));
-		}	
+		}
 	}
 
 	/**
-	 * Creates special hosts from json file or if
-	 * the specialHostsFile is null it does nothing
+	 * Creates special hosts from json file or if the specialHostsFile is null it
+	 * does nothing
 	 */
 	private void createSpecialHosts() {
 		if (specialHostsFile == null)
@@ -166,13 +167,12 @@ public class Simulation {
 	 */
 	private void initRouting() {
 		graph = new NetworkGraph(graphFile);
-		
+
 		graph.addRoutingToHosts(allHostsMap.values());
 
 		messagesManager = new MessagesManager(graph);
 	}
 
-	
 	/**
 	 * Initializes the agents
 	 */
@@ -212,15 +212,14 @@ public class Simulation {
 
 	}
 
-	
-	
 	/**
-	 * Starts the simulation. The init function should be called before starting the simulation.
+	 * Starts the simulation. The init function should be called before starting the
+	 * simulation.
 	 */
 	public void start() {
 
-		for (Integer step = 0; step < Constants.NO_WORKING_STEPS + 2 * Constants.STEPS_WAITING_FOR_LAST_MESSAGES; step++) {
-			
+		for (int step = 0; step < Constants.NO_WORKING_STEPS + 2 * Constants.STEPS_WAITING_FOR_LAST_MESSAGES; step++) {
+
 			messagesManager.travelMessages();
 			List<MessageInterface> arrivedMessages = messagesManager.getArrivedMessages();
 			for (MessageInterface message : arrivedMessages) {
@@ -240,8 +239,10 @@ public class Simulation {
 				for (Iterator<CommunicatingAgentInterface> agentsIterator = hostActiveAgents.iterator(); agentsIterator
 						.hasNext();) {
 					CommunicatingAgentInterface agent = agentsIterator.next();
+					if (step == Constants.NO_WORKING_STEPS + Constants.STEPS_WAITING_FOR_LAST_MESSAGES)
+						agent.stopCreatingNewMessages();
 
-					if(step >= Constants.STEPS_WAITING_FOR_LAST_MESSAGES && step <= Constants.STEPS_WAITING_FOR_LAST_MESSAGES + Constants.NO_WORKING_STEPS)
+					if (step >= Constants.STEPS_WAITING_FOR_LAST_MESSAGES)
 						if (agent.wantsToMigrate()) {
 							agent.prepareMigratingMessage();
 							agentsIterator.remove();
@@ -252,7 +253,7 @@ public class Simulation {
 			}
 		}
 	}
-	
+
 	/**
 	 * TODO: change this
 	 */
