@@ -31,7 +31,7 @@ public class ShadowHost extends AbstractProtocolHost {
 	}
 
 	@Override
-	public void init() {
+	public void init(Map<String, String> protocolArguments) {
 		agentForwardingProxy = new HashMap<Integer, Integer>();
 	}
 

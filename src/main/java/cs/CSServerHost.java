@@ -31,7 +31,7 @@ public class CSServerHost extends AbstractProtocolHost {
 	}
 
 	@Override
-	public void init() {
+	public void init(Map<String, String> protocolArguments) {
 		agentToHostDatabase = new HashMap<Integer, Integer>();
 	}
 

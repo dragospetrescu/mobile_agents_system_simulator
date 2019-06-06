@@ -2,12 +2,9 @@ package core.host.communication;
 
 import core.agent.communication.CommunicatingAgentInterface;
 import core.agent.protocol.ProtocolAgent;
-import core.helpers.LogTag;
-import core.helpers.Logger;
 import core.host.protocol.ProtocolHost;
 import core.message.MessageInterface;
 import core.message.MessagesManager;
-import core.message.MigratingAgentMessageInterface;
 import protocol.Protocol;
 
 import java.util.ArrayList;
@@ -53,6 +50,8 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	 * Hosts to which agents can migrate
 	 */
 	private List<Integer> normalHosts;
+	
+	private Map<String, String> protocolArguments;
 
 	/**
 	 * TODO add parameters
@@ -108,15 +107,7 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	public void receiveMessage(MessageInterface message) {
 		Integer messageDestinationHostId = message.getHostDestinationId();
 		if (messageDestinationHostId == getId()) {
-			if (message instanceof MigratingAgentMessageInterface) {
-				MigratingAgentMessageInterface migratingAgentMessage = (MigratingAgentMessageInterface) message;
-				CommunicatingAgentInterface migratingAgent = migratingAgentMessage.getMigratingAgent();
-				addAgent(migratingAgent);
-				migratingAgent.getProtocolAgent().setProtocolHost(getProtocolHost(migratingAgent.getProtocol()));
-				Logger.i(LogTag.AGENT_MIGRATING, toString() + " received " + migratingAgent);
-			} else {
-				protocolHost.interpretMessage(message);
-			}
+			protocolHost.interpretMessage(message);
 		} else {
 			routeMessage(message);
 			addMessageForSending(message);
@@ -147,7 +138,7 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 
 	@Override
 	public void initProtocol() {
-		this.protocolHost.init();
+		this.protocolHost.init(protocolArguments);
 	}
 
 	@Override

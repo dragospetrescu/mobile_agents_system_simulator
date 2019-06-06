@@ -2,12 +2,14 @@ package core.host.protocol;
 
 import java.util.List;
 
+import core.agent.communication.CommunicatingAgentInterface;
 import core.agent.protocol.ProtocolAgent;
 import core.helpers.LogTag;
 import core.helpers.Logger;
 import core.host.communication.CommunicatingHostInterface;
 import core.message.AgentCommunicationMessageInterface;
 import core.message.MessageInterface;
+import core.message.MigratingAgentMessageInterface;
 import protocol.Protocol;
 
 /**
@@ -55,6 +57,12 @@ public abstract class AbstractProtocolHost implements ProtocolHost {
 				Logger.w(LogTag.NORMAL_MESSAGE,
 						message + " did non find destination Agent " + communicatingAgentId + " at " + this);
 			}
+		} else if (message instanceof MigratingAgentMessageInterface) {
+			MigratingAgentMessageInterface migratingAgentMessage = (MigratingAgentMessageInterface) message;
+			CommunicatingAgentInterface migratingAgent = migratingAgentMessage.getMigratingAgent();
+			communicationHost.addAgent(migratingAgent);
+			migratingAgent.getProtocolAgent().setProtocolHost(communicationHost.getProtocolHost(migratingAgent.getProtocol()));
+			Logger.i(LogTag.AGENT_MIGRATING, toString() + " received " + migratingAgent);
 		}
 	}
 

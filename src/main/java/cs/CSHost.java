@@ -1,5 +1,7 @@
 package cs;
 
+import java.util.Map;
+
 import core.host.communication.CommunicatingHostInterface;
 import core.host.protocol.AbstractProtocolHost;
 
@@ -16,7 +18,7 @@ public class CSHost extends AbstractProtocolHost {
 	}
 
 	@Override
-	public void init() {
+	public void init(Map<String, String> protocolArguments) {
 	}
 
 }

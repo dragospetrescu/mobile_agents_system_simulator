@@ -55,11 +55,13 @@ public class HSSHomeAgentHost extends AbstractProtocolHost {
 			Integer newInhabitingHostId = locationUpdateMessage.getNewHostId();
 			Integer agentSourceId = locationUpdateMessage.getAgentId();
 			agentToAddressDatabase.put(agentSourceId, newInhabitingHostId);
+		} else {
+			super.interpretMessage(message);
 		}
 	}
 
 	@Override
-	public void init() {
+	public void init(Map<String, String> protocolArguments) {
 		agentToAddressDatabase = new HashMap<Integer, Integer>();
 		CommunicatingHostInterface communicationHost = getCommunicationHost();
 		Collection<CommunicatingAgentInterface> activeAgents = communicationHost.getActiveAgents();

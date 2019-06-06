@@ -50,11 +50,13 @@ public class HSSHomeServerHost extends AbstractProtocolHost {
 			Integer agentId = locationUpdateMessage.getAgentId();
 			Integer newHostId = locationUpdateMessage.getNewHostId();
 			agentToHomeDatabase.put(agentId, newHostId);
+		} else {
+			super.interpretMessage(message);
 		}
 	}
 
 	@Override
-	public void init() {
+	public void init(Map<String, String> protocolArguments) {
 		agentToHomeDatabase = new HashMap<Integer, Integer>();
 	}
 }

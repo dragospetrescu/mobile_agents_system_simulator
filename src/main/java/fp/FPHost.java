@@ -1,6 +1,7 @@
 package fp;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import core.agent.protocol.ProtocolAgent;
 import core.host.communication.CommunicatingHostInterface;
@@ -83,7 +84,7 @@ public class FPHost extends AbstractProtocolHost {
 	}
 	
 	@Override
-	public void init() {
+	public void init(Map<String, String> protocolArguments) {
 		agentForwardingProxy = new HashMap<Integer, Integer>();
 	}
 }

@@ -1,6 +1,7 @@
 package core.host.protocol;
 
 import java.util.List;
+import java.util.Map;
 
 import core.host.communication.CommunicatingHostInterface;
 import core.message.MessageInterface;
@@ -39,7 +40,7 @@ public interface ProtocolHost {
 	/**
 	 * Protocol init
 	 */
-	void init();
+	void init(Map<String, String> protocolArguments);
 	
 	/**
 	 * Communicating line is:

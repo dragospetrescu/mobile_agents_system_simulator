@@ -1,4 +1,5 @@
 package protocol;
+
 import broadcast.BroadcastAgent;
 import broadcast.BroadcastHost;
 import core.agent.communication.CommunicatingAgent;
@@ -11,6 +12,9 @@ import cs.CSServerHost;
 import fp.FPAgent;
 import fp.FPHost;
 import hss.HSSHomeServerHost;
+import mdp.MDPAgent;
+import mdp.MDPGatewayHost;
+import mdp.MDPHost;
 import shadow.ShadowAgent;
 import shadow.ShadowHomeServerHost;
 import shadow.ShadowHost;
@@ -35,16 +39,16 @@ public enum Protocol {
 	/**
 	 * Home Server protocol for HSS
 	 */
-	HSSServer, 
+	HSSServer,
 	/**
-	 * Forward Proxy. Every host leaves some breadcrumbs before migrating to a new host
-	 * The messages follow those breadcrumbs
+	 * Forward Proxy. Every host leaves some breadcrumbs before migrating to a new
+	 * host The messages follow those breadcrumbs
 	 */
-	FP, 
+	FP,
 	/**
 	 * Combination between FP and HSS based on TTL
 	 */
-	Shadow, 
+	Shadow,
 	/**
 	 * Home Server protocol for Shadow
 	 */
@@ -56,8 +60,7 @@ public enum Protocol {
 	/**
 	 * The server part of the Central Server protocol
 	 */
-	CSServer;
-	;
+	CSServer, MDP, MDP_GATEWAY;
 
 	/**
 	 * Based on the {@link Protocol} it returns a ProtocolHost
@@ -83,8 +86,10 @@ public enum Protocol {
 			return new CSHost(communicationHost);
 		case CSServer:
 			return new CSServerHost(communicationHost);
-		default:
-			break;
+		case MDP:
+			return new MDPHost(communicationHost);
+		case MDP_GATEWAY:
+			return new MDPGatewayHost(communicationHost);
 		}
 		throw new RuntimeException("NO PROTOCOL HOST CREATED FOR " + this + " " + communicationHost);
 	}
@@ -113,6 +118,10 @@ public enum Protocol {
 			return new CSAgent(communicatingAgent);
 		case CSServer:
 			throw new RuntimeException("CSServer is not an agent Protocol!");
+		case MDP:
+			return new MDPAgent(communicatingAgent);
+		case MDP_GATEWAY:
+			throw new RuntimeException("MDP_GATEWAY is not an agent Protocol!");
 		default:
 			break;
 		}

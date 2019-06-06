@@ -53,12 +53,14 @@ public class ShadowHomeServerHost extends AbstractProtocolHost {
 			Integer agentId = locationUpdateMessage.getAgentId();
 			Integer newHostId = locationUpdateMessage.getNewHostId();
 			agentToFirstMigrationStopHostMap.put(agentId, newHostId);
+		} else {
+			super.interpretMessage(message);
 		}
 
 	}
 
 	@Override
-	public void init() {
+	public void init(Map<String, String> protocolArguments) {
 		agentToFirstMigrationStopHostMap = new HashMap<Integer, Integer>();
 	}
 }

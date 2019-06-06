@@ -1,5 +1,7 @@
 package broadcast;
 
+import java.util.Map;
+
 import core.agent.protocol.ProtocolAgent;
 import core.helpers.LogTag;
 import core.helpers.Logger;
@@ -33,10 +35,12 @@ public class BroadcastHost extends AbstractProtocolHost {
 			} else {
 				Logger.w(LogTag.AGENT_MIGRATING, message + " arrived at " + this + " but did not find Agent " + agentCommunicationMessage.getAgentDestinationId());
 			}
+		} else {
+			super.interpretMessage(message);
 		}
 	}
 
 	@Override
-	public void init() {
+	public void init(Map<String, String> protocolArguments) {
 	}
 }
