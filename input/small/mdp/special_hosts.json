@@ -1,0 +1,22 @@
+[
+	{
+		"id": 5,
+		"protocol": "MDP_GATEWAY",
+		"protocolArguments": {}
+	},
+	{
+		"id": 6,
+		"protocol": "MDP_GATEWAY",
+		"protocolArguments": {
+			"gateway": "5"
+		}
+	},
+	{
+		"id": 7,
+		"protocol": "MDP_GATEWAY",
+		"protocolArguments": {
+			"gateway": "5"
+		}
+	}
+	
+]
