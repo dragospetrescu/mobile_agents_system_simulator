@@ -17,7 +17,7 @@ import core.host.communication.CommunicatingHostInterface;
 import core.host.router.NetworkGraph;
 import core.message.MessageInterface;
 import core.message.MessagesManager;
-import core.statistics.StatisticsCreator;
+import core.statistics.Statistics;
 
 /**
  * 
@@ -74,6 +74,8 @@ public class Simulation {
 	 * All hosts of the simulation
 	 */
 	private Map<Integer, CommunicatingHostInterface> allHostsMap;
+
+	public static int step;
 
 	/**
 	 * @param graphFile        - Json file where the simulation's agents are
@@ -218,7 +220,7 @@ public class Simulation {
 	 */
 	public void start() {
 
-		for (int step = 0; step < Constants.NO_WORKING_STEPS + 2 * Constants.STEPS_WAITING_FOR_LAST_MESSAGES; step++) {
+		for (step = 0; step < Constants.NO_WORKING_STEPS + 2 * Constants.STEPS_WAITING_FOR_LAST_MESSAGES; step++) {
 
 			messagesManager.travelMessages();
 			List<MessageInterface> arrivedMessages = messagesManager.getArrivedMessages();
@@ -258,7 +260,7 @@ public class Simulation {
 	 * TODO: change this
 	 */
 	public void printStatistics() {
-		StatisticsCreator statistics = StatisticsCreator.getStatistics();
+		Statistics statistics = Statistics.getStatistics();
 		System.out.println(1.0 * statistics.getNumberOfSuccess() / statistics.getNumberOfMessages() + " success rate");
 		System.out.println("Average time to deliver message: " + statistics.getAverageDeliveryTime());
 	}

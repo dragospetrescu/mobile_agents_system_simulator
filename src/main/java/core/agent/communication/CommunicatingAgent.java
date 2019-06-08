@@ -14,7 +14,7 @@ import core.host.communication.CommunicatingHost;
 import core.host.communication.CommunicatingHostInterface;
 import core.message.MessageInterface;
 import core.message.MigratingAgentMessage;
-import core.statistics.StatisticsCreator;
+import core.statistics.Statistics;
 
 /**
  * Represents the protocol-independent part of the Agent. It's responsibilities
@@ -108,7 +108,7 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 
 	@Override
 	public void receiveMessage(MessageInterface message) {
-		StatisticsCreator statistics = StatisticsCreator.getStatistics();
+		Statistics statistics = Statistics.getStatistics();
 		statistics.messageSuccesfullyDelivered(message);
 		Logger.i(LogTag.NORMAL_MESSAGE, this + " received " + message);
 	}

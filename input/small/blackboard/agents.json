@@ -1,0 +1,13 @@
+[
+  {
+      "id": 0,
+      "hostId": 0,
+      "protocol": "BLACKBOARD"
+  },
+    {
+      "id": 1,
+      "hostId": 1,
+      "protocol": "BLACKBOARD"
+  }
+]
+]

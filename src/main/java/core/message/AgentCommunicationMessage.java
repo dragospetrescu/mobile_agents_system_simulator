@@ -1,6 +1,6 @@
 package core.message;
 
-import core.statistics.StatisticsCreator;
+import core.statistics.Statistics;
 
 /**
  * All agent communication will use this kind of messages.
@@ -31,7 +31,7 @@ public class AgentCommunicationMessage extends Message implements AgentCommunica
 		super(id, sourceHostId, destinationHostId);
 		this.sourceAgentId = sourceAgent;
 		this.destinationAgentId = destinationAgent;
-		StatisticsCreator statistics = StatisticsCreator.getStatistics();
+		Statistics statistics = Statistics.getStatistics();
 		statistics.messageFailedDelivered(this);
 	}
 

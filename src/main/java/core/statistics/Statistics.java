@@ -11,21 +11,21 @@ import core.message.MessageInterface;
 /**
  * Will create statistics for each protocol in order to compare them
  */
-public class StatisticsCreator {
+public class Statistics {
 
 	/**
 	 * Singleton pattern
 	 */
-	public static StatisticsCreator statistics;
+	public static Statistics statistics;
 
 	/**
 	 * Singleton pattern.
 	 * 
 	 * @return a unique StatisticsCreator object
 	 */
-	public static synchronized StatisticsCreator getStatistics() {
+	public static synchronized Statistics getStatistics() {
 		if (statistics == null) {
-			statistics = new StatisticsCreator();
+			statistics = new Statistics();
 		}
 		return statistics;
 	}
@@ -33,7 +33,7 @@ public class StatisticsCreator {
 	/**
 	 * Singleton pattern
 	 */
-	private StatisticsCreator() {
+	private Statistics() {
 		messagesDeliveryStatusMap = new HashMap<>();
 	}
 

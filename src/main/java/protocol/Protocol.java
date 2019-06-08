@@ -1,5 +1,7 @@
 package protocol;
 
+import blackboard.BlackboardAgent;
+import blackboard.BlackboardHost;
 import broadcast.BroadcastAgent;
 import broadcast.BroadcastHost;
 import core.agent.communication.CommunicatingAgent;
@@ -60,7 +62,7 @@ public enum Protocol {
 	/**
 	 * The server part of the Central Server protocol
 	 */
-	CSServer, MDP, MDP_GATEWAY;
+	CSServer, MDP, MDP_GATEWAY, BLACKBOARD;
 
 	/**
 	 * Based on the {@link Protocol} it returns a ProtocolHost
@@ -90,6 +92,8 @@ public enum Protocol {
 			return new MDPHost(communicationHost);
 		case MDP_GATEWAY:
 			return new MDPGatewayHost(communicationHost);
+		case BLACKBOARD:
+			return new BlackboardHost(communicationHost);
 		}
 		throw new RuntimeException("NO PROTOCOL HOST CREATED FOR " + this + " " + communicationHost);
 	}
@@ -122,8 +126,8 @@ public enum Protocol {
 			return new MDPAgent(communicatingAgent);
 		case MDP_GATEWAY:
 			throw new RuntimeException("MDP_GATEWAY is not an agent Protocol!");
-		default:
-			break;
+		case BLACKBOARD:
+			return new BlackboardAgent(communicatingAgent);
 		}
 		throw new RuntimeException("NO PROTOCOL AGENT CREATED FOR " + this + " " + communicatingAgent);
 	}

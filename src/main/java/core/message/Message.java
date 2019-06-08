@@ -140,6 +140,11 @@ public class Message implements MessageInterface {
 		timeSpentToFinalDestination += distance;		
 	}
 	
+	@Override
+	public void setTravelingTime(long distance) {
+		timeSpentToFinalDestination = distance;		
+	}
+	
 	public long getTimeSpentToFinalDestination() {
 		return timeSpentToFinalDestination;
 	}

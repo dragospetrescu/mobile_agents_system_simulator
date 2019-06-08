@@ -49,6 +49,8 @@ public interface MessageInterface {
 	 */
 	void addTravelingTime(long distance);
 	
+	void setTravelingTime(long distance);
+	
 	/**
 	 * @return total time spent traveling to the final destination
 	 */
