@@ -1,5 +1,6 @@
 package mefs;
 
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
@@ -9,6 +10,7 @@ import core.host.protocol.ProtocolHost;
 import core.message.LocationUpdateMessage;
 import core.message.MessageInterface;
 import core.message.MigratingAgentMessageInterface;
+import core.simulation.Simulation;
 import protocol.Protocol;
 
 /**
@@ -23,6 +25,7 @@ import protocol.Protocol;
  */
 public class MEFSAgent extends AbstractProtocolAgent {
 
+	private static final int AVERAGE_SIZE = 5;
 	/**
 	 * Server that has mapped agent to homeHost
 	 */
@@ -35,7 +38,7 @@ public class MEFSAgent extends AbstractProtocolAgent {
 	private long lastMigrateTime;
 	private int ttl;
 	private int originalTimeToSync;
-	private Queue<Integer> queue;
+	private Queue<Long> queue;
 	private int timeToSync;
 
 	/**
@@ -66,6 +69,9 @@ public class MEFSAgent extends AbstractProtocolAgent {
 		if (timeToSync <= 0) {
 			synch = true;
 		}
+		Long averageStay = queue.stream().reduce(0L, (a, b) -> a + b) / AVERAGE_SIZE;
+		if(averageStay < maxSpeed)
+			synch = true;
 
 		if (synch) {
 			protocolHost.addSynchAgent(sourceAgent, migrationMessage);
@@ -79,13 +85,18 @@ public class MEFSAgent extends AbstractProtocolAgent {
 					sourceAgent.getId(), destinationHostId, Protocol.HSS);
 			protocolHost.sendMessage(locationMessage);
 			protocolHost.updateProxy(sourceAgent.getId(), destinationHostId);
+			if(queue.size() > AVERAGE_SIZE) {
+				queue.poll();
+			}
+			queue.offer(Simulation.step - lastMigrateTime);
+			lastMigrateTime = Simulation.step;
 		}
 	}
 
 	@Override
 	public void init(Map<String, String> protocolArguments, ProtocolHost protocolHost) {
 		super.init(protocolArguments, protocolHost);
-
+		queue = new LinkedList<Long>();
 		homeServerHostId = Integer.parseInt(protocolArguments.get("homeServerHost"));
 		maxSpeed = Integer.parseInt(protocolArguments.get("maxSpeed"));
 		ttl = Integer.parseInt(protocolArguments.get("ttl"));

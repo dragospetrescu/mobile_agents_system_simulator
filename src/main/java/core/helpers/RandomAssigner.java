@@ -14,7 +14,7 @@ public class RandomAssigner {
      * Random that will be used.
      * TODO: make it receive a seed so that the results are consistent
      */
-    private static Random random = new Random();
+    private static Random random = new Random(123);
 
     
     /**

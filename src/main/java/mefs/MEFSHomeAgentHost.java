@@ -44,6 +44,9 @@ public class MEFSHomeAgentHost extends AbstractProtocolHost {
 
 	@Override
 	public void interpretMessage(MessageInterface message) {
+		if(message.getMessageId() == 251) {
+			System.out.println("MERE");
+		}
 		CommunicatingHostInterface communicationHost = getCommunicationHost();
 		if (message instanceof MEFSAgentCommunicationMessage) {
 			MEFSAgentCommunicationMessage commMessage = (MEFSAgentCommunicationMessage) message;
@@ -70,6 +73,9 @@ public class MEFSHomeAgentHost extends AbstractProtocolHost {
 						communicationHost.addMessageForSending(commMessage);
 					}
 				}
+			} else {
+				communicationHost.reRouteMessage(commMessage, homeServerHostId);
+				communicationHost.addMessageForSending(commMessage);
 			}
 		} else if (message instanceof LocationUpdateMessageInterface) {
 			LocationUpdateMessageInterface locationUpdateMessage = (LocationUpdateMessageInterface) message;
