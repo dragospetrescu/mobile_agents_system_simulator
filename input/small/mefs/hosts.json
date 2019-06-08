@@ -1,0 +1,31 @@
+[
+  {
+      "id": 0,
+      "protocol": "MEFS",
+	  "protocolArguments": {
+			"homeServerHost": "4"
+	}
+		
+  },
+  {
+      "id": 1,
+      "protocol": "MEFS",
+	  "protocolArguments": {
+			"homeServerHost": "4"
+	}
+  },
+  {
+      "id": 2,
+      "protocol": "MEFS",
+	  "protocolArguments": {
+			"homeServerHost": "4"
+	}
+  },
+  {
+      "id": 3,
+      "protocol": "MEFS",
+	  "protocolArguments": {
+			"homeServerHost": "4"
+	}
+  }
+]

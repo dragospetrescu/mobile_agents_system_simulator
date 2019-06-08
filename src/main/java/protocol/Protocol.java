@@ -17,6 +17,9 @@ import hss.HSSHomeServerHost;
 import mdp.MDPAgent;
 import mdp.MDPGatewayHost;
 import mdp.MDPHost;
+import mefs.MEFSAgent;
+import mefs.MEFSHomeAgentHost;
+import mefs.MEFSHomeServerHost;
 import shadow.ShadowAgent;
 import shadow.ShadowHomeServerHost;
 import shadow.ShadowHost;
@@ -62,7 +65,7 @@ public enum Protocol {
 	/**
 	 * The server part of the Central Server protocol
 	 */
-	CSServer, MDP, MDP_GATEWAY, BLACKBOARD;
+	CSServer, MDP, MDP_GATEWAY, BLACKBOARD, MEFS, MEFS_SERVER;
 
 	/**
 	 * Based on the {@link Protocol} it returns a ProtocolHost
@@ -94,6 +97,10 @@ public enum Protocol {
 			return new MDPGatewayHost(communicationHost);
 		case BLACKBOARD:
 			return new BlackboardHost(communicationHost);
+		case MEFS:
+			return new MEFSHomeAgentHost(communicationHost);
+		case MEFS_SERVER:
+			return new MEFSHomeServerHost(communicationHost);
 		}
 		throw new RuntimeException("NO PROTOCOL HOST CREATED FOR " + this + " " + communicationHost);
 	}
@@ -128,6 +135,10 @@ public enum Protocol {
 			throw new RuntimeException("MDP_GATEWAY is not an agent Protocol!");
 		case BLACKBOARD:
 			return new BlackboardAgent(communicatingAgent);
+		case MEFS:
+			return new MEFSAgent(communicatingAgent);
+		case MEFS_SERVER:
+			throw new RuntimeException("MEFS_SERVER is not an agent Protocol!");
 		}
 		throw new RuntimeException("NO PROTOCOL AGENT CREATED FOR " + this + " " + communicatingAgent);
 	}
