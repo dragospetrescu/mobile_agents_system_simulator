@@ -14,6 +14,7 @@ import core.host.communication.CommunicatingHost;
 import core.host.communication.CommunicatingHostInterface;
 import core.message.MessageInterface;
 import core.message.MigratingAgentMessage;
+import core.simulation.Constants;
 import core.statistics.Statistics;
 
 /**
@@ -73,7 +74,7 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 
 	@Override
 	public void work() {
-		if (work % 10 == 0 && shouldSendMessages) {
+		if (work % Constants.MESSAGE_FREQUENCY == 0 && shouldSendMessages) {
 			Integer destinationAgentId = RandomAssigner.getRandomElement(allAgentsIds, getId());
 			Logger.i(LogTag.NORMAL_MESSAGE, this + " sending message to Agent " + destinationAgentId);
 			protocolAgent.prepareMessageTo(destinationAgentId);

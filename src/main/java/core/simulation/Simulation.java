@@ -219,8 +219,8 @@ public class Simulation {
 	 * simulation.
 	 */
 	public void start() {
-
-		for (step = 0; step < Constants.NO_WORKING_STEPS + 2 * Constants.STEPS_WAITING_FOR_LAST_MESSAGES; step++) {
+		int numSteps = Constants.NO_WORKING_STEPS + Constants.STEPS_WAITING_FOR_INIT + Constants.STEPS_WAITING_FOR_LAST_MESSAGES;
+		for (step = 0; step < numSteps; step++) {
 
 			messagesManager.travelMessages();
 			List<MessageInterface> arrivedMessages = messagesManager.getArrivedMessages();
@@ -244,7 +244,7 @@ public class Simulation {
 					if (step == Constants.NO_WORKING_STEPS + Constants.STEPS_WAITING_FOR_LAST_MESSAGES)
 						agent.stopCreatingNewMessages();
 
-					if (step >= Constants.STEPS_WAITING_FOR_LAST_MESSAGES)
+					if (step >= Constants.STEPS_WAITING_FOR_INIT)
 						if (agent.wantsToMigrate()) {
 							agent.prepareMigratingMessage();
 							agentsIterator.remove();

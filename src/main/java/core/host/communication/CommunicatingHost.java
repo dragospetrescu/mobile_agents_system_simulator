@@ -5,6 +5,7 @@ import core.agent.protocol.ProtocolAgent;
 import core.host.protocol.ProtocolHost;
 import core.message.MessageInterface;
 import core.message.MessagesManager;
+import core.simulation.Constants;
 import protocol.Protocol;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	 * Hosts to which agents can migrate
 	 */
 	private List<Integer> normalHosts;
-	
+
 	private Map<String, String> protocolArguments;
 
 	/**
@@ -116,8 +117,12 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 
 	@Override
 	public List<MessageInterface> sendMessages() {
-		List<MessageInterface> messages = messagesToBeSent;
-		messagesToBeSent = new ArrayList<MessageInterface>();
+		List<MessageInterface> messages = messagesToBeSent.subList(0,
+				Math.min(messagesToBeSent.size(), Constants.MAXIMUM_CPU_POWER));
+
+		messagesToBeSent = new ArrayList<MessageInterface>(messagesToBeSent
+				.subList(Math.min(messagesToBeSent.size(), Constants.MAXIMUM_CPU_POWER), messagesToBeSent.size()));
+		
 		return messages;
 	}
 
@@ -156,18 +161,19 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	public ProtocolHost getProtocolHost(Protocol protocol) {
 		return protocolHost;
 	}
-	
+
 	@Override
 	public boolean hasAgentWithId(Integer communicatingAgentId) {
 		return activeAgentsMap.containsKey(communicatingAgentId);
 	}
-	
+
 	@Override
 	public ProtocolAgent getProtocolAgentWithId(Integer communicatingAgentId) {
-		if(!hasAgentWithId(communicatingAgentId)) {
-			throw new RuntimeException("There is no protocol agent with id " + communicatingAgentId + " on " + toString());
+		if (!hasAgentWithId(communicatingAgentId)) {
+			throw new RuntimeException(
+					"There is no protocol agent with id " + communicatingAgentId + " on " + toString());
 		}
-		
+
 		return activeAgentsMap.get(communicatingAgentId).getProtocolAgent();
 	}
 
@@ -175,9 +181,9 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	public void routeMessage(MessageInterface message) {
 		Integer hostDestinationId = message.getHostDestinationId();
 		Integer nextHopHostId = nextHopMap.get(hostDestinationId);
-		
+
 		message.route(nextHopHostId);
-		
+
 	}
 
 	@Override

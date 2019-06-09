@@ -30,7 +30,7 @@ public class RandomAssigner {
      * @return random time units until next migration
      */
     public static Integer assignWork() {
-        Integer workTime = getRandomNumberInRange(Constants.MAXIMUM_WORK_TIME / 10, Constants.MAXIMUM_WORK_TIME);
+        Integer workTime = getRandomNumberInRange(Constants.MIGRATION_FREQUENCY / 10, Constants.MIGRATION_FREQUENCY);
         return workTime;
     }
     
