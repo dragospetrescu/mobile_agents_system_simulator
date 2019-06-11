@@ -93,6 +93,9 @@ public class Statistics {
 	 * @return average delivery time of AgentCommunicationMessageInterface messages
 	 */
 	public double getAverageDeliveryTime() {
+//		messagesDeliveryStatusMap.keySet().stream().filter(message -> !messagesDeliveryStatusMap.get(message))
+//				.forEach(e -> System.out.println(e));
+		
 		List<MessageInterface> agentCommunicationMessages = messagesDeliveryStatusMap.keySet().stream()
 				.filter(message -> message instanceof AgentCommunicationMessageInterface).collect(Collectors.toList());
 		double average = 0.0;
