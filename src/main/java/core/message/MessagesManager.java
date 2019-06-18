@@ -43,7 +43,6 @@ public class MessagesManager {
     	Integer prevId = message.getPreviousHopId();
     	Integer nextId = message.getNextHopId();
     	int distance = networkGraph.getDistance(prevId, nextId);
-    	message.addTravelingTime(distance);
         travelingMessages.put(message, distance);
     }
 

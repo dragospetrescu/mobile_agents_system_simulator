@@ -16,6 +16,7 @@ import core.host.communication.CommunicatingHostInterface;
 import core.message.MessageInterface;
 import core.message.MigratingAgentMessage;
 import core.simulation.Constants;
+import core.simulation.Simulation;
 import core.statistics.Statistics;
 
 /**
@@ -112,6 +113,7 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 	public void receiveMessage(MessageInterface message) {
 		Statistics statistics = Statistics.getStatistics();
 		statistics.messageSuccesfullyDelivered(message);
+		message.setEndTravelingStep(Simulation.step);
 		Logger.i(LogTag.NORMAL_MESSAGE, this + " received " + message);
 	}
 

@@ -43,17 +43,8 @@ public interface MessageInterface {
 	 * @param newHostDestinationId - the new destination of the message
 	 */
 	void route(Integer nextHopHostId, Integer newHostDestinationId);
-
-	/**
-	 * @param distance - distance from one hop to another 
-	 */
-	void addTravelingTime(long distance);
 	
-	void setTravelingTime(long distance);
+	void setEndTravelingStep(Integer step);
 	
-	/**
-	 * @return total time spent traveling to the final destination
-	 */
-	public long getTimeSpentToFinalDestination();
-
+	Integer getTimeSpentToFinalDestination();
 }

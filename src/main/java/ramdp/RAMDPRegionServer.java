@@ -45,8 +45,6 @@ public class RAMDPRegionServer extends AbstractProtocolHost {
 			
 			for (AgentCommunicationMessageInterface commMessage : messages) {
 //				protocolAgent.receiveMessage(commMessage);
-				long timeWaiting = Simulation.step - commMessage.getTimeSpentToFinalDestination();
-				commMessage.setTravelingTime(timeWaiting);
 			}
 			
 		} else {
@@ -67,9 +65,6 @@ public class RAMDPRegionServer extends AbstractProtocolHost {
 			if (!blackboard.containsKey(agentDestinationId))
 				blackboard.put(agentDestinationId, new ArrayList<>());
 			blackboard.get(agentDestinationId).add(commMesage);
-			Statistics statistics = Statistics.getStatistics();
-			statistics.messageFailedDelivered(message);
-			message.setTravelingTime(Simulation.step);
 		} else {
 			super.sendMessage(message);
 		}
