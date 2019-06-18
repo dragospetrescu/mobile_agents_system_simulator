@@ -65,7 +65,27 @@ public enum Protocol {
 	/**
 	 * The server part of the Central Server protocol
 	 */
-	CSServer, MDP, MDP_GATEWAY, BLACKBOARD, MEFS, MEFS_SERVER;
+	CSServer,
+	/**
+	* 
+	*/
+	MDP,
+	/**
+	* 
+	*/
+	MDP_GATEWAY,
+	/**
+	* 
+	*/
+	BLACKBOARD,
+	/**
+	* 
+	*/
+	MEFS,
+	/**
+	* 
+	*/
+	MEFS_SERVER;
 
 	/**
 	 * Based on the {@link Protocol} it returns a ProtocolHost

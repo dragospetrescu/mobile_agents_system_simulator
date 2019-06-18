@@ -52,6 +52,9 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	 */
 	private List<Integer> normalHosts;
 
+	/**
+	 * Arguments used to init protocolHost
+	 */
 	private Map<String, String> protocolArguments;
 
 	/**

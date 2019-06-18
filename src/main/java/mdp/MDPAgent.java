@@ -6,8 +6,9 @@ import core.message.AgentCommunicationMessage;
 import core.message.AgentCommunicationMessageInterface;
 import core.message.MigratingAgentMessageInterface;
 
+@SuppressWarnings("javadoc")
 public class MDPAgent extends AbstractProtocolAgent {
-
+	//#TODO
 	public MDPAgent(CommunicatingAgentInterface communicatingAgent) {
 		super(communicatingAgent.getId(), communicatingAgent, communicatingAgent.getProtocol());
 	}

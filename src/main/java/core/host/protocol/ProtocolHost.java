@@ -39,6 +39,7 @@ public interface ProtocolHost {
 
 	/**
 	 * Protocol init
+	 * @param protocolArguments - arguments for protocolHost
 	 */
 	void init(Map<String, String> protocolArguments);
 	

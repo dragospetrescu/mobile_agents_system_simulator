@@ -75,6 +75,9 @@ public class Simulation {
 	 */
 	private Map<Integer, CommunicatingHostInterface> allHostsMap;
 
+	/**
+	 * The simulation step
+	 */
 	public static int step;
 
 	/**
@@ -263,6 +266,6 @@ public class Simulation {
 	public void printStatistics() {
 		Statistics statistics = Statistics.getStatistics();
 		System.out.println(1.0 * statistics.getNumberOfSuccess() / statistics.getNumberOfMessages() + " "
-				+ statistics.getAverageDeliveryTime() + " " + statistics.getNetworkLoad());
+				+ statistics.getAverageDeliveryTime() + " " + statistics.getNetworkLoad() + " " + statistics.getNetworkTimeOfFailedMessages());
 	}
 }

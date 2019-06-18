@@ -1,5 +1,5 @@
 package core.simulation;
-
+@SuppressWarnings("javadoc")
 public enum MigrationFrequency {
 
 	EXTREMELY_LOW(1000),

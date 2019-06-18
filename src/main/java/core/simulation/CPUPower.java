@@ -1,5 +1,10 @@
 package core.simulation;
 
+/**
+ * @author dragos
+ *	How many messages can a host process during a 1 simulation step
+ */
+@SuppressWarnings("javadoc")
 public enum CPUPower {
 	EXTREMELY_LOW(1),
 	LOW(5),

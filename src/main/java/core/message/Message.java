@@ -28,7 +28,13 @@ public class Message implements MessageInterface {
 	 */
 	private Integer nextHopHostId;
 
+	/**
+	 * Simulation step at which the traveling started
+	 */
 	private Integer startTravelingStep;
+	/**
+	 * Simulation step at which the traveling ended
+	 */
 	private Integer endTravelingStep;
 
 	/**
@@ -42,13 +48,22 @@ public class Message implements MessageInterface {
 	 * @param id              - the unique identifier
 	 * @param sourceHost      - host from where the message is sent
 	 * @param destinationHost - the host where the message has to arrive
+	 * @param startTravelingStep - the step at which traveling started
 	 */
 	public Message(Integer id, Integer sourceHost, Integer destinationHost, Integer startTravelingStep) {
 		this.id = id;
 		this.sourceHostId = sourceHost;
 		this.destinationHostId = destinationHost;
+		this.startTravelingStep = startTravelingStep;
 	}
 
+	/**
+	 * Warning. You should only use this constructor if the id provided is unique
+	 * 
+	 * @param id              - the unique identifier
+	 * @param sourceHost      - host from where the message is sent
+	 * @param destinationHost - the host where the message has to arrive
+	 */
 	public Message(Integer id, Integer sourceHost, Integer destinationHost) {
 		this(id, sourceHost, destinationHost, Simulation.step);
 	}
@@ -143,8 +158,9 @@ public class Message implements MessageInterface {
 
 	@Override
 	public Integer getTimeSpentToFinalDestination() {
-		if (endTravelingStep == null)
+		if (endTravelingStep == null) {
 			return Simulation.step - startTravelingStep;
+		}
 		return endTravelingStep - startTravelingStep;
 	}
 

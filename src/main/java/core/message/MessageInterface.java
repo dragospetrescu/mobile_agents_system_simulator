@@ -44,7 +44,13 @@ public interface MessageInterface {
 	 */
 	void route(Integer nextHopHostId, Integer newHostDestinationId);
 	
+	/**
+	 * @param step - step at which the message arrived at the final destination
+	 */
 	void setEndTravelingStep(Integer step);
 	
+	/**
+	 * @return numbers of steps for delivering the message
+	 */
 	Integer getTimeSpentToFinalDestination();
 }

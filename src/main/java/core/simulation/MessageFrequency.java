@@ -1,5 +1,5 @@
 package core.simulation;
-
+@SuppressWarnings("javadoc")
 public enum MessageFrequency {
 	EXTREMELY_LOW(100),
 	LOW(50),

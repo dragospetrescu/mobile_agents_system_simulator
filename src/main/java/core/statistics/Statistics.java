@@ -42,6 +42,9 @@ public class Statistics {
 	 * Maps each message to its delivery status
 	 */
 	private Map<MessageInterface, Boolean> messagesDeliveryStatusMap;
+	/**
+	 * Holds network load
+	 */
 	private double networkLoad;
 
 	/**
@@ -108,12 +111,32 @@ public class Statistics {
 		return average;
 	}
 
+	/**
+	 * Calculate network load at each step
+	 * @param size
+	 */
 	public void calculateNetworkLoad(int size) {
 		int numSteps = Constants.NO_WORKING_STEPS + Constants.STEPS_WAITING_FOR_INIT + Constants.STEPS_WAITING_FOR_LAST_MESSAGES;
 		networkLoad += size * 1.0 / numSteps;
 	}
 
+	/**
+	 * @return the network load
+	 */
 	public double getNetworkLoad() {
 		return networkLoad;
+	}
+	
+	/**
+	 * @return time spent delivering the failed messages
+	 */
+	public double getNetworkTimeOfFailedMessages() {
+		List<MessageInterface> failedMessages = messagesDeliveryStatusMap.keySet().stream().filter(message -> !messagesDeliveryStatusMap.get(message)).collect(Collectors.toList());
+		double average = 0.0;
+		long numMessages = failedMessages.size();
+		for (MessageInterface messageInterface : failedMessages) {
+			average += 1.0 * messageInterface.getTimeSpentToFinalDestination() / numMessages;
+		}
+		return average;
 	}
 }

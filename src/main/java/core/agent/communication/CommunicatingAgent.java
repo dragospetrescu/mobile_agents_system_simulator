@@ -5,7 +5,6 @@ import protocol.Protocol;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import core.agent.protocol.ProtocolAgent;
 import core.helpers.LogTag;
@@ -15,7 +14,6 @@ import core.host.communication.CommunicatingHost;
 import core.host.communication.CommunicatingHostInterface;
 import core.message.MessageInterface;
 import core.message.MigratingAgentMessage;
-import core.simulation.Constants;
 import core.simulation.Simulation;
 import core.statistics.Statistics;
 
@@ -76,7 +74,7 @@ public class CommunicatingAgent implements CommunicatingAgentInterface {
 
 	@Override
 	public void work() {
-		if (shouldSendMessages && new Random().nextInt(Constants.MESSAGE_FREQUENCY) == 0) {
+		if (shouldSendMessages && RandomAssigner.wantsToSendMessage()) {
 			Integer destinationAgentId = RandomAssigner.getRandomElement(allAgentsIds, getId());
 			Logger.i(LogTag.NORMAL_MESSAGE, this + " sending message to Agent " + destinationAgentId);
 			protocolAgent.prepareMessageTo(destinationAgentId);

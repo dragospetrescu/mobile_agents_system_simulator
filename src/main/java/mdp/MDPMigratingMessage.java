@@ -3,6 +3,7 @@ package mdp;
 import core.agent.communication.CommunicatingAgentInterface;
 import core.message.MigratingAgentMessage;
 
+@SuppressWarnings("javadoc")
 public class MDPMigratingMessage extends MigratingAgentMessage {
 
 	private Integer finalDestination;

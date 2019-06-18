@@ -19,6 +19,9 @@ import core.message.MigratingAgentMessageInterface;
  */
 public class BlackboardHost extends AbstractProtocolHost {
 
+	/**
+	 * Holds messages that will be delivered when agent migrates to this host
+	 */
 	Map<Integer, List<AgentCommunicationMessageInterface>> blackboard;
 
 	/**

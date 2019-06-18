@@ -23,8 +23,12 @@ import protocol.Protocol;
  * HomeServer sends message to Agent 1 Home Agent Home Agent sends message
  * location of the Agent
  */
+@SuppressWarnings("javadoc")
 public class MEFSAgent extends AbstractProtocolAgent {
 
+	/**
+	 * Size of length before sync
+	 */
 	private static final int AVERAGE_SIZE = 5;
 	/**
 	 * Server that has mapped agent to homeHost

@@ -35,6 +35,13 @@ public class RandomAssigner {
     }
     
     /**
+     * @return true if the random states that a message should be delivered
+     */
+    public static boolean wantsToSendMessage() {
+    	return random.nextInt(Constants.MESSAGE_FREQUENCY) == 0;
+    }
+    
+    /**
      * @param <T>
      * @param allElements
      * @param exception

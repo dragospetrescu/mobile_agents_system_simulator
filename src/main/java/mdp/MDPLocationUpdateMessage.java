@@ -3,9 +3,9 @@ package mdp;
 import java.util.List;
 
 import core.message.Message;
-
+@SuppressWarnings("javadoc")
 public class MDPLocationUpdateMessage extends Message {
-
+//#TODO
 	private List<Integer> agents;
 	private Integer mdpSenderHostId;
 

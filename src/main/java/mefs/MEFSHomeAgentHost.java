@@ -24,6 +24,7 @@ import core.message.MigratingAgentMessageInterface;
  * When agent migrates it sends to it's home host message that updates the
  * location database
  */
+@SuppressWarnings("javadoc")
 public class MEFSHomeAgentHost extends AbstractProtocolHost {
 
 	/**

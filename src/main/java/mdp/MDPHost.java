@@ -9,9 +9,9 @@ import core.agent.communication.CommunicatingAgentInterface;
 import core.host.communication.CommunicatingHostInterface;
 import core.host.protocol.AbstractProtocolHost;
 import core.message.Message;
-
+@SuppressWarnings("javadoc")
 public class MDPHost extends AbstractProtocolHost {
-
+//#TODO
 	private Integer gatewayHostId;
 
 	public MDPHost(CommunicatingHostInterface communicationHost) {

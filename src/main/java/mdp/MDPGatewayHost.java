@@ -9,9 +9,9 @@ import core.host.communication.CommunicatingHostInterface;
 import core.host.protocol.AbstractProtocolHost;
 import core.message.AgentCommunicationMessageInterface;
 import core.message.MessageInterface;
-
+@SuppressWarnings("javadoc")
 public class MDPGatewayHost extends AbstractProtocolHost {
-
+//#TODO
 	private Integer gatewayHostId;
 	private List<Integer> directChildernMDPHostIds;
 	private Map<Integer, Integer> mapHostIdToGateway;

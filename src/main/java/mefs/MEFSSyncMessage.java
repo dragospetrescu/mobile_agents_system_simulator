@@ -4,7 +4,7 @@ import java.util.List;
 
 import core.message.Message;
 import core.message.MessageInterface;
-
+@SuppressWarnings("javadoc")
 public class MEFSSyncMessage extends Message {
 
 	private Integer sourceAgentId;

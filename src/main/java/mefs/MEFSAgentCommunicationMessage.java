@@ -1,7 +1,7 @@
 package mefs;
 
 import core.message.AgentCommunicationMessage;
-
+@SuppressWarnings("javadoc")
 public class MEFSAgentCommunicationMessage extends AgentCommunicationMessage {
 
 	private int ttl;
