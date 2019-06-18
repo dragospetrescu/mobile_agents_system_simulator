@@ -12,8 +12,6 @@ import core.host.protocol.AbstractProtocolHost;
 import core.message.AgentCommunicationMessageInterface;
 import core.message.MessageInterface;
 import core.message.MigratingAgentMessageInterface;
-import core.simulation.Simulation;
-import core.statistics.Statistics;
 
 /**
  * Host implementation of the Broadcast Protocol If this host does not contain
@@ -46,8 +44,6 @@ public class BlackboardHost extends AbstractProtocolHost {
 			
 			for (AgentCommunicationMessageInterface commMessage : messages) {
 				protocolAgent.receiveMessage(commMessage);
-				long timeWaiting = Simulation.step - commMessage.getTimeSpentToFinalDestination();
-				commMessage.setTravelingTime(timeWaiting);
 			}
 			
 		} else {
@@ -68,9 +64,6 @@ public class BlackboardHost extends AbstractProtocolHost {
 			if (!blackboard.containsKey(agentDestinationId))
 				blackboard.put(agentDestinationId, new ArrayList<>());
 			blackboard.get(agentDestinationId).add(commMesage);
-			Statistics statistics = Statistics.getStatistics();
-			statistics.messageFailedDelivered(message);
-			message.setTravelingTime(Simulation.step);
 		} else {
 			super.sendMessage(message);
 		}

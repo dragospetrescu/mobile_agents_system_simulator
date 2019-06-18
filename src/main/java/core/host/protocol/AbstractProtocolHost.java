@@ -10,6 +10,8 @@ import core.host.communication.CommunicatingHostInterface;
 import core.message.AgentCommunicationMessageInterface;
 import core.message.MessageInterface;
 import core.message.MigratingAgentMessageInterface;
+import core.simulation.Simulation;
+import core.statistics.Statistics;
 import protocol.Protocol;
 
 /**
@@ -56,6 +58,9 @@ public abstract class AbstractProtocolHost implements ProtocolHost {
 			} else {
 				Logger.w(LogTag.NORMAL_MESSAGE,
 						message + " did non find destination Agent " + communicatingAgentId + " at " + this);
+				Statistics statistics = Statistics.getStatistics();
+				message.setEndTravelingStep(Simulation.step);
+				statistics.messageFailedDelivered(message);
 			}
 		} else if (message instanceof MigratingAgentMessageInterface) {
 			MigratingAgentMessageInterface migratingAgentMessage = (MigratingAgentMessageInterface) message;

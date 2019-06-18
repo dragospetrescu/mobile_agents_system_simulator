@@ -1,8 +1,9 @@
 package core.message;
 
+import core.simulation.Simulation;
+
 /**
- * All messages need to extend this.
- * Takes care of routing part
+ * All messages need to extend this. Takes care of routing part
  */
 public class Message implements MessageInterface {
 
@@ -26,11 +27,9 @@ public class Message implements MessageInterface {
 	 * The next host to the final destination
 	 */
 	private Integer nextHopHostId;
-	
-	/**
-	 * Time spent to deliver the message
-	 */
-	private long timeSpentToFinalDestination;
+
+	private Integer startTravelingStep;
+	private Integer endTravelingStep;
 
 	/**
 	 * Used to make sure each message receives a unique id
@@ -40,22 +39,25 @@ public class Message implements MessageInterface {
 	/**
 	 * Warning. You should only use this constructor if the id provided is unique
 	 * 
-	 * @param id               - the unique identifier
-	 * @param sourceHost       - host from where the message is sent
-	 * @param destinationHost  - the host where the message has to arrive
+	 * @param id              - the unique identifier
+	 * @param sourceHost      - host from where the message is sent
+	 * @param destinationHost - the host where the message has to arrive
 	 */
-	public Message(Integer id, Integer sourceHost, Integer destinationHost) {
+	public Message(Integer id, Integer sourceHost, Integer destinationHost, Integer startTravelingStep) {
 		this.id = id;
 		this.sourceHostId = sourceHost;
 		this.destinationHostId = destinationHost;
-		timeSpentToFinalDestination = 0;
+	}
+
+	public Message(Integer id, Integer sourceHost, Integer destinationHost) {
+		this(id, sourceHost, destinationHost, Simulation.step);
 	}
 
 	/**
 	 * Use this constructor if you don't care about the id
 	 * 
-	 * @param sourceHost       - host from where the message is sent
-	 * @param destinationHost  - the host where the message has to arrive
+	 * @param sourceHost      - host from where the message is sent
+	 * @param destinationHost - the host where the message has to arrive
 	 */
 	public Message(Integer sourceHost, Integer destinationHost) {
 		this(noMessages, sourceHost, destinationHost);
@@ -119,34 +121,31 @@ public class Message implements MessageInterface {
 
 	@Override
 	public void route(Integer nextHopHostId) {
-		if(this.nextHopHostId == null) {
+		if (this.nextHopHostId == null) {
 			previousHopHostId = this.sourceHostId;
 		} else {
 			previousHopHostId = this.nextHopHostId;
 		}
 		this.nextHopHostId = nextHopHostId;
 	}
-	
+
 	@Override
 	public void route(Integer nextHopHostId, Integer newHostDestinationId) {
 		route(nextHopHostId);
 		this.sourceHostId = this.destinationHostId;
 		this.destinationHostId = newHostDestinationId;
-		
 	}
 
 	@Override
-	public void addTravelingTime(long distance) {
-		timeSpentToFinalDestination += distance;		
+	public void setEndTravelingStep(Integer endTravelingStep) {
+		this.endTravelingStep = endTravelingStep;
 	}
-	
+
 	@Override
-	public void setTravelingTime(long distance) {
-		timeSpentToFinalDestination = distance;		
-	}
-	
-	public long getTimeSpentToFinalDestination() {
-		return timeSpentToFinalDestination;
+	public Integer getTimeSpentToFinalDestination() {
+		if (endTravelingStep == null)
+			return Simulation.step - startTravelingStep;
+		return endTravelingStep - startTravelingStep;
 	}
 
 }
