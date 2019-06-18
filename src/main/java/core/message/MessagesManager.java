@@ -3,6 +3,7 @@ package core.message;
 import java.util.*;
 
 import core.host.router.NetworkGraph;
+import core.statistics.Statistics;
 
 /**
  * Represents the physical layer, the wire through which the messages are traveling.
@@ -51,6 +52,9 @@ public class MessagesManager {
      */
     public void travelMessages() {
         Set<MessageInterface> messages = travelingMessages.keySet();
+        
+        Statistics statistics = Statistics.getStatistics();
+        statistics.calculateNetworkLoad(messages.size());
         Set<MessageInterface> messagesToBeRemoved = new HashSet<>();
         for (MessageInterface message : messages) {
             Integer leftDistance = travelingMessages.get(message) - 1;
@@ -69,6 +73,8 @@ public class MessagesManager {
      */
     public List<MessageInterface> getArrivedMessages() {
         List<MessageInterface> oldArrivedMessages = arrivedMessages;
+//        oldArrivedMessages.stream().filter(ms -> ms.getMessageId().equals(0)).forEach(m -> System.out.println(m.getHostDestinationId()));
+        
         arrivedMessages = new ArrayList<>();
         return oldArrivedMessages;
     }

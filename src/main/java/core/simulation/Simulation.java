@@ -219,7 +219,8 @@ public class Simulation {
 	 * simulation.
 	 */
 	public void start() {
-		int numSteps = Constants.NO_WORKING_STEPS + Constants.STEPS_WAITING_FOR_INIT + Constants.STEPS_WAITING_FOR_LAST_MESSAGES;
+		int numSteps = Constants.NO_WORKING_STEPS + Constants.STEPS_WAITING_FOR_INIT
+				+ Constants.STEPS_WAITING_FOR_LAST_MESSAGES;
 		for (step = 0; step < numSteps; step++) {
 
 			messagesManager.travelMessages();
@@ -261,7 +262,7 @@ public class Simulation {
 	 */
 	public void printStatistics() {
 		Statistics statistics = Statistics.getStatistics();
-		System.out.println(1.0 * statistics.getNumberOfSuccess() / statistics.getNumberOfMessages() + " success rate");
-		System.out.println("Average time to deliver message: " + statistics.getAverageDeliveryTime());
+		System.out.println(1.0 * statistics.getNumberOfSuccess() / statistics.getNumberOfMessages() + " "
+				+ statistics.getAverageDeliveryTime() + " " + statistics.getNetworkLoad());
 	}
 }

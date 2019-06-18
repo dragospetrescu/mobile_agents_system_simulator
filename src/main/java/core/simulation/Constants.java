@@ -10,8 +10,8 @@ public class Constants {
 	public static int STEPS_WAITING_FOR_LAST_MESSAGES = NO_WORKING_STEPS / 2;
 	public static int STEPS_WAITING_FOR_INIT =  NO_WORKING_STEPS / 2;
 	
-	public static int MESSAGE_FREQUENCY = MessageFrequency.NORMAL.getValue();
-	public static int MIGRATION_FREQUENCY = MigrationFrequency.NORMAL.getValue();
-	public static int MAXIMUM_CPU_POWER = CPUPower.NORMAL.getValue();
+	public static int MIGRATION_FREQUENCY = MigrationFrequency.EXTREMELY_HIGH.getValue();
+	public static int MESSAGE_FREQUENCY = MessageFrequency.EXTREMELY_LOW.getValue();
+	public static int MAXIMUM_CPU_POWER = CPUPower.EXTREMELY_LOW.getValue();
 }
 	

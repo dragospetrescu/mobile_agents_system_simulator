@@ -44,9 +44,6 @@ public class MEFSHomeAgentHost extends AbstractProtocolHost {
 
 	@Override
 	public void interpretMessage(MessageInterface message) {
-		if(message.getMessageId() == 251) {
-			System.out.println("MERE");
-		}
 		CommunicatingHostInterface communicationHost = getCommunicationHost();
 		if (message instanceof MEFSAgentCommunicationMessage) {
 			MEFSAgentCommunicationMessage commMessage = (MEFSAgentCommunicationMessage) message;

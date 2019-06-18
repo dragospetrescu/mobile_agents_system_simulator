@@ -107,7 +107,7 @@ public class CommunicatingHost implements CommunicatingHostInterface {
 	@Override
 	public void receiveMessage(MessageInterface message) {
 		Integer messageDestinationHostId = message.getHostDestinationId();
-		if (messageDestinationHostId == getId()) {
+		if (messageDestinationHostId.equals(getId())) {
 			protocolHost.interpretMessage(message);
 		} else {
 			routeMessage(message);

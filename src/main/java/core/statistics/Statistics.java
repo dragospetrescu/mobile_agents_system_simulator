@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import core.message.AgentCommunicationMessageInterface;
 import core.message.MessageInterface;
+import core.simulation.Constants;
 
 /**
  * Will create statistics for each protocol in order to compare them
@@ -41,6 +42,7 @@ public class Statistics {
 	 * Maps each message to its delivery status
 	 */
 	private Map<MessageInterface, Boolean> messagesDeliveryStatusMap;
+	private double networkLoad;
 
 	/**
 	 * Marks a message was successfully to be delivered.
@@ -104,5 +106,14 @@ public class Statistics {
 			average += 1.0 * messageInterface.getTimeSpentToFinalDestination() / numMessages;
 		}
 		return average;
+	}
+
+	public void calculateNetworkLoad(int size) {
+		int numSteps = Constants.NO_WORKING_STEPS + Constants.STEPS_WAITING_FOR_INIT + Constants.STEPS_WAITING_FOR_LAST_MESSAGES;
+		networkLoad += size * 1.0 / numSteps;
+	}
+
+	public double getNetworkLoad() {
+		return networkLoad;
 	}
 }
