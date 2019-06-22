@@ -78,7 +78,7 @@ public class ProtocolTestMain {
 				Constants.MAXIMUM_CPU_POWER = CPUPower.valueOf(commandLine.getOptionValues("cpu")[0]).getValue();
 			}
 			if (commandLine.hasOption("no_steps")) {
-				Constants.NO_WORKING_STEPS = Integer.parseInt(commandLine.getOptionValues("migration")[0]);
+				Constants.NO_WORKING_STEPS = Integer.parseInt(commandLine.getOptionValues("no_steps")[0]);
 			}
 
 			Simulation simulation = new Simulation(graphPath, hostsPath, agentsPath, specialHostsPath);

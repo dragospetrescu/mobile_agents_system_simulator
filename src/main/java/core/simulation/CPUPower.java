@@ -6,11 +6,11 @@ package core.simulation;
  */
 @SuppressWarnings("javadoc")
 public enum CPUPower {
-	EXTREMELY_LOW(1),
-	LOW(5),
+	EXTREMELY_SLOW(1),
+	SLOW(5),
 	NORMAL(10),
-	HIGH(25),
-	EXTREMELY_HIGH(50);
+	FAST(25),
+	EXTREMELY_FAST(50);
 	
 	private int value;
 
