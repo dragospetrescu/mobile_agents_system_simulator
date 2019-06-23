@@ -6,7 +6,7 @@ package core.simulation;
  */
 public class Constants {
 
-    public static int NO_WORKING_STEPS = 10000;
+    public static int NO_WORKING_STEPS = 100000;
 	public static int STEPS_WAITING_FOR_LAST_MESSAGES = NO_WORKING_STEPS / 2;
 	public static int STEPS_WAITING_FOR_INIT =  NO_WORKING_STEPS / 2;
 	

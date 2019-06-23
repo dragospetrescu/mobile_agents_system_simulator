@@ -13,7 +13,7 @@ public class Logger {
 	 * Used to filter only some tags
 	 */
 	public static List<LogTag> ACCEPTED_LOGS = new ArrayList<LogTag>(
-			Arrays.asList(LogTag.AGENT_MIGRATING, LogTag.NORMAL_MESSAGE));
+			Arrays.asList());
 
 	/**
 	 * Logs info

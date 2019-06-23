@@ -1,0 +1,15 @@
+[
+	{
+		"id": 5,
+		"protocol": "RAMDP_RS"
+	},
+	{
+		"id": 6,
+		"protocol": "RAMDP_RS"
+	},
+	{
+		"id": 7,
+		"protocol": "RAMDP_LS"
+	}
+	
+]

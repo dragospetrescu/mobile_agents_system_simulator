@@ -8,7 +8,6 @@ import java.util.Map;
 import core.host.communication.CommunicatingHostInterface;
 import core.host.protocol.AbstractProtocolHost;
 import core.message.AgentCommunicationMessageInterface;
-import core.message.LocationUpdateMessageInterface;
 import core.message.MessageInterface;
 
 /**
@@ -20,7 +19,7 @@ public class RAMDPRegionServer extends AbstractProtocolHost {
 	/**
 	 * Holds messages that will be delivered
 	 */
-	Map<Integer, List<AgentCommunicationMessageInterface>> blackboard;
+	Map<Integer, List<MessageInterface>> blackboard;
 
 	/**
 	 * @param communicationHost - the CommunicatingAgent that will use this protocol
@@ -32,19 +31,27 @@ public class RAMDPRegionServer extends AbstractProtocolHost {
 	@Override
 	public void interpretMessage(MessageInterface message) {
 		
-		if (message instanceof LocationUpdateMessageInterface) {
-			super.interpretMessage(message);
-			LocationUpdateMessageInterface locationMessage = (LocationUpdateMessageInterface) message;
-			Integer agentId = locationMessage.getAgentId();
+		if (message instanceof RAMDPSyncMessage) {
+			RAMDPSyncMessage locationMessage = (RAMDPSyncMessage) message;
+			Integer agentId = locationMessage.getSourceAgentId();
+			Integer newHostId = locationMessage.getHostSourceId();
 			
-			List<AgentCommunicationMessageInterface> messages = blackboard.get(agentId);
-			if(messages == null || messages.isEmpty())
-				return;
+			List<MessageInterface> messages = blackboard.get(agentId);
+			locationMessage.setMessages(messages);
+			blackboard.put(agentId, new ArrayList<>());
 			
-//			for (AgentCommunicationMessageInterface commMessage : messages) {
-//				protocolAgent.receiveMessage(commMessage);
-//			}
+			CommunicatingHostInterface communicationHost = getCommunicationHost();
+			communicationHost.reRouteMessage(locationMessage, newHostId);
+			communicationHost.addMessageForSending(locationMessage);
 			
+		} else if(message instanceof AgentCommunicationMessageInterface){
+			AgentCommunicationMessageInterface commMessage = (AgentCommunicationMessageInterface) message;
+			Integer agentDestinationId = commMessage.getAgentDestinationId();
+			
+			if(!blackboard.containsKey(agentDestinationId))
+				blackboard.put(agentDestinationId, new ArrayList<MessageInterface>());
+			List<MessageInterface> agentMessages = blackboard.get(agentDestinationId);
+			agentMessages.add(commMessage);
 		} else {
 			super.interpretMessage(message);
 		}
@@ -53,19 +60,5 @@ public class RAMDPRegionServer extends AbstractProtocolHost {
 	@Override
 	public void init(Map<String, String> protocolArguments) {
 		blackboard = new HashMap<>();
-	}
-
-	@Override
-	public void sendMessage(MessageInterface message) {
-		if (message instanceof AgentCommunicationMessageInterface) {
-			AgentCommunicationMessageInterface commMesage = (AgentCommunicationMessageInterface) message;
-			Integer agentDestinationId = commMesage.getAgentDestinationId();
-			if (!blackboard.containsKey(agentDestinationId))
-				blackboard.put(agentDestinationId, new ArrayList<>());
-			blackboard.get(agentDestinationId).add(commMesage);
-		} else {
-			super.sendMessage(message);
-		}
-
 	}
 }

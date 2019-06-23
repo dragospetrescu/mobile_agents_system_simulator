@@ -1,0 +1,37 @@
+[
+  {
+      "id": 0,
+      "protocol": "RAMDP",
+		"protocolArguments": {
+			"rs": "6"
+		}
+  },
+  {
+      "id": 1,
+      "protocol": "RAMDP",
+		"protocolArguments": {
+			"rs": "5"
+		}
+  },
+  {
+      "id": 2,
+      "protocol": "RAMDP",
+		"protocolArguments": {
+			"rs": "6"
+		}
+  },
+  {
+      "id": 3,
+      "protocol": "RAMDP",
+		"protocolArguments": {
+			"rs": "5"
+		}
+  },
+    {
+      "id": 4,
+      "protocol": "RAMDP",
+		"protocolArguments": {
+			"rs": "5"
+		}
+  }
+]

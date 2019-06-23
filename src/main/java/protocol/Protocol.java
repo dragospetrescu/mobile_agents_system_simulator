@@ -20,6 +20,10 @@ import mdp.MDPHost;
 import mefs.MEFSAgent;
 import mefs.MEFSHomeAgentHost;
 import mefs.MEFSHomeServerHost;
+import ramdp.RAMDPAgent;
+import ramdp.RAMDPHomeNode;
+import ramdp.RAMDPRegionServer;
+import ramdp.RAMPDLookupServer;
 import shadow.ShadowAgent;
 import shadow.ShadowHomeServerHost;
 import shadow.ShadowHost;
@@ -85,7 +89,7 @@ public enum Protocol {
 	/**
 	* 
 	*/
-	MEFS_SERVER;
+	MEFS_SERVER, RAMDP, RAMDP_LS, RAMDP_RS;
 
 	/**
 	 * Based on the {@link Protocol} it returns a ProtocolHost
@@ -121,6 +125,12 @@ public enum Protocol {
 			return new MEFSHomeAgentHost(communicationHost);
 		case MEFS_SERVER:
 			return new MEFSHomeServerHost(communicationHost);
+		case RAMDP:
+			return new RAMDPHomeNode(communicationHost);
+		case RAMDP_LS:
+			return new RAMPDLookupServer(communicationHost);
+		case RAMDP_RS:
+			return new RAMDPRegionServer(communicationHost);
 		}
 		throw new RuntimeException("NO PROTOCOL HOST CREATED FOR " + this + " " + communicationHost);
 	}
@@ -159,6 +169,12 @@ public enum Protocol {
 			return new MEFSAgent(communicatingAgent);
 		case MEFS_SERVER:
 			throw new RuntimeException("MEFS_SERVER is not an agent Protocol!");
+		case RAMDP:
+			return new RAMDPAgent(communicatingAgent);
+		case RAMDP_LS:
+			throw new RuntimeException("RAMDP_LS is not an agent Protocol!");
+		case RAMDP_RS:
+			throw new RuntimeException("RAMDP_RS is not an agent Protocol!");
 		}
 		throw new RuntimeException("NO PROTOCOL AGENT CREATED FOR " + this + " " + communicatingAgent);
 	}

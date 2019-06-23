@@ -1,0 +1,21 @@
+[
+  {
+      "id": 0,
+      "hostId": 0,
+      "protocol": "RAMDP",
+      "protocolArguments": {
+      		"hn": 0,
+      		"ls": 7
+      }
+  },
+    {
+      "id": 1,
+      "hostId": 1,
+      "protocol": "RAMDP",
+      "protocolArguments": {
+      		"hn": 1,
+      		"ls": 7
+      }
+  }
+]
+
