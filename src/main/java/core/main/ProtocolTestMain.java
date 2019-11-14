@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright 2019 dragos
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License.  You may obtain a copy
+ * of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ ******************************************************************************/
 package core.main;
 
 import org.apache.commons.cli.CommandLine;
@@ -45,6 +60,8 @@ public class ProtocolTestMain {
 				.longOpt("cpu_power").build();
 		Option noStepsOption = Option.builder("steps").required(false).hasArg().desc("Number of steps")
 				.longOpt("no_steps").build();
+		Option headersOption = Option.builder("headers").required(false).desc("Number of steps")
+				.longOpt("add_headers").build();
 		CommandLineParser parser = new DefaultParser();
 
 		Options options = new Options();
@@ -56,6 +73,7 @@ public class ProtocolTestMain {
 		options.addOption(messageFreqOption);
 		options.addOption(cpuOption);
 		options.addOption(noStepsOption);
+		options.addOption(headersOption);
 
 		try {
 			commandLine = parser.parse(options, args);
@@ -79,6 +97,9 @@ public class ProtocolTestMain {
 			}
 			if (commandLine.hasOption("no_steps")) {
 				Constants.NO_WORKING_STEPS = Integer.parseInt(commandLine.getOptionValues("no_steps")[0]);
+			}
+			if (commandLine.hasOption("headers")) {
+				Constants.HEADERS = true;
 			}
 
 			Simulation simulation = new Simulation(graphPath, hostsPath, agentsPath, specialHostsPath);
